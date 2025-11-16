@@ -1,3 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/**
+ * Main CSS Import File - SIAG NEKAS
+ * SMK Negeri Kasomalang
+ *
+ * Import order:
+ * 1. Variables (CSS Custom Properties)
+ * 2. Base styles (Reset & Typography)
+ * 3. Layout (Master layout structure)
+ * 4. Components (Reusable UI components)
+ * 5. Pages (Page-specific styles)
+ * 6. Utilities (Helper classes)
+ */
+
+/* 1. Variables */
+@import 'variables.css';
+
+/* 2. Base Styles */
+@import 'base.css';
+
+/* 3. Layout */
+@import 'layout.css';
+
+/* 4. Components */
+@import 'components/navbar.css';
+@import 'components/sidebar.css';
+@import 'components/cards.css';
+@import 'components/buttons.css';
+@import 'components/tables.css';
+@import 'components/forms.css';
+
+/* 5. Pages */
+@import 'pages/auth.css';
+@import 'pages/dashboard.css';
+
+/* 6. Utilities */
+@import 'utilities.css';

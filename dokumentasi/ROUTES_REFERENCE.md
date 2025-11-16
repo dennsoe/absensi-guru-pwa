@@ -387,4 +387,4 @@ return route('laporan.export-pdf', ['bulan' => 12]);
 ---
 
 **Dibuat:** 2025-01-16  
-**Developer:** GitHub Copilot
+**Developer:** Denny Soemantri

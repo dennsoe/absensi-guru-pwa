@@ -1,0 +1,220 @@
+/**
+ * Button Component - Custom Button Styling
+ * SIAG NEKAS - SMK Negeri Kasomalang
+ * NO GRADIENTS - Solid backgrounds only
+ */
+
+/* Base Button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Primary Button */
+.btn-primary {
+    color: var(--text-white);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    color: var(--text-primary);
+    background-color: var(--bg-gray-100);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--bg-gray-200);
+    border-color: var(--border-dark);
+}
+
+/* Success Button */
+.btn-success {
+    color: var(--text-white);
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: var(--color-success-dark);
+    border-color: var(--color-success-dark);
+}
+
+/* Warning Button */
+.btn-warning {
+    color: var(--text-white);
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+}
+
+.btn-warning:hover:not(:disabled) {
+    background-color: var(--color-warning-dark);
+    border-color: var(--color-warning-dark);
+}
+
+/* Danger Button */
+.btn-danger {
+    color: var(--text-white);
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: var(--color-danger-dark);
+    border-color: var(--color-danger-dark);
+}
+
+/* Outline Buttons */
+.btn-outline-primary {
+    color: var(--color-primary);
+    background-color: transparent;
+    border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover:not(:disabled) {
+    color: var(--text-white);
+    background-color: var(--color-primary);
+}
+
+.btn-outline-secondary {
+    color: var(--text-secondary);
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+    background-color: var(--bg-gray-100);
+}
+
+/* Button Sizes */
+.btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+}
+
+.btn-lg {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    font-size: var(--font-size-base);
+}
+
+/* Icon Button */
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--radius-md);
+}
+
+.btn-icon.btn-sm {
+    width: 28px;
+    height: 28px;
+}
+
+.btn-icon.btn-lg {
+    width: 44px;
+    height: 44px;
+}
+
+/* Block Button */
+.btn-block {
+    width: 100%;
+    display: flex;
+}
+
+/* Button Group */
+.btn-group {
+    display: inline-flex;
+    gap: var(--spacing-sm);
+}
+
+/* Quick Action Button */
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+}
+
+.quick-action-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-2xl);
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--color-primary);
+}
+
+.quick-action-text {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .btn-sm {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .btn-lg {
+        padding: var(--spacing-lg) var(--spacing-xl);
+    }
+
+    .quick-action-btn {
+        padding: var(--spacing-md);
+    }
+
+    .quick-action-icon {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-xl);
+    }
+
+    .quick-action-text {
+        font-size: var(--font-size-xs);
+    }
+}

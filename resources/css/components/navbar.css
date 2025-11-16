@@ -1,0 +1,307 @@
+/**
+ * Navbar Component - Custom Top Navigation
+ * SIAG NEKAS - SMK Negeri Kasomalang
+ * NO GRADIENTS - Solid white background only
+ */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: var(--sidebar-width);
+    height: var(--navbar-height);
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xl);
+    z-index: var(--z-sticky);
+    transition: left var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Toggle Button */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-toggle:hover {
+    background-color: var(--bg-gray-100);
+    color: var(--text-primary);
+}
+
+/* Date Time Display */
+.navbar-datetime {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.navbar-datetime i {
+    color: var(--color-primary);
+}
+
+/* Navbar Actions */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+/* Notification Dropdown */
+.navbar-notification {
+    position: relative;
+}
+
+.navbar-notification-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    position: relative;
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-notification-btn:hover {
+    background-color: var(--bg-gray-100);
+    color: var(--text-primary);
+}
+
+.navbar-notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--color-danger);
+    color: var(--text-white);
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    min-width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-primary);
+}
+
+/* Notification Dropdown Menu */
+.navbar-notification-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    max-height: 400px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: none;
+}
+
+.navbar-notification-menu.show {
+    display: block;
+}
+
+.navbar-notification-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.navbar-notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.navbar-notification-item {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color var(--transition-fast);
+    cursor: pointer;
+}
+
+.navbar-notification-item:hover {
+    background-color: var(--bg-gray-50);
+}
+
+.navbar-notification-item.unread {
+    background-color: #eff6ff;
+}
+
+.navbar-notification-item.unread:hover {
+    background-color: #dbeafe;
+}
+
+.navbar-notification-item-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.navbar-notification-item-message {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.navbar-notification-item-time {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.navbar-notification-empty {
+    padding: var(--spacing-2xl);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.navbar-notification-footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.navbar-notification-footer a {
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* User Profile Dropdown */
+.navbar-profile {
+    position: relative;
+}
+
+.navbar-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-profile-btn:hover {
+    background-color: var(--bg-gray-100);
+}
+
+.navbar-profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+}
+
+.navbar-profile-info {
+    text-align: left;
+}
+
+.navbar-profile-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    display: block;
+}
+
+.navbar-profile-role {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    display: block;
+}
+
+.navbar-profile-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 200px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: none;
+}
+
+.navbar-profile-menu.show {
+    display: block;
+}
+
+.navbar-profile-menu-item {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-profile-menu-item:hover {
+    background-color: var(--bg-gray-50);
+}
+
+.navbar-profile-menu-item i {
+    margin-right: var(--spacing-sm);
+    width: 16px;
+}
+
+.navbar-profile-menu-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xs) 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        left: 0;
+        padding: 0 var(--spacing-lg);
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-datetime {
+        display: none;
+    }
+
+    .navbar-profile-info {
+        display: none;
+    }
+
+    .navbar-notification-menu,
+    .navbar-profile-menu {
+        right: -10px;
+    }
+}

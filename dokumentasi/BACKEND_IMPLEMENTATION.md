@@ -560,4 +560,4 @@ Semua relationship sudah di-define dengan proper foreign keys dan eager loading.
 
 **Dibuat:** 2025-01-16  
 **Last Update:** 2025-01-16  
-**Developer:** GitHub Copilot + User
+**Developer:** Denny Soemantri + User

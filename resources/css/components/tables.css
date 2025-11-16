@@ -1,0 +1,114 @@
+/**
+ * Tables Component - Custom Table Styling
+ * SIAG NEKAS - SMK Negeri Kasomalang
+ * NO GRADIENTS - Solid backgrounds only
+ */
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.table-custom thead {
+    background-color: var(--color-primary);
+}
+
+.table-custom thead th {
+    padding: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-white);
+    text-align: left;
+    border-bottom: none;
+}
+
+.table-custom tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color var(--transition-fast);
+}
+
+.table-custom tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table-custom tbody tr:hover {
+    background-color: var(--bg-gray-50);
+}
+
+.table-custom tbody td {
+    padding: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+/* Table Responsive Wrapper */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Table Actions */
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+.badge-primary {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--color-primary);
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+}
+
+.badge-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger);
+}
+
+.badge-gray {
+    background-color: var(--bg-gray-200);
+    color: var(--text-secondary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .table-custom {
+        font-size: var(--font-size-xs);
+    }
+
+    .table-custom thead th,
+    .table-custom tbody td {
+        padding: var(--spacing-md);
+    }
+
+    .table-actions {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}

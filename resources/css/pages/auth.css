@@ -1,0 +1,201 @@
+/**
+ * Auth Pages - Login & Authentication
+ * SIAG NEKAS - SMK Negeri Kasomalang
+ * NO GRADIENTS - Solid backgrounds only
+ */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-xl);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.auth-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.auth-header {
+    background-color: var(--color-primary);
+    padding: var(--spacing-2xl);
+    text-align: center;
+}
+
+.auth-logo {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto var(--spacing-lg);
+    display: block;
+    filter: brightness(0) invert(1);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-white);
+    margin-bottom: var(--spacing-xs);
+}
+
+.auth-subtitle {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+.auth-body {
+    padding: var(--spacing-2xl);
+}
+
+.auth-form {
+    margin-top: var(--spacing-xl);
+}
+
+.auth-form-group {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+}
+
+.auth-form-icon {
+    position: absolute;
+    left: var(--spacing-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: var(--font-size-lg);
+    pointer-events: none;
+}
+
+.auth-form-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) * 3);
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.auth-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.auth-form-input.is-invalid {
+    border-color: var(--color-danger);
+}
+
+.auth-form-input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.auth-error {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: var(--color-danger);
+}
+
+.auth-remember {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.auth-remember-input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.auth-remember-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.auth-submit {
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-white);
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.auth-submit:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+}
+
+.auth-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-footer {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    background-color: var(--bg-gray-50);
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.auth-footer-text {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+/* Alert Message */
+.auth-alert {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.auth-alert-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.auth-alert-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .auth-page {
+        padding: var(--spacing-lg);
+    }
+
+    .auth-header,
+    .auth-body {
+        padding: var(--spacing-xl);
+    }
+
+    .auth-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    .auth-title {
+        font-size: var(--font-size-xl);
+    }
+}

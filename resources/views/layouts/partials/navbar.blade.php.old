@@ -1,0 +1,311 @@
+<nav class="navbar">
+    <div class="navbar-content">
+        <button class="btn-toggle-sidebar" id="toggleSidebar">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div class="navbar-info">
+            <div class="date-time" x-data="dateTime()">
+                <i class="bi bi-calendar3"></i>
+                <span x-text="currentDate"></span>
+                <span class="separator">•</span>
+                <i class="bi bi-clock"></i>
+                <span x-text="currentTime"></span>
+            </div>
+        </div>
+
+        <div class="navbar-actions">
+            <!-- Notification Bell -->
+            <div class="dropdown">
+                <button class="btn-icon" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    @php
+                        $unreadCount = auth()->user()->notifikasi()->where('is_read', false)->count();
+                    @endphp
+                    @if ($unreadCount > 0)
+                        <span class="badge-dot"></span>
+                    @endif
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                    <li class="dropdown-header">
+                        <strong>Notifikasi</strong>
+                        @if ($unreadCount > 0)
+                            <span class="badge bg-primary">{{ $unreadCount }}</span>
+                        @endif
+                    </li>
+                    @forelse(auth()->user()->notifikasi()->latest()->limit(5)->get() as $notif)
+                        <li>
+                            <a class="dropdown-item {{ $notif->is_read ? '' : 'unread' }}" href="#">
+                                <div class="notif-icon">
+                                    <i
+                                        class="bi bi-{{ $notif->jenis === 'info' ? 'info-circle' : ($notif->jenis === 'success' ? 'check-circle' : 'exclamation-circle') }}"></i>
+                                </div>
+                                <div class="notif-content">
+                                    <div class="notif-title">{{ $notif->judul }}</div>
+                                    <div class="notif-time">{{ $notif->created_at->diffForHumans() }}</div>
+                                </div>
+                            </a>
+                        </li>
+                    @empty
+                        <li class="dropdown-item text-center text-muted py-3">
+                            <i class="bi bi-inbox"></i><br>
+                            <small>Tidak ada notifikasi</small>
+                        </li>
+                    @endforelse
+                    @if ($unreadCount > 0)
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="text-center">
+                            <a href="#" class="dropdown-item text-primary">
+                                <small>Tandai semua telah dibaca</small>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+
+            <!-- User Profile Dropdown -->
+            <div class="dropdown">
+                <button class="btn-profile" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i>
+                    <span
+                        class="ms-2 d-none d-md-inline">{{ auth()->user()->guru->nama ?? auth()->user()->username }}</span>
+                    <i class="bi bi-chevron-down ms-1"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="dropdown-header">
+                        <strong>{{ auth()->user()->guru->nama ?? auth()->user()->username }}</strong><br>
+                        <small class="text-muted">{{ auth()->user()->guru->email ?? '-' }}</small>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-person"></i> Profil Saya
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-gear"></i> Pengaturan
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 0.75rem 2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .navbar-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .btn-toggle-sidebar {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: none;
+    }
+
+    .btn-toggle-sidebar:hover {
+        background: #f1f5f9;
+    }
+
+    @media (max-width: 768px) {
+        .btn-toggle-sidebar {
+            display: block;
+        }
+    }
+
+    .navbar-info {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        margin-left: 1rem;
+    }
+
+    .date-time {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary-color);
+        font-size: 0.9rem;
+    }
+
+    .date-time i {
+        color: var(--primary-color);
+    }
+
+    .separator {
+        color: #cbd5e1;
+    }
+
+    .navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-icon {
+        position: relative;
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: var(--secondary-color);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+    }
+
+    .badge-dot {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 8px;
+        height: 8px;
+        background: var(--danger-color);
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    .btn-profile {
+        background: none;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        color: var(--dark-color);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-profile:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    .btn-profile i:first-child {
+        font-size: 1.5rem;
+    }
+
+    .notification-dropdown {
+        width: 320px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .notification-dropdown .dropdown-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: #f8fafc;
+    }
+
+    .notification-dropdown .dropdown-item {
+        display: flex;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .notification-dropdown .dropdown-item.unread {
+        background: #eff6ff;
+    }
+
+    .notification-dropdown .dropdown-item:hover {
+        background: #f1f5f9;
+    }
+
+    .notif-icon {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+    }
+
+    .notif-content {
+        flex: 1;
+    }
+
+    .notif-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--dark-color);
+        margin-bottom: 0.25rem;
+    }
+
+    .notif-time {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+    }
+</style>
+
+<script>
+    // Toggle Sidebar for Mobile
+    document.getElementById('toggleSidebar')?.addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Date Time Component
+    function dateTime() {
+        return {
+            currentDate: '',
+            currentTime: '',
+            init() {
+                this.updateDateTime();
+                setInterval(() => this.updateDateTime(), 1000);
+            },
+            updateDateTime() {
+                const now = new Date();
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                ];
+
+                this.currentDate =
+                    `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+                this.currentTime = now.toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
+        };
+    }
+</script>

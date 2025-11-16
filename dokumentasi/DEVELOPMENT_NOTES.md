@@ -3,7 +3,7 @@
 **Tanggal Diskusi:** 16 November 2025  
 **Tanggal Update Backend:** 16 Januari 2025  
 **Project:** SIAG NEKAS - Sistem Informasi Absensi Guru SMK Negeri Kasomalang  
-**Developer:** GitHub Copilot + User  
+**Developer:** Denny Soemantri + User  
 **Sekolah:** SMK Negeri Kasomalang, Kabupaten Subang, Jawa Barat
 
 ---
