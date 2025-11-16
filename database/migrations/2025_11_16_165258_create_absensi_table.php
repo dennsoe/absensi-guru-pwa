@@ -31,7 +31,7 @@ return new class extends Migration
             $table->enum('validasi_gps', ['Valid', 'Invalid', 'Tidak Divalidasi'])->default('Tidak Divalidasi');
             $table->foreignId('diinput_oleh')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
-
+            
             $table->index(['guru_id', 'tanggal']);
             $table->index('status');
             $table->index('tanggal');

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('tahun_ajaran', 10);
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
-
+            
             $table->index(['guru_id', 'hari']);
             $table->index('kelas');
         });

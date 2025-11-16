@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('status', ['Aktif', 'Expired', 'Digunakan'])->default('Aktif');
             $table->foreignId('dibuat_oleh')->constrained('users')->onDelete('cascade');
             $table->timestamps();
-
+            
             $table->index('code');
             $table->index(['tanggal', 'status']);
         });
