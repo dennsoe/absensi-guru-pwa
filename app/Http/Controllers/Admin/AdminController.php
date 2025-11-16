@@ -37,7 +37,7 @@ class AdminController extends Controller
      */
     public function users(Request $request)
     {
-        $query = User::with('guru')->latest();
+        $query = User::with(['guru', 'kelas'])->latest();
 
         // Filter search
         if ($request->filled('search')) {
@@ -63,7 +63,8 @@ class AdminController extends Controller
     public function createUser()
     {
         $guru_list = Guru::whereDoesntHave('user')->get();
-        return view('admin.users.create', compact('guru_list'));
+        $kelas_list = Kelas::all();
+        return view('admin.users.create', compact('guru_list', 'kelas_list'));
     }
 
     public function storeUser(Request $request)
@@ -77,6 +78,7 @@ class AdminController extends Controller
             'no_hp' => 'nullable|string|max:20',
             'role' => 'required|in:admin,guru,ketua_kelas,guru_piket,kepala_sekolah,kurikulum',
             'guru_id' => 'nullable|exists:guru,id',
+            'kelas_id' => 'nullable|exists:kelas,id',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -93,7 +95,8 @@ class AdminController extends Controller
         $guru_list = Guru::whereDoesntHave('user')
                      ->orWhere('id', $user->guru_id)
                      ->get();
-        return view('admin.users.edit', compact('user', 'guru_list'));
+        $kelas_list = Kelas::all();
+        return view('admin.users.edit', compact('user', 'guru_list', 'kelas_list'));
     }
 
     public function updateUser(Request $request, User $user)
@@ -107,6 +110,7 @@ class AdminController extends Controller
             'no_hp' => 'nullable|string|max:20',
             'role' => 'required|in:admin,guru,ketua_kelas,guru_piket,kepala_sekolah,kurikulum',
             'guru_id' => 'nullable|exists:guru,id',
+            'kelas_id' => 'nullable|exists:kelas,id',
             'is_active' => 'nullable|boolean',
         ]);
 

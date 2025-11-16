@@ -20,7 +20,14 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'nama',
+        'email',
+        'nip',
+        'no_hp',
         'role',
+        'guru_id',
+        'kelas_id',
+        'is_active',
         'status',
         'last_login',
     ];
@@ -54,6 +61,11 @@ class User extends Authenticatable
     public function guru()
     {
         return $this->hasOne(Guru::class);
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 
     public function notifikasi()

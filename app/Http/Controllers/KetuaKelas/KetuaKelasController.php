@@ -30,11 +30,57 @@ class KetuaKelasController extends Controller
     }
 
     /**
-     * Tampilkan halaman scan QR
+     * Tampilkan halaman generate QR (ketua kelas generate untuk discan guru)
      */
-    public function scanQr()
+    public function generateQr()
     {
-        return view('ketua-kelas.scan-qr');
+        // Ambil data kelas dari user ketua kelas
+        // Untuk sementara menggunakan data dummy atau dari user profile
+        $kelasId = auth()->user()->kelas_id ?? 1; // Harus ada relasi user ke kelas
+
+        $data = [
+            'kelas_id' => $kelasId,
+            'ketua_kelas_nama' => auth()->user()->nama,
+        ];
+
+        return view('ketua-kelas.generate-qr', $data);
+    }
+
+    /**
+     * Get statistik scan untuk kelas ini
+     */
+    public function statistikScan()
+    {
+        $kelasId = auth()->user()->kelas_id ?? 1;
+
+        // Count absensi hari ini untuk kelas ini
+        $today = Carbon::today();
+
+        $total = Absensi::whereHas('jadwal', function($query) use ($kelasId) {
+                $query->where('kelas_id', $kelasId);
+            })
+            ->whereDate('tanggal', $today)
+            ->count();
+
+        $hadir = Absensi::whereHas('jadwal', function($query) use ($kelasId) {
+                $query->where('kelas_id', $kelasId);
+            })
+            ->whereDate('tanggal', $today)
+            ->where('status_kehadiran', 'hadir')
+            ->count();
+
+        $terlambat = Absensi::whereHas('jadwal', function($query) use ($kelasId) {
+                $query->where('kelas_id', $kelasId);
+            })
+            ->whereDate('tanggal', $today)
+            ->where('status_kehadiran', 'terlambat')
+            ->count();
+
+        return response()->json([
+            'total' => $total,
+            'hadir' => $hadir,
+            'terlambat' => $terlambat,
+        ]);
     }
 
     /**

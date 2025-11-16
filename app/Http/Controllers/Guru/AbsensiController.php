@@ -18,11 +18,11 @@ class AbsensiController extends Controller
     const RADIUS_METER = 200;
 
     /**
-     * Tampilkan halaman absensi QR Code
+     * Tampilkan halaman scan QR Code (guru scan QR dari ketua kelas)
      */
-    public function qr()
+    public function scanQr()
     {
-        return view('guru.absensi.qr');
+        return view('guru.absensi.scan-qr');
     }
 
     /**
@@ -34,17 +34,17 @@ class AbsensiController extends Controller
     }
 
     /**
-     * Proses absensi QR Code (dipanggil oleh ketua kelas scanner)
+     * Proses absensi QR Code (guru scan QR dari ketua kelas)
      */
     public function prosesAbsensiQr(Request $request)
     {
         try {
-            // Decode QR data
+            // Decode QR data (dari ketua kelas)
             $qrString = $request->input('qr_data');
             $qrData = json_decode(base64_decode($qrString), true);
 
             // Validasi struktur data
-            if (!isset($qrData['user_id']) || !isset($qrData['guru_id']) || !isset($qrData['timestamp'])) {
+            if (!isset($qrData['kelas_id']) || !isset($qrData['timestamp'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Format QR Code tidak valid'
@@ -56,14 +56,14 @@ class AbsensiController extends Controller
             if ($now > $qrData['expires']) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'QR Code sudah kadaluarsa. Minta guru untuk refresh QR Code.'
+                    'message' => 'QR Code sudah kadaluarsa. Minta ketua kelas untuk refresh QR Code.'
                 ], 400);
             }
 
-            // Validasi lokasi GPS
+            // Validasi lokasi GPS (guru yang scan)
             $distance = $this->calculateDistance(
-                $qrData['latitude'],
-                $qrData['longitude'],
+                $request->latitude,
+                $request->longitude,
                 self::SEKOLAH_LAT,
                 self::SEKOLAH_LNG
             );
@@ -71,13 +71,24 @@ class AbsensiController extends Controller
             if ($distance > self::RADIUS_METER) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Lokasi guru terlalu jauh dari sekolah (' . round($distance) . 'm). Maksimal ' . self::RADIUS_METER . 'm.'
+                    'message' => 'Lokasi Anda terlalu jauh dari sekolah (' . round($distance) . 'm). Maksimal ' . self::RADIUS_METER . 'm.'
                 ], 400);
             }
 
-            // Cari jadwal hari ini untuk guru
+            // Get guru dari auth
+            $guruId = Auth::user()->guru_id;
+
+            if (!$guruId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User tidak memiliki profil guru'
+                ], 400);
+            }
+
+            // Cari jadwal hari ini untuk guru di kelas ini
             $hari = Carbon::now()->locale('id')->isoFormat('dddd');
-            $jadwal = JadwalMengajar::where('guru_id', $qrData['guru_id'])
+            $jadwal = JadwalMengajar::where('guru_id', $guruId)
+                ->where('kelas_id', $qrData['kelas_id'])
                 ->where('hari', $hari)
                 ->where('is_active', true)
                 ->first();
@@ -85,7 +96,7 @@ class AbsensiController extends Controller
             if (!$jadwal) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tidak ada jadwal mengajar untuk guru ini hari ini'
+                    'message' => 'Tidak ada jadwal mengajar untuk Anda di kelas ini hari ini'
                 ], 404);
             }
 
@@ -97,7 +108,7 @@ class AbsensiController extends Controller
             if ($existingAbsensi) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Guru sudah melakukan absensi untuk jadwal ini'
+                    'message' => 'Anda sudah melakukan absensi untuk jadwal ini'
                 ], 400);
             }
 
@@ -118,26 +129,26 @@ class AbsensiController extends Controller
             // Simpan absensi
             $absensi = Absensi::create([
                 'jadwal_id' => $jadwal->id,
-                'guru_id' => $qrData['guru_id'],
+                'guru_id' => $guruId,
                 'tanggal' => Carbon::today(),
                 'jam_absen' => Carbon::now()->format('H:i:s'),
                 'status_kehadiran' => $statusKehadiran,
                 'metode_absensi' => 'qr',
-                'latitude' => $qrData['latitude'],
-                'longitude' => $qrData['longitude'],
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
                 'keterangan' => $keterangan,
                 'foto_selfie' => null,
-                'verified_by' => $request->input('scanner_id'), // Ketua kelas yang scan
+                'verified_by' => $qrData['kelas_id'], // Kelas sebagai verifikasi
             ]);
 
             // Load relasi untuk response
-            $absensi->load(['guru', 'jadwal']);
+            $absensi->load(['guru', 'jadwal', 'jadwal.kelas']);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Absensi berhasil disimpan',
                 'data' => [
-                    'nama_guru' => $absensi->guru->nama,
+                    'kelas' => $absensi->jadwal->kelas->nama_kelas ?? 'N/A',
                     'mata_pelajaran' => $absensi->jadwal->mata_pelajaran,
                     'status' => $statusKehadiran,
                     'status_text' => $statusKehadiran === 'hadir' ? 'Hadir' : 'Terlambat',

@@ -112,8 +112,8 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('guru.dashboard')->with('info', 'Fitur Jadwal sedang dalam pengembangan');
         })->name('jadwal.index');
 
-        // Absensi routes
-        Route::get('/absensi/qr', [GuruAbsensiController::class, 'qr'])->name('absensi.qr');
+        // Absensi routes (guru scan QR dari ketua kelas)
+        Route::get('/absensi/scan-qr', [GuruAbsensiController::class, 'scanQr'])->name('absensi.scan-qr');
         Route::get('/absensi/selfie', [GuruAbsensiController::class, 'selfie'])->name('absensi.selfie');
         Route::post('/absensi/proses-qr', [GuruAbsensiController::class, 'prosesAbsensiQr'])->name('absensi.proses-qr');
         Route::post('/absensi/proses-selfie', [GuruAbsensiController::class, 'prosesAbsensiSelfie'])->name('absensi.proses-selfie');
@@ -250,9 +250,10 @@ Route::middleware('auth')->group(function () {
             return view('ketua-kelas.dashboard', $data);
         })->name('dashboard');
 
-        // Scan QR
-        Route::get('/scan-qr', [KetuaKelasController::class, 'scanQr'])->name('scan-qr');
+        // Generate QR (ketua kelas generate QR untuk discan guru)
+        Route::get('/generate-qr', [KetuaKelasController::class, 'generateQr'])->name('generate-qr');
         Route::get('/riwayat-scan', [KetuaKelasController::class, 'riwayatScan'])->name('riwayat-scan');
+        Route::get('/statistik-scan', [KetuaKelasController::class, 'statistikScan'])->name('statistik-scan');
         Route::get('/statistik', [KetuaKelasController::class, 'statistik'])->name('statistik');
 
         // Riwayat

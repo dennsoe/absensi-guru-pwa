@@ -112,7 +112,7 @@
                             <option value="kurikulum" {{ old('role', $user->role) === 'kurikulum' ? 'selected' : '' }}>
                                 Kurikulum</option>
                             <option value="ketua_kelas" {{ old('role', $user->role) === 'ketua_kelas' ? 'selected' : '' }}>
-                                Ketua Kelas</option>
+                                Ketua Kelas (Siswa yang generate QR)</option>
                         </select>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -121,7 +121,7 @@
 
                     {{-- Guru (conditional) --}}
                     <div class="mb-3" id="guru-field"
-                        style="{{ old('role', $user->role) && old('role', $user->role) !== 'guru' ? '' : 'display: none;' }}">
+                        style="{{ old('role', $user->role) && old('role', $user->role) !== 'guru' && old('role', $user->role) !== 'ketua_kelas' ? '' : 'display: none;' }}">
                         <label for="guru_id" class="form-label">Profil Guru <span class="text-danger">*</span></label>
                         <select class="form-control @error('guru_id') is-invalid @enderror" id="guru_id" name="guru_id">
                             <option value="">-- Pilih Guru --</option>
@@ -135,7 +135,29 @@
                         @error('guru_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-text text-muted">Wajib diisi jika role bukan Guru</small>
+                        <small class="form-text text-muted">Role Admin, Guru Piket, Kepala Sekolah, dan Kurikulum
+                            memerlukan Profil Guru</small>
+                    </div>
+
+                    {{-- Kelas (conditional) --}}
+                    <div class="mb-3" id="kelas-field"
+                        style="{{ old('role', $user->role) === 'ketua_kelas' ? '' : 'display: none;' }}">
+                        <label for="kelas_id" class="form-label">Kelas <span class="text-danger">*</span></label>
+                        <select class="form-control @error('kelas_id') is-invalid @enderror" id="kelas_id"
+                            name="kelas_id">
+                            <option value="">-- Pilih Kelas --</option>
+                            @foreach ($kelas_list as $kelas)
+                                <option value="{{ $kelas->id }}"
+                                    {{ old('kelas_id', $user->kelas_id) == $kelas->id ? 'selected' : '' }}>
+                                    {{ $kelas->nama_kelas }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('kelas_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-text text-muted">Ketua Kelas adalah Siswa yang bertanggung jawab di kelas
+                            tersebut</small>
                     </div>
 
                     {{-- Status Aktif --}}
@@ -179,6 +201,12 @@
                                 <td>{{ $user->guru->nama }}</td>
                             </tr>
                         @endif
+                        @if ($user->kelas_id && $user->kelas)
+                            <tr>
+                                <td><strong>Kelas:</strong></td>
+                                <td>{{ $user->kelas->nama_kelas }}</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -193,7 +221,8 @@
                                 <li>Username harus unik</li>
                                 <li>Password minimal 6 karakter</li>
                                 <li>Kosongkan password jika tidak ingin mengubah</li>
-                                <li>Role selain Guru memerlukan Profil Guru</li>
+                                <li>Role Admin, Guru Piket, Kepala Sekolah, Kurikulum memerlukan Profil Guru</li>
+                                <li>Role Ketua Kelas memerlukan Kelas</li>
                             </ul>
                         </div>
                     </div>
@@ -208,21 +237,34 @@
         const roleSelect = document.getElementById('role');
         const guruField = document.getElementById('guru-field');
         const guruSelect = document.getElementById('guru_id');
+        const kelasField = document.getElementById('kelas-field');
+        const kelasSelect = document.getElementById('kelas_id');
 
         roleSelect.addEventListener('change', function() {
-            if (this.value && this.value !== 'guru') {
+            const roleValue = this.value;
+
+            // Reset visibility
+            guruField.style.display = 'none';
+            kelasField.style.display = 'none';
+            guruSelect.required = false;
+            kelasSelect.required = false;
+
+            // Show appropriate field based on role
+            if (roleValue === 'ketua_kelas') {
+                // Ketua Kelas = Siswa → Pilih Kelas
+                kelasField.style.display = 'block';
+                kelasSelect.required = true;
+            } else if (roleValue && roleValue !== 'admin') {
+                // Guru, Guru Piket, Kepala Sekolah, Kurikulum → Pilih Profil Guru
                 guruField.style.display = 'block';
                 guruSelect.required = true;
-            } else {
-                guruField.style.display = 'none';
-                guruSelect.required = false;
             }
+            // Admin tidak perlu guru_id atau kelas_id
         });
 
         // Trigger on page load if role is already selected
-        if (roleSelect.value && roleSelect.value !== 'guru') {
-            guruField.style.display = 'block';
-            guruSelect.required = true;
+        if (roleSelect.value) {
+            roleSelect.dispatchEvent(new Event('change'));
         }
     </script>
 @endpush
