@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'role',
+        'status',
+        'last_login',
     ];
 
     /**
@@ -41,8 +43,44 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'last_login' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relationships
+     */
+    public function guru()
+    {
+        return $this->hasOne(Guru::class);
+    }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
+
+    public function logAktivitas()
+    {
+        return $this->hasMany(LogAktivitas::class);
+    }
+
+    public function pushSubscriptions()
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
+
+    public function scopeRole($query, $role)
+    {
+        return $query->where('role', $role);
     }
 }
