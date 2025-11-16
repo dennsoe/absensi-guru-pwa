@@ -4,12 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\MataPelajaranController;
+use App\Http\Controllers\Admin\JadwalController as AdminJadwalController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Guru\GuruController;
 use App\Http\Controllers\GuruPiket\GuruPiketController;
 use App\Http\Controllers\KepalaSekolah\KepalaSekolahController;
 use App\Http\Controllers\Kurikulum\KurikulumController;
 use App\Http\Controllers\Absensi\AbsensiController;
-use App\Http\Controllers\Jadwal\JadwalController;
 use App\Http\Controllers\Laporan\LaporanController;
 use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
 use App\Http\Controllers\KetuaKelas\KetuaKelasController;
@@ -71,25 +74,39 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
         Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
-        // Kelas Management (placeholder)
-        Route::get('/kelas', function() {
-            return redirect()->route('admin.dashboard')->with('info', 'Fitur Data Kelas sedang dalam pengembangan');
-        })->name('kelas.index');
+        // Kelas Management
+        Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+        Route::get('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+        Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
+        Route::get('/kelas/{kela}/edit', [KelasController::class, 'edit'])->name('kelas.edit');
+        Route::put('/kelas/{kela}', [KelasController::class, 'update'])->name('kelas.update');
+        Route::delete('/kelas/{kela}', [KelasController::class, 'destroy'])->name('kelas.destroy');
 
-        // Jadwal Management (placeholder)
-        Route::get('/jadwal', function() {
-            return redirect()->route('admin.dashboard')->with('info', 'Fitur Jadwal Mengajar sedang dalam pengembangan');
-        })->name('jadwal.index');
+        // Mata Pelajaran Management
+        Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->name('mapel.index');
+        Route::get('/mata-pelajaran/create', [MataPelajaranController::class, 'create'])->name('mapel.create');
+        Route::post('/mata-pelajaran', [MataPelajaranController::class, 'store'])->name('mapel.store');
+        Route::get('/mata-pelajaran/{mapel}/edit', [MataPelajaranController::class, 'edit'])->name('mapel.edit');
+        Route::put('/mata-pelajaran/{mapel}', [MataPelajaranController::class, 'update'])->name('mapel.update');
+        Route::delete('/mata-pelajaran/{mapel}', [MataPelajaranController::class, 'destroy'])->name('mapel.destroy');
+
+        // Jadwal Mengajar Management
+        Route::get('/jadwal', [AdminJadwalController::class, 'index'])->name('jadwal.index');
+        Route::get('/jadwal/create', [AdminJadwalController::class, 'create'])->name('jadwal.create');
+        Route::post('/jadwal', [AdminJadwalController::class, 'store'])->name('jadwal.store');
+        Route::get('/jadwal/{jadwal}/edit', [AdminJadwalController::class, 'edit'])->name('jadwal.edit');
+        Route::put('/jadwal/{jadwal}', [AdminJadwalController::class, 'update'])->name('jadwal.update');
+        Route::delete('/jadwal/{jadwal}', [AdminJadwalController::class, 'destroy'])->name('jadwal.destroy');
 
         // Absensi Management (placeholder)
         Route::get('/absensi', function() {
             return redirect()->route('admin.dashboard')->with('info', 'Fitur Monitoring Absensi sedang dalam pengembangan');
         })->name('absensi.index');
 
-        // Laporan (placeholder)
-        Route::get('/laporan', function() {
-            return redirect()->route('admin.dashboard')->with('info', 'Fitur Laporan sedang dalam pengembangan');
-        })->name('laporan.index');
+        // Laporan Absensi
+        Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/per-guru', [AdminLaporanController::class, 'perGuru'])->name('laporan.per-guru');
+        Route::get('/laporan/per-kelas', [AdminLaporanController::class, 'perKelas'])->name('laporan.per-kelas');
 
         // Settings (placeholder)
         Route::get('/settings', function() {
