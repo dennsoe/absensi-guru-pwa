@@ -187,9 +187,12 @@
                     {{-- Status --}}
                     <div class="mb-3">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                        <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
-                            <option value="aktif" {{ old('status', $user->status) === 'aktif' ? 'selected' : '' }}>Aktif (dapat login)</option>
-                            <option value="nonaktif" {{ old('status', $user->status) === 'nonaktif' ? 'selected' : '' }}>Nonaktif (tidak dapat login)</option>
+                        <select class="form-control @error('status') is-invalid @enderror" id="status" name="status"
+                            required>
+                            <option value="aktif" {{ old('status', $user->status) === 'aktif' ? 'selected' : '' }}>Aktif
+                                (dapat login)</option>
+                            <option value="nonaktif" {{ old('status', $user->status) === 'nonaktif' ? 'selected' : '' }}>
+                                Nonaktif (tidak dapat login)</option>
                         </select>
                         @error('status')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -293,7 +296,8 @@
                 // Ketua Kelas = Siswa → Pilih Kelas
                 kelasField.style.display = 'block';
                 kelasSelect.required = true;
-            } else if (roleValue === 'guru' || roleValue === 'guru_piket' || roleValue === 'kepala_sekolah' || roleValue === 'kurikulum') {
+            } else if (roleValue === 'guru' || roleValue === 'guru_piket' || roleValue === 'kepala_sekolah' ||
+                roleValue === 'kurikulum') {
                 // Guru, Guru Piket, Kepala Sekolah, Kurikulum → Pilih Profil Guru
                 guruField.style.display = 'block';
                 guruSelect.required = true;

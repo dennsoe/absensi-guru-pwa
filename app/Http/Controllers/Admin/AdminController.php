@@ -194,7 +194,7 @@ class AdminController extends Controller
                 return back()->withErrors(['guru_id' => 'Profil guru harus dipilih untuk role ' . ucwords(str_replace('_', ' ', $request->role)) . '.'])
                     ->withInput();
             }
-            
+
             // Validasi: jika role ketua_kelas, harus ada kelas_id
             if ($request->role === 'ketua_kelas' && !$request->kelas_id) {
                 return back()->withErrors(['kelas_id' => 'Kelas harus dipilih untuk role Ketua Kelas.'])
