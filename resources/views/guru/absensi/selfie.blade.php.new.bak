@@ -422,7 +422,7 @@
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Mengirim...';
 
             try {
-                const response = await fetch('{{ route('guru.absensi.proses-selfie') }}', {
+                const response = await fetch('{{ route('absensi.selfie.proses') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

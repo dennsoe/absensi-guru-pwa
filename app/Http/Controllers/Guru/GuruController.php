@@ -72,6 +72,27 @@ class GuruController extends Controller
                                                      ->exists();
         }
 
+        // CEK JADWAL YANG SUDAH LEWAT TAPI BELUM ABSEN (KRITIS!)
+        $jadwal_terlewat_belum_absen = $jadwal_hari_ini->filter(function($jadwal) use ($jam_sekarang, $guru, $tanggal_hari_ini) {
+            $jam_selesai = \Carbon\Carbon::parse($jadwal->jam_selesai);
+
+            // Jadwal sudah selesai (lewat)
+            if ($jam_sekarang->greaterThan($jam_selesai)) {
+                // Cek apakah ada absensi untuk jadwal ini
+                $sudah_absen = Absensi::where('guru_id', $guru->id)
+                                      ->where('jadwal_id', $jadwal->id)
+                                      ->whereDate('tanggal', $tanggal_hari_ini)
+                                      ->exists();
+
+                return !$sudah_absen; // Return TRUE jika belum absen
+            }
+
+            return false;
+        });
+
+        // Ambil jadwal terlewat pertama (paling urgent)
+        $jadwal_terlewat_pertama = $jadwal_terlewat_belum_absen->first();
+
         $data = [
             'guru' => $guru,
             'hari_ini' => $hari_ini,
@@ -85,6 +106,8 @@ class GuruController extends Controller
             'jadwal_upcoming' => $jadwal_upcoming,
             'jadwal_berlangsung' => $jadwal_berlangsung,
             'sudah_absen_jadwal_berlangsung' => $sudah_absen_jadwal_berlangsung,
+            'jadwal_terlewat_belum_absen' => $jadwal_terlewat_belum_absen,
+            'jadwal_terlewat_pertama' => $jadwal_terlewat_pertama,
         ];
 
         return view('guru.dashboard', $data);

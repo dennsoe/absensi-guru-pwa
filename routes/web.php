@@ -142,6 +142,7 @@ Route::middleware('auth')->group(function () {
         // Jadwal Personal
         Route::get('/jadwal', [GuruJadwalController::class, 'index'])->name('jadwal.index');
         Route::get('/jadwal/today', [GuruJadwalController::class, 'today'])->name('jadwal.today');
+        Route::get('/jadwal/list-json', [GuruJadwalController::class, 'listJson'])->name('jadwal.list');
         Route::get('/jadwal/{jadwal}', [GuruJadwalController::class, 'show'])->name('jadwal.show');
 
         // Absensi routes (guru scan QR dari ketua kelas)

@@ -398,7 +398,7 @@
                 updateScanResult(false, null, 'Memproses...');
 
                 // Send to server
-                const response = await fetch('{{ route('guru.absensi.proses-qr') }}', {
+                const response = await fetch('{{ route('absensi.scan-qr.proses') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

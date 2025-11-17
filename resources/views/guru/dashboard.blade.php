@@ -13,7 +13,61 @@
         </div>
 
         <!-- Notifikasi & Peringatan - Tidak Bisa Di-dismiss -->
-        @if ($jadwal_berlangsung && !$sudah_absen_jadwal_berlangsung)
+        {{-- PRIORITAS 1: Jadwal terlewat belum absen (KRITIS!) --}}
+        @if ($jadwal_terlewat_pertama)
+            <div class="alert alert-danger border-start border-danger border-4 mb-4 alert-permanent" role="alert">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 me-3">
+                        <i class="bi bi-exclamation-octagon-fill fs-3"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="alert-heading mb-2">
+                            <i class="bi bi-alarm-fill"></i> URGENT: Jadwal Terlewat Tanpa Absen!
+                        </h5>
+                        <p class="mb-2">
+                            Anda <strong class="text-decoration-underline">TIDAK ABSEN</strong> untuk jadwal:
+                            <strong>{{ $jadwal_terlewat_pertama->mataPelajaran->nama_mapel }}</strong>
+                            di kelas <strong>{{ $jadwal_terlewat_pertama->kelas->nama_kelas }}</strong>
+                        </p>
+                        <p class="mb-3 small">
+                            <i class="bi bi-clock-fill"></i>
+                            {{ \Carbon\Carbon::parse($jadwal_terlewat_pertama->jam_mulai)->format('H:i') }} -
+                            {{ \Carbon\Carbon::parse($jadwal_terlewat_pertama->jam_selesai)->format('H:i') }}
+                            @if ($jadwal_terlewat_pertama->ruangan)
+                                <span class="ms-2"><i class="bi bi-geo-alt-fill"></i>
+                                    {{ $jadwal_terlewat_pertama->ruangan }}</span>
+                            @endif
+                            <span class="ms-2 badge bg-danger">Jadwal Sudah Lewat</span>
+                        </p>
+                        <p class="mb-3 small text-dark">
+                            <i class="bi bi-info-circle-fill"></i>
+                            Status: <strong>Akan tercatat ALPHA</strong> jika tidak segera melakukan absensi atau mengajukan
+                            izin
+                        </p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{{ route('absensi.scan-qr') }}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-qr-code-scan"></i> Absen Sekarang
+                            </a>
+                            <a href="{{ route('guru.izin.create') }}" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-file-earmark-text"></i> Ajukan Izin
+                            </a>
+                        </div>
+
+                        @if ($jadwal_terlewat_belum_absen->count() > 1)
+                            <div class="alert alert-warning mt-3 mb-0 py-2 px-3" role="alert">
+                                <small>
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    <strong>Perhatian:</strong> Anda memiliki
+                                    <strong>{{ $jadwal_terlewat_belum_absen->count() }}</strong> jadwal yang terlewat tanpa
+                                    absen hari ini
+                                </small>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            {{-- PRIORITAS 2: Jadwal sedang berlangsung belum absen --}}
+        @elseif ($jadwal_berlangsung && !$sudah_absen_jadwal_berlangsung)
             <div class="alert alert-danger border-start border-danger border-4 mb-4 alert-permanent" role="alert">
                 <div class="d-flex align-items-start">
                     <div class="flex-shrink-0 me-3">
@@ -32,7 +86,8 @@
                             {{ \Carbon\Carbon::parse($jadwal_berlangsung->jam_mulai)->format('H:i') }} -
                             {{ \Carbon\Carbon::parse($jadwal_berlangsung->jam_selesai)->format('H:i') }}
                             @if ($jadwal_berlangsung->ruangan)
-                                <span class="ms-2"><i class="bi bi-geo-alt"></i> {{ $jadwal_berlangsung->ruangan }}</span>
+                                <span class="ms-2"><i class="bi bi-geo-alt"></i>
+                                    {{ $jadwal_berlangsung->ruangan }}</span>
                             @endif
                         </p>
                         <div class="d-flex gap-2">
@@ -189,6 +244,14 @@
                                     $is_upcoming =
                                         now()->diffInMinutes($jam_mulai, false) > 0 &&
                                         now()->diffInMinutes($jam_mulai, false) <= 30;
+
+                                    // Cek status absensi untuk jadwal ini
+                                    $absensi_jadwal = \App\Models\Absensi::where('guru_id', $guru->id)
+                                        ->where('jadwal_id', $jadwal->id)
+                                        ->whereDate('tanggal', today())
+                                        ->first();
+
+                                    $is_terlewat = now()->greaterThan($jam_selesai);
                                 @endphp
                                 <div
                                     class="card jadwal-card mb-2 {{ $is_active ? 'jadwal-active' : ($is_upcoming ? 'jadwal-upcoming' : '') }}">
@@ -204,6 +267,10 @@
                                                     <span class="badge bg-success mt-1 small">Sedang Berlangsung</span>
                                                 @elseif($is_upcoming)
                                                     <span class="badge bg-warning mt-1 small">Segera Dimulai</span>
+                                                @elseif($is_terlewat && !$absensi_jadwal)
+                                                    <span class="badge bg-danger mt-1 small">Terlewat - Belum Absen</span>
+                                                @elseif($is_terlewat && $absensi_jadwal)
+                                                    <span class="badge bg-secondary mt-1 small">Selesai</span>
                                                 @endif
                                             </div>
                                             <div class="col-6 col-sm-2">
@@ -216,10 +283,34 @@
                                                 <div class="fw-semibold">{{ $jadwal->mataPelajaran->nama_mapel }}</div>
                                             </div>
                                             <div class="col-12 col-sm-3">
-                                                <div class="small text-muted">Ruangan</div>
-                                                <div class="text-muted">
-                                                    <i class="bi bi-geo-alt"></i>
-                                                    {{ $jadwal->ruangan ?? 'Belum ditentukan' }}
+                                                <div class="d-flex flex-column">
+                                                    <div>
+                                                        <div class="small text-muted">Ruangan</div>
+                                                        <div class="text-muted">
+                                                            <i class="bi bi-geo-alt"></i>
+                                                            {{ $jadwal->ruangan ?? 'Belum ditentukan' }}
+                                                        </div>
+                                                    </div>
+                                                    @if ($absensi_jadwal)
+                                                        <div class="mt-2">
+                                                            <span
+                                                                class="badge
+                                                                @if ($absensi_jadwal->status_kehadiran == 'hadir') bg-success
+                                                                @elseif($absensi_jadwal->status_kehadiran == 'terlambat') bg-warning
+                                                                @elseif(in_array($absensi_jadwal->status_kehadiran, ['izin', 'sakit'])) bg-info
+                                                                @else bg-danger @endif
+                                                            ">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                {{ ucfirst($absensi_jadwal->status_kehadiran) }}
+                                                            </span>
+                                                        </div>
+                                                    @elseif($is_terlewat)
+                                                        <div class="mt-2">
+                                                            <span class="badge bg-danger">
+                                                                <i class="bi bi-x-circle"></i> Belum Absen
+                                                            </span>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

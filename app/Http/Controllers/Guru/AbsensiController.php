@@ -271,6 +271,36 @@ class AbsensiController extends Controller
         $guruId = Auth::user()->guru_id;
         $guru = Auth::user()->guru;
 
+        // Check if AJAX request (return JSON)
+        if (request()->wantsJson() || request()->ajax()) {
+            $riwayat = Absensi::with(['jadwal.kelas', 'jadwal.mataPelajaran'])
+                ->where('guru_id', $guruId)
+                ->whereDate('tanggal', Carbon::today())
+                ->orderBy('jam_absen', 'asc')
+                ->get();
+
+            return response()->json($riwayat->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'jam_masuk' => $item->jam_absen ? Carbon::parse($item->jam_absen)->format('H:i') : '-',
+                    'jam_absen' => $item->jam_absen ? Carbon::parse($item->jam_absen)->format('H:i') : '-',
+                    'status_kehadiran' => $item->status_kehadiran,
+                    'metode_absensi' => $item->metode_absensi,
+                    'keterangan' => $item->keterangan,
+                    'jadwal' => [
+                        'id' => $item->jadwal->id ?? null,
+                        'mata_pelajaran' => [
+                            'nama_mapel' => $item->jadwal->mataPelajaran->nama_mapel ?? '-'
+                        ],
+                        'kelas' => [
+                            'nama_kelas' => $item->jadwal->kelas->nama_kelas ?? '-'
+                        ]
+                    ]
+                ];
+            }));
+        }
+
+        // Otherwise return view
         $riwayat = Absensi::with(['jadwal.kelas', 'jadwal.mataPelajaran'])
             ->where('guru_id', $guruId)
             ->whereDate('tanggal', Carbon::today())

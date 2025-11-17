@@ -93,4 +93,31 @@ class JadwalController extends Controller
 
         return view('guru.jadwal.show', compact('jadwal', 'riwayat'));
     }
+
+    /**
+     * API: List Jadwal Hari Ini (JSON for AJAX)
+     */
+    public function listJson()
+    {
+        $guru = Guru::where('user_id', Auth::id())->firstOrFail();
+        $hari = ucfirst(now()->locale('id')->dayName);
+
+        $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
+                                ->where('guru_id', $guru->id)
+                                ->where('hari', $hari)
+                                ->where('status', 'aktif')
+                                ->orderBy('jam_mulai')
+                                ->get();
+
+        return response()->json($jadwal->map(function($j) {
+            return [
+                'id' => $j->id,
+                'mata_pelajaran' => $j->mataPelajaran->nama_mapel ?? '-',
+                'kelas' => $j->kelas->nama_kelas ?? '-',
+                'jam_mulai' => \Carbon\Carbon::parse($j->jam_mulai)->format('H:i'),
+                'jam_selesai' => \Carbon\Carbon::parse($j->jam_selesai)->format('H:i'),
+                'ruangan' => $j->ruangan ?? 'Belum ditentukan'
+            ];
+        }));
+    }
 }
