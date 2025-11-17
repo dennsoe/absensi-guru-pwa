@@ -26,7 +26,7 @@
                 @php
                     $unreadCount = auth()->user()->notifikasi()->where('is_read', false)->count();
                 @endphp
-                @if($unreadCount > 0)
+                @if ($unreadCount > 0)
                     <span class="navbar-notification-badge">{{ $unreadCount }}</span>
                 @endif
             </button>
@@ -43,7 +43,7 @@
 
                     @forelse($notifications as $notif)
                         <div class="navbar-notification-item {{ !$notif->is_read ? 'unread' : '' }}"
-                             onclick="window.location.href='{{ route('notifikasi.show', $notif->id) }}'">
+                            onclick="window.location.href='{{ route('notifikasi.show', $notif->id) }}'">
                             <div class="navbar-notification-item-title">{{ $notif->judul }}</div>
                             <div class="navbar-notification-item-message">{{ $notif->pesan }}</div>
                             <div class="navbar-notification-item-time">
@@ -58,7 +58,7 @@
                     @endforelse
                 </div>
 
-                @if($notifications->count() > 0)
+                @if ($notifications->count() > 0)
                     <div class="navbar-notification-footer">
                         <a href="{{ route('notifikasi.index') }}">Lihat semua notifikasi</a>
                     </div>
@@ -70,10 +70,10 @@
         <div class="navbar-profile">
             <button class="navbar-profile-btn" data-bs-toggle="dropdown">
                 <div class="navbar-profile-avatar">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                    <x-user-avatar :user="auth()->user()" size="sm" />
                 </div>
                 <div class="navbar-profile-info">
-                    <span class="navbar-profile-name">{{ auth()->user()->name }}</span>
+                    <span class="navbar-profile-name">{{ auth()->user()->nama }}</span>
                     <span class="navbar-profile-role">{{ ucfirst(str_replace('_', ' ', auth()->user()->role)) }}</span>
                 </div>
                 <i class="bi bi-chevron-down"></i>
@@ -102,31 +102,31 @@
 </nav>
 
 <script>
-function dateTime() {
-    return {
-        currentDate: '',
-        currentTime: '',
-        updateTime() {
-            const now = new Date();
-            
-            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-            
-            const dayName = days[now.getDay()];
-            const day = now.getDate();
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            
-            this.currentDate = `${dayName}, ${day} ${month} ${year}`;
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            this.currentTime = `${hours}:${minutes}:${seconds}`;
-            
-            setTimeout(() => this.updateTime(), 1000);
+    function dateTime() {
+        return {
+            currentDate: '',
+            currentTime: '',
+            updateTime() {
+                const now = new Date();
+
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+                const dayName = days[now.getDay()];
+                const day = now.getDate();
+                const month = months[now.getMonth()];
+                const year = now.getFullYear();
+
+                this.currentDate = `${dayName}, ${day} ${month} ${year}`;
+
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+
+                this.currentTime = `${hours}:${minutes}:${seconds}`;
+
+                setTimeout(() => this.updateTime(), 1000);
+            }
         }
     }
-}
 </script>

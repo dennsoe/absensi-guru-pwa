@@ -165,8 +165,13 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>
-                                            <strong>{{ $absensi->guru->nama }}</strong><br>
-                                            <small class="text-muted">{{ $absensi->guru->nip ?? '-' }}</small>
+                                            <div class="d-flex align-items-center">
+                                                <x-user-avatar :user="$absensi->guru->user" size="sm" class="me-2" />
+                                                <div>
+                                                    <strong>{{ $absensi->guru->nama }}</strong><br>
+                                                    <small class="text-muted">{{ $absensi->guru->nip ?? '-' }}</small>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>{{ $absensi->jadwal->kelas->nama_kelas }}</td>
                                         <td>{{ $absensi->jadwal->mataPelajaran->nama_mapel }}</td>

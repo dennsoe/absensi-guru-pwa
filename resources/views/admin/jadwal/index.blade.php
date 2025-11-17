@@ -96,7 +96,12 @@
                     @forelse($jadwal_list as $index => $jadwal)
                         <tr>
                             <td>{{ $jadwal_list->firstItem() + $index }}</td>
-                            <td>{{ $jadwal->guru->nama }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <x-user-avatar :user="$jadwal->guru->user" size="sm" class="me-2" />
+                                    <span>{{ $jadwal->guru->nama }}</span>
+                                </div>
+                            </td>
                             <td><strong>{{ $jadwal->kelas->nama_kelas }}</strong></td>
                             <td>{{ $jadwal->mataPelajaran->nama_mapel }}</td>
                             <td>{{ $jadwal->hari }}</td>

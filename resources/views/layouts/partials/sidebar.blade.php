@@ -10,10 +10,10 @@
     {{-- User Info --}}
     <div class="sidebar-user">
         <div class="sidebar-user-avatar">
-            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+            <x-user-avatar :user="auth()->user()" size="lg" />
         </div>
         <div class="sidebar-user-info">
-            <div class="sidebar-user-name">{{ auth()->user()->name }}</div>
+            <div class="sidebar-user-name">{{ auth()->user()->nama }}</div>
             <span class="sidebar-user-role">
                 @switch(auth()->user()->role)
                     @case('admin')
@@ -59,14 +59,14 @@
                 </div>
                 <div class="sidebar-menu-item">
                     <a href="{{ route('admin.users') }}"
-                        class="sidebar-menu-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        class="sidebar-menu-link {{ request()->routeIs('admin.users') || request()->routeIs('admin.users.*') ? 'active' : '' }}">
                         <i class="bi bi-people sidebar-menu-icon"></i>
                         <span class="sidebar-menu-text">Data Guru</span>
                     </a>
                 </div>
                 <div class="sidebar-menu-item">
                     <a href="{{ route('admin.kelas') }}"
-                        class="sidebar-menu-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                        class="sidebar-menu-link {{ request()->routeIs('admin.kelas') || request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
                         <i class="bi bi-building sidebar-menu-icon"></i>
                         <span class="sidebar-menu-text">Data Kelas</span>
                     </a>

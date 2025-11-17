@@ -60,10 +60,27 @@ class ProfileController extends Controller
             'nip' => 'required|string|max:50|unique:guru,nip,' . $guru->id,
             'no_telepon' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:500',
+            'foto_profil' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        // Update user email
-        $guru->user->update(['email' => $validated['email']]);
+        // Update user data
+        $userData = ['email' => $validated['email'], 'nama' => $validated['nama']];
+
+        // Handle foto upload
+        if ($request->hasFile('foto_profil')) {
+            // Delete old photo if exists
+            if ($guru->user->foto_profil && file_exists(storage_path('app/public/' . $guru->user->foto_profil))) {
+                unlink(storage_path('app/public/' . $guru->user->foto_profil));
+            }
+
+            // Save new photo
+            $file = $request->file('foto_profil');
+            $filename = 'foto-' . $guru->user_id . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('foto-profil', $filename, 'public');
+            $userData['foto_profil'] = $path;
+        }
+
+        $guru->user->update($userData);
 
         // Update guru data
         $guru->update([

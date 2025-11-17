@@ -21,14 +21,17 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h5>{{ $guru->nama }}</h5>
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <x-user-avatar :user="$guru->user" size="xl" />
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mb-1">{{ $guru->nama }}</h5>
                                 <p class="text-muted mb-2">NIP: {{ $guru->nip }}</p>
                                 <p class="mb-1"><i class="bi bi-envelope"></i> {{ $guru->user->email }}</p>
                                 <p class="mb-0"><i class="bi bi-telephone"></i> {{ $guru->no_telepon ?? '-' }}</p>
                             </div>
-                            <div class="col-md-4 text-end">
+                            <div class="col text-end">
                                 <span class="badge bg-{{ $guru->status === 'aktif' ? 'success' : 'danger' }} fs-6">
                                     {{ strtoupper($guru->status) }}
                                 </span>

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'nip',
         'no_hp',
+        'foto_profil',
         'role',
         'guru_id',
         'kelas_id',
@@ -81,6 +82,26 @@ class User extends Authenticatable
     public function pushSubscriptions()
     {
         return $this->hasMany(PushSubscription::class, 'user_id');
+    }
+
+    /**
+     * Accessors
+     */
+    public function getFotoUrlAttribute()
+    {
+        if ($this->foto_profil && file_exists(storage_path('app/public/' . $this->foto_profil))) {
+            return asset('storage/' . $this->foto_profil);
+        }
+        return asset('assets/images/avatars/default-avatar.svg');
+    }
+
+    public function getInisialAttribute()
+    {
+        $words = explode(' ', $this->nama);
+        if (count($words) >= 2) {
+            return strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+        }
+        return strtoupper(substr($this->nama, 0, 2));
     }
 
     /**

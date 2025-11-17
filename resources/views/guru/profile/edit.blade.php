@@ -22,29 +22,23 @@
                             @method('PUT')
 
                             <!-- Photo Preview -->
-                            <div class="mb-3 text-center">
-                                @if (auth()->user()->foto)
-                                    <img src="{{ Storage::url(auth()->user()->foto) }}" alt="Foto"
-                                        class="rounded-circle mb-2" width="120" height="120" style="object-fit: cover;"
-                                        id="photoPreview">
-                                @else
-                                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-2"
-                                        style="width: 120px; height: 120px; font-size: 48px;" id="photoPlaceholder">
-                                        {{ strtoupper(substr(auth()->user()->nama, 0, 1)) }}
-                                    </div>
-                                    <img src="" alt="Foto" class="rounded-circle mb-2 d-none" width="120"
-                                        height="120" style="object-fit: cover;" id="photoPreview">
-                                @endif
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Foto Profil</label>
-                                <input type="file" name="foto"
-                                    class="form-control @error('foto') is-invalid @enderror" accept="image/*"
-                                    onchange="previewPhoto(event)">
-                                <small class="text-muted">Format: JPG, PNG. Max: 2MB</small>
-                                @error('foto')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="mb-4 text-center">
+                                <div class="mb-3">
+                                    <img src="{{ auth()->user()->foto_url }}" alt="{{ auth()->user()->nama }}"
+                                        class="rounded-circle" width="120" height="120"
+                                        style="object-fit: cover; border: 3px solid #e9ecef;" id="photoPreview">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="foto_profil" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-camera"></i> Pilih Foto
+                                    </label>
+                                    <input type="file" name="foto_profil" id="foto_profil"
+                                        class="d-none @error('foto_profil') is-invalid @enderror"
+                                        accept="image/jpeg,image/jpg,image/png" onchange="previewPhoto(event)">
+                                </div>
+                                <small class="text-muted d-block">Format: JPG, PNG. Maksimal: 2MB</small>
+                                @error('foto_profil')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
 

@@ -32,6 +32,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
+                        <div class="text-center mb-3">
+                            <x-user-avatar :user="$guru->user" size="xl" />
+                        </div>
                         <h5 class="card-title">Informasi Guru</h5>
                         <table class="table table-borderless table-sm">
                             <tr>

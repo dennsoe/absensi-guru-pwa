@@ -175,7 +175,9 @@ class AdminController extends Controller
             'no_hp' => 'nullable|string|max:20',
             'role' => 'required|in:admin,guru,ketua_kelas,guru_piket,kepala_sekolah,kurikulum',
             'guru_id' => 'nullable|exists:guru,id',
+            'kelas_id' => 'nullable|exists:kelas,id',
             'status' => 'required|in:aktif,nonaktif',
+            'foto_profil' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         try {
@@ -186,13 +188,20 @@ class AdminController extends Controller
                     ->with('error', 'Akses ditolak.');
             }
 
-            // Validasi: jika role guru, harus ada guru_id
-            if ($request->role === 'guru' && !$request->guru_id) {
-                return back()->withErrors(['guru_id' => 'Guru harus dipilih untuk role Guru.'])
+            // Validasi: jika role memerlukan profil guru, harus ada guru_id
+            $rolesYangPerluGuru = ['guru', 'guru_piket', 'kepala_sekolah', 'kurikulum'];
+            if (in_array($request->role, $rolesYangPerluGuru) && !$request->guru_id) {
+                return back()->withErrors(['guru_id' => 'Profil guru harus dipilih untuk role ' . ucwords(str_replace('_', ' ', $request->role)) . '.'])
+                    ->withInput();
+            }
+            
+            // Validasi: jika role ketua_kelas, harus ada kelas_id
+            if ($request->role === 'ketua_kelas' && !$request->kelas_id) {
+                return back()->withErrors(['kelas_id' => 'Kelas harus dipilih untuk role Ketua Kelas.'])
                     ->withInput();
             }
 
-            User::create([
+            $userData = [
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
                 'nama' => $request->nama,
@@ -201,8 +210,19 @@ class AdminController extends Controller
                 'no_hp' => $request->no_hp,
                 'role' => $request->role,
                 'guru_id' => $request->guru_id,
+                'kelas_id' => $request->kelas_id,
                 'status' => $request->status,
-            ]);
+            ];
+
+            // Handle foto profil upload
+            if ($request->hasFile('foto_profil')) {
+                $file = $request->file('foto_profil');
+                $filename = 'foto-' . time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('foto-profil', $filename, 'public');
+                $userData['foto_profil'] = $path;
+            }
+
+            User::create($userData);
 
             return redirect()->route('admin.users')
                 ->with('success', 'User berhasil ditambahkan.');
@@ -255,7 +275,9 @@ class AdminController extends Controller
             'no_hp' => 'nullable|string|max:20',
             'role' => 'required|in:admin,guru,ketua_kelas,guru_piket,kepala_sekolah,kurikulum',
             'guru_id' => 'nullable|exists:guru,id',
+            'kelas_id' => 'nullable|exists:kelas,id',
             'status' => 'required|in:aktif,nonaktif',
+            'foto_profil' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         try {
@@ -276,12 +298,27 @@ class AdminController extends Controller
                 'no_hp' => $request->no_hp,
                 'role' => $request->role,
                 'guru_id' => $request->guru_id,
+                'kelas_id' => $request->kelas_id,
                 'status' => $request->status,
             ];
 
             // Update password hanya jika diisi
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($request->password);
+            }
+
+            // Handle foto profil upload
+            if ($request->hasFile('foto_profil')) {
+                // Hapus foto lama jika ada
+                if ($user_edit->foto_profil && file_exists(storage_path('app/public/' . $user_edit->foto_profil))) {
+                    unlink(storage_path('app/public/' . $user_edit->foto_profil));
+                }
+
+                // Upload foto baru
+                $file = $request->file('foto_profil');
+                $filename = 'foto-' . $user_edit->id . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('foto-profil', $filename, 'public');
+                $data['foto_profil'] = $path;
             }
 
             $user_edit->update($data);

@@ -67,7 +67,12 @@
                         <tr>
                             <td>{{ $users->firstItem() + $index }}</td>
                             <td>{{ $user->username }}</td>
-                            <td>{{ $user->nama }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <x-user-avatar :user="$user" size="sm" class="me-2" />
+                                    <span>{{ $user->nama }}</span>
+                                </div>
+                            </td>
                             <td>{{ $user->email ?? '-' }}</td>
                             <td>{{ $user->nip ?? '-' }}</td>
                             <td>

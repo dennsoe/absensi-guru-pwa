@@ -16,9 +16,31 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="page-section">
-                <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+                <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+
+                    {{-- Foto Profil --}}
+                    <div class="mb-4 text-center">
+                        <div class="mb-3">
+                            <img src="{{ $user->foto_url }}" alt="{{ $user->nama }}" class="rounded-circle" width="120"
+                                height="120" style="object-fit: cover; border: 3px solid #e9ecef;" id="fotoPreview">
+                        </div>
+                        <div class="mb-2">
+                            <label for="foto_profil" class="btn btn-sm btn-primary">
+                                <i class="bi bi-camera"></i> Ubah Foto
+                            </label>
+                            <input type="file" name="foto_profil" id="foto_profil"
+                                class="d-none @error('foto_profil') is-invalid @enderror"
+                                accept="image/jpeg,image/jpg,image/png" onchange="previewFoto(event)">
+                        </div>
+                        <small class="text-muted d-block">Format: JPG, PNG. Maksimal: 2MB</small>
+                        @error('foto_profil')
+                            <div class="text-danger mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <hr class="my-4">
 
                     {{-- Username --}}
                     <div class="mb-3">
@@ -111,7 +133,8 @@
                             </option>
                             <option value="kurikulum" {{ old('role', $user->role) === 'kurikulum' ? 'selected' : '' }}>
                                 Kurikulum</option>
-                            <option value="ketua_kelas" {{ old('role', $user->role) === 'ketua_kelas' ? 'selected' : '' }}>
+                            <option value="ketua_kelas"
+                                {{ old('role', $user->role) === 'ketua_kelas' ? 'selected' : '' }}>
                                 Ketua Kelas (Siswa yang generate QR)</option>
                         </select>
                         @error('role')
@@ -123,7 +146,8 @@
                     <div class="mb-3" id="guru-field"
                         style="{{ old('role', $user->role) && old('role', $user->role) !== 'guru' && old('role', $user->role) !== 'ketua_kelas' ? '' : 'display: none;' }}">
                         <label for="guru_id" class="form-label">Profil Guru <span class="text-danger">*</span></label>
-                        <select class="form-control @error('guru_id') is-invalid @enderror" id="guru_id" name="guru_id">
+                        <select class="form-control @error('guru_id') is-invalid @enderror" id="guru_id"
+                            name="guru_id">
                             <option value="">-- Pilih Guru --</option>
                             @foreach ($guru_list as $guru)
                                 <option value="{{ $guru->id }}"
@@ -160,13 +184,16 @@
                             tersebut</small>
                     </div>
 
-                    {{-- Status Aktif --}}
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
-                            {{ old('is_active', $user->is_active) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="is_active">
-                            Aktif (user dapat login)
-                        </label>
+                    {{-- Status --}}
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                        <select class="form-control @error('status') is-invalid @enderror" id="status" name="status" required>
+                            <option value="aktif" {{ old('status', $user->status) === 'aktif' ? 'selected' : '' }}>Aktif (dapat login)</option>
+                            <option value="nonaktif" {{ old('status', $user->status) === 'nonaktif' ? 'selected' : '' }}>Nonaktif (tidak dapat login)</option>
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- Submit --}}
@@ -234,6 +261,18 @@
 
 @push('scripts')
     <script>
+        // Preview foto
+        function previewFoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('fotoPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
         const roleSelect = document.getElementById('role');
         const guruField = document.getElementById('guru-field');
         const guruSelect = document.getElementById('guru_id');
@@ -254,7 +293,7 @@
                 // Ketua Kelas = Siswa → Pilih Kelas
                 kelasField.style.display = 'block';
                 kelasSelect.required = true;
-            } else if (roleValue && roleValue !== 'admin') {
+            } else if (roleValue === 'guru' || roleValue === 'guru_piket' || roleValue === 'kepala_sekolah' || roleValue === 'kurikulum') {
                 // Guru, Guru Piket, Kepala Sekolah, Kurikulum → Pilih Profil Guru
                 guruField.style.display = 'block';
                 guruSelect.required = true;
