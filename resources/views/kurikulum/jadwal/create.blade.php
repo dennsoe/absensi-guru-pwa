@@ -135,9 +135,11 @@
                                     <label class="form-label">Semester <span class="text-danger">*</span></label>
                                     <select name="semester" class="form-select @error('semester') is-invalid @enderror"
                                         required>
-                                        <option value="Ganjil" {{ old('semester') == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil
+                                        <option value="Ganjil" {{ old('semester') == 'Ganjil' ? 'selected' : '' }}>Semester
+                                            Ganjil
                                         </option>
-                                        <option value="Genap" {{ old('semester') == 'Genap' ? 'selected' : '' }}>Semester Genap
+                                        <option value="Genap" {{ old('semester') == 'Genap' ? 'selected' : '' }}>Semester
+                                            Genap
                                         </option>
                                     </select>
                                     @error('semester')

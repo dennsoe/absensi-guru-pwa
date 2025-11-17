@@ -50,7 +50,8 @@
                                 <select name="hari" class="form-select" onchange="this.form.submit()">
                                     <option value="">Semua Hari</option>
                                     @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $h)
-                                        <option value="{{ strtolower($h) }}" {{ request('hari') === strtolower($h) ? 'selected' : '' }}>
+                                        <option value="{{ strtolower($h) }}"
+                                            {{ request('hari') === strtolower($h) ? 'selected' : '' }}>
                                             {{ $h }}</option>
                                     @endforeach
                                 </select>
@@ -63,8 +64,11 @@
                             <div class="col-md-3">
                                 <label class="form-label">Semester</label>
                                 <select name="semester" class="form-select" onchange="this.form.submit()">
-                                    <option value="Ganjil" {{ request('semester', 'Ganjil') == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil</option>
-                                    <option value="Genap" {{ request('semester') == 'Genap' ? 'selected' : '' }}>Semester Genap</option>
+                                    <option value="Ganjil"
+                                        {{ request('semester', 'Ganjil') == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil
+                                    </option>
+                                    <option value="Genap" {{ request('semester') == 'Genap' ? 'selected' : '' }}>Semester
+                                        Genap</option>
                                 </select>
                             </div>
                         </form>

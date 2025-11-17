@@ -133,10 +133,12 @@
                                     <select name="semester" class="form-select @error('semester') is-invalid @enderror"
                                         required>
                                         <option value="Ganjil"
-                                            {{ old('semester', $jadwal->semester) == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil
+                                            {{ old('semester', $jadwal->semester) == 'Ganjil' ? 'selected' : '' }}>Semester
+                                            Ganjil
                                         </option>
                                         <option value="Genap"
-                                            {{ old('semester', $jadwal->semester) == 'Genap' ? 'selected' : '' }}>Semester Genap
+                                            {{ old('semester', $jadwal->semester) == 'Genap' ? 'selected' : '' }}>Semester
+                                            Genap
                                         </option>
                                     </select>
                                     @error('semester')
