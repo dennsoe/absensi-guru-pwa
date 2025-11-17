@@ -49,6 +49,12 @@ Route::middleware('guest')->group(function () {
 */
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Fallback untuk logout GET (redirect ke dashboard dengan pesan)
+    Route::get('/logout', function() {
+        return redirect()->route('dashboard')->with('error', 'Logout harus menggunakan tombol Logout yang tersedia di menu.');
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Profile Routes (All authenticated users)
