@@ -21,9 +21,9 @@ class AnalyticsController extends Controller
             $date = today()->subDays($i);
             $trend_30_hari[] = [
                 'tanggal' => $date->format('d M'),
-                'hadir' => Absensi::whereDate('tanggal', $date)->where('status', 'hadir')->count(),
-                'terlambat' => Absensi::whereDate('tanggal', $date)->where('status', 'terlambat')->count(),
-                'alpha' => Absensi::whereDate('tanggal', $date)->where('status', 'alpha')->count(),
+                'hadir' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'hadir')->count(),
+                'terlambat' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'terlambat')->count(),
+                'alpha' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'alpha')->count(),
             ];
         }
 
@@ -35,7 +35,7 @@ class AnalyticsController extends Controller
             $tahun = $date->year;
 
             $total = Absensi::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->count();
-            $hadir = Absensi::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->where('status', 'hadir')->count();
+            $hadir = Absensi::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->where('status_kehadiran', 'hadir')->count();
 
             $perbandingan_bulanan[] = [
                 'bulan' => $date->translatedFormat('M Y'),
@@ -51,7 +51,7 @@ class AnalyticsController extends Controller
                 $q->whereMonth('tanggal', now()->month);
             },
             'absensi as hadir' => function($q) {
-                $q->whereMonth('tanggal', now()->month)->where('status', 'hadir');
+                $q->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'hadir');
             },
         ])->get()
           ->map(function($guru) {
@@ -64,10 +64,10 @@ class AnalyticsController extends Controller
         // Guru dengan pelanggaran (bulan ini)
         $guru_pelanggaran = Guru::withCount([
             'absensi as terlambat' => function($q) {
-                $q->whereMonth('tanggal', now()->month)->where('status', 'terlambat');
+                $q->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'terlambat');
             },
             'absensi as alpha' => function($q) {
-                $q->whereMonth('tanggal', now()->month)->where('status', 'alpha');
+                $q->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'alpha');
             },
         ])->get()
           ->map(function($guru) {
@@ -83,7 +83,7 @@ class AnalyticsController extends Controller
             ->join('jadwal_mengajar', 'absensi.jadwal_id', '=', 'jadwal_mengajar.id')
             ->select('jadwal_mengajar.hari', DB::raw('COUNT(*) as total'))
             ->whereMonth('absensi.tanggal', now()->month)
-            ->where('absensi.status', 'hadir')
+            ->where('absensi.status_kehadiran', 'hadir')
             ->groupBy('jadwal_mengajar.hari')
             ->get()
             ->pluck('total', 'hari');
@@ -119,9 +119,9 @@ class AnalyticsController extends Controller
             $trend_guru[] = [
                 'bulan' => $date->translatedFormat('M Y'),
                 'total' => $absensi->count(),
-                'hadir' => $absensi->where('status', 'hadir')->count(),
-                'terlambat' => $absensi->where('status', 'terlambat')->count(),
-                'alpha' => $absensi->where('status', 'alpha')->count(),
+                'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+                'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+                'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
             ];
         }
 

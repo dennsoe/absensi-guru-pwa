@@ -71,7 +71,7 @@ class GuruPiketController extends Controller
     {
         $absensi = Absensi::whereDate('tanggal', today())
                           ->with(['guru', 'jadwalMengajar.kelas', 'jadwalMengajar.mataPelajaran'])
-                          ->latest('waktu_masuk')
+                          ->latest('jam_masuk')
                           ->get();
 
         return view('piket.monitoring', compact('absensi'));
@@ -82,7 +82,9 @@ class GuruPiketController extends Controller
      */
     public function inputAbsensiManual()
     {
-        $guru = Guru::where('status', 'aktif')
+        $guru = Guru::whereHas('user', function($q) {
+                        $q->where('status', 'aktif');
+                    })
                     ->whereDoesntHave('absensi', function($q) {
                         $q->whereDate('tanggal', today());
                     })
@@ -100,13 +102,13 @@ class GuruPiketController extends Controller
     {
         $validated = $request->validate([
             'guru_id' => 'required|exists:guru,id',
-            'jadwal_mengajar_id' => 'required|exists:jadwal_mengajar,id',
+            'jadwal_id' => 'required|exists:jadwal_mengajar,id',
             'status_kehadiran' => 'required|in:hadir,izin,sakit,alpha,dinas_luar',
             'keterangan' => 'nullable|string|max:500',
         ]);
 
         $validated['tanggal'] = today();
-        $validated['waktu_masuk'] = now()->format('H:i:s');
+        $validated['jam_masuk'] = now()->format('H:i:s');
         $validated['metode_absensi'] = 'manual';
         $validated['dibuat_oleh'] = Auth::id();
 

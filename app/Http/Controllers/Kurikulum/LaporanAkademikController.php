@@ -64,7 +64,9 @@ class LaporanAkademikController extends Controller
         $tahun_ajaran = $request->get('tahun_ajaran', '2025/2026');
         $semester = $request->get('semester', 1);
 
-        $guru_list = Guru::where('status', 'aktif')->orderBy('nama')->get();
+        $guru_list = Guru::whereHas('user', function($q) {
+            $q->where('status', 'aktif');
+        })->orderBy('nama')->get();
 
         $laporan = Guru::with(['jadwalMengajar' => function($q) use ($tahun_ajaran, $semester) {
                           $q->where('tahun_ajaran', $tahun_ajaran)

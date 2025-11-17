@@ -129,7 +129,7 @@ class KepalaSekolahController extends Controller
                         'guru_id',
                         DB::raw('COUNT(*) as total_absensi'),
                         DB::raw('SUM(CASE WHEN status_kehadiran = "hadir" THEN 1 ELSE 0 END) as total_hadir'),
-                        DB::raw('SUM(CASE WHEN status_keterlambatan = "terlambat" THEN 1 ELSE 0 END) as total_terlambat'),
+                        DB::raw('SUM(CASE WHEN status_kehadiran = "terlambat" THEN 1 ELSE 0 END) as total_terlambat'),
                         DB::raw('SUM(CASE WHEN status_kehadiran = "alpha" THEN 1 ELSE 0 END) as total_alpha')
                     )
                     ->whereMonth('tanggal', $bulan)

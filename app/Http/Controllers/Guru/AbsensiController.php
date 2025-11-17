@@ -269,26 +269,15 @@ class AbsensiController extends Controller
     public function riwayat()
     {
         $guruId = Auth::user()->guru_id;
+        $guru = Auth::user()->guru;
 
-        $riwayat = Absensi::with(['jadwal'])
+        $riwayat = Absensi::with(['jadwal.kelas', 'jadwal.mataPelajaran'])
             ->where('guru_id', $guruId)
             ->whereDate('tanggal', Carbon::today())
             ->orderBy('jam_absen', 'asc')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'jadwal' => [
-                        'mata_pelajaran' => $item->jadwal->mata_pelajaran,
-                        'jam_mulai' => $item->jadwal->jam_mulai,
-                    ],
-                    'jam_absen' => Carbon::parse($item->jam_absen)->format('H:i'),
-                    'status_kehadiran' => $item->status_kehadiran,
-                    'metode_absensi' => $item->metode_absensi,
-                    'keterangan' => $item->keterangan,
-                ];
-            });
+            ->get();
 
-        return response()->json($riwayat);
+        return view('guru.absensi.riwayat', compact('riwayat', 'guru'));
     }
 
     /**

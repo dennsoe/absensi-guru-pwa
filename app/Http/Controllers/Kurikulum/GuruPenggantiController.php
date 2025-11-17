@@ -49,7 +49,9 @@ class GuruPenggantiController extends Controller
                                         ->get();
 
         // Guru yang available (tidak izin, tidak punya jadwal bentrok)
-        $guru_available = Guru::where('status', 'aktif')
+        $guru_available = Guru::whereHas('user', function($q) {
+                                    $q->where('status', 'aktif');
+                                })
                              ->whereDoesntHave('izinCuti', function($q) {
                                  $q->where('status', 'approved')
                                    ->whereDate('tanggal_mulai', '<=', today())

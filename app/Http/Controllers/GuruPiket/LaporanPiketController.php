@@ -33,16 +33,16 @@ class LaporanPiketController extends Controller
         // Statistik
         $stats = [
             'total_jadwal' => $jadwal->count(),
-            'hadir' => $absensi->where('status', 'hadir')->count(),
-            'terlambat' => $absensi->where('status', 'terlambat')->count(),
-            'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi->where('status', 'alpha')->count(),
+            'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
             'belum_absen' => $jadwal->count() - $absensi->count(),
         ];
 
         // Catatan khusus
         $catatan_khusus = [
-            'guru_terlambat' => $absensi->where('status', 'terlambat'),
+            'guru_terlambat' => $absensi->where('status_kehadiran', 'terlambat'),
             'guru_belum_absen' => $jadwal->filter(function($j) use ($absensi) {
                 return !$absensi->pluck('guru_id')->contains($j->guru_id);
             })->unique('guru_id'),
@@ -78,10 +78,10 @@ class LaporanPiketController extends Controller
 
         $stats = [
             'total_jadwal' => $jadwal->count(),
-            'hadir' => $absensi->where('status', 'hadir')->count(),
-            'terlambat' => $absensi->where('status', 'terlambat')->count(),
-            'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi->where('status', 'alpha')->count(),
+            'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
         ];
 
         $pdf = Pdf::loadView('guru-piket.laporan.pdf', compact(

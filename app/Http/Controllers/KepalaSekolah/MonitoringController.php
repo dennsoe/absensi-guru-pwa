@@ -36,10 +36,10 @@ class MonitoringController extends Controller
         $total_absensi = Absensi::whereBetween('tanggal', [$start, $end])->count();
         $stats = [
             'total' => $total_absensi,
-            'hadir' => Absensi::whereBetween('tanggal', [$start, $end])->where('status', 'hadir')->count(),
-            'terlambat' => Absensi::whereBetween('tanggal', [$start, $end])->where('status', 'terlambat')->count(),
-            'izin' => Absensi::whereBetween('tanggal', [$start, $end])->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => Absensi::whereBetween('tanggal', [$start, $end])->where('status', 'alpha')->count(),
+            'hadir' => Absensi::whereBetween('tanggal', [$start, $end])->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => Absensi::whereBetween('tanggal', [$start, $end])->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => Absensi::whereBetween('tanggal', [$start, $end])->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => Absensi::whereBetween('tanggal', [$start, $end])->where('status_kehadiran', 'alpha')->count(),
         ];
 
         $stats['persentase_kehadiran'] = $total_absensi > 0
@@ -48,8 +48,8 @@ class MonitoringController extends Controller
 
         // Guru dengan pelanggaran tertinggi
         $guru_pelanggaran = Guru::select('guru.*')
-            ->selectRaw('(SELECT COUNT(*) FROM absensi WHERE absensi.guru_id = guru.id AND status = "alpha" AND tanggal BETWEEN ? AND ?) as alpha_count', [$start, $end])
-            ->selectRaw('(SELECT COUNT(*) FROM absensi WHERE absensi.guru_id = guru.id AND status = "terlambat" AND tanggal BETWEEN ? AND ?) as terlambat_count', [$start, $end])
+            ->selectRaw('(SELECT COUNT(*) FROM absensi WHERE absensi.guru_id = guru.id AND status_kehadiran = "alpha" AND tanggal BETWEEN ? AND ?) as alpha_count', [$start, $end])
+            ->selectRaw('(SELECT COUNT(*) FROM absensi WHERE absensi.guru_id = guru.id AND status_kehadiran = "terlambat" AND tanggal BETWEEN ? AND ?) as terlambat_count', [$start, $end])
             ->get()
             ->map(function($guru) {
                 $guru->total_pelanggaran = $guru->alpha_count + $guru->terlambat_count;
@@ -65,9 +65,9 @@ class MonitoringController extends Controller
             $date = today()->subDays($i);
             $trend_data[] = [
                 'tanggal' => $date->format('d M'),
-                'hadir' => Absensi::whereDate('tanggal', $date)->where('status', 'hadir')->count(),
-                'terlambat' => Absensi::whereDate('tanggal', $date)->where('status', 'terlambat')->count(),
-                'alpha' => Absensi::whereDate('tanggal', $date)->where('status', 'alpha')->count(),
+                'hadir' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'hadir')->count(),
+                'terlambat' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'terlambat')->count(),
+                'alpha' => Absensi::whereDate('tanggal', $date)->where('status_kehadiran', 'alpha')->count(),
             ];
         }
 
@@ -106,10 +106,10 @@ class MonitoringController extends Controller
             'total_jadwal' => $jadwal_hari_ini,
             'sudah_absen' => $absensi_hari_ini,
             'belum_absen' => $jadwal_hari_ini - $absensi_hari_ini,
-            'hadir' => Absensi::whereDate('tanggal', today())->where('status', 'hadir')->count(),
-            'terlambat' => Absensi::whereDate('tanggal', today())->where('status', 'terlambat')->count(),
-            'izin' => Absensi::whereDate('tanggal', today())->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => Absensi::whereDate('tanggal', today())->where('status', 'alpha')->count(),
+            'hadir' => Absensi::whereDate('tanggal', today())->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => Absensi::whereDate('tanggal', today())->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => Absensi::whereDate('tanggal', today())->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => Absensi::whereDate('tanggal', today())->where('status_kehadiran', 'alpha')->count(),
         ];
 
         return response()->json([
@@ -136,10 +136,10 @@ class MonitoringController extends Controller
 
         $stats = [
             'total' => $absensi->count(),
-            'hadir' => $absensi->where('status', 'hadir')->count(),
-            'terlambat' => $absensi->where('status', 'terlambat')->count(),
-            'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi->where('status', 'alpha')->count(),
+            'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
         ];
 
         return view('kepala-sekolah.monitoring.per-kelas', compact('kelas', 'absensi', 'stats'));

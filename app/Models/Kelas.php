@@ -32,7 +32,7 @@ class Kelas extends Model
 
     public function jadwalMengajar()
     {
-        return $this->hasMany(JadwalMengajar::class);
+        return $this->hasMany(JadwalMengajar::class, 'kelas_id');
     }
 
     /**

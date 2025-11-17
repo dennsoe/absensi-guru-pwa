@@ -30,6 +30,7 @@ use App\Http\Controllers\Kurikulum\LaporanAkademikController;
 use App\Http\Controllers\Guru\JadwalController as GuruJadwalController;
 use App\Http\Controllers\Guru\IzinController as GuruIzinController;
 use App\Http\Controllers\Guru\ProfileController as GuruProfileController;
+use App\Http\Controllers\Jadwal\JadwalController;
 
 /*
 |--------------------------------------------------------------------------

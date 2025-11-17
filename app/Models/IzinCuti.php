@@ -32,7 +32,7 @@ class IzinCuti extends Model
      */
     public function guru()
     {
-        return $this->belongsTo(Guru::class);
+        return $this->belongsTo(Guru::class, 'guru_id');
     }
 
     public function approvedBy()

@@ -35,10 +35,10 @@ class MonitoringController extends Controller
             'total_jadwal' => $jadwal_hari_ini->count(),
             'sudah_absen' => $absensi->count(),
             'belum_absen' => $jadwal_hari_ini->count() - $absensi->count(),
-            'hadir' => $absensi->where('status', 'hadir')->count(),
-            'terlambat' => $absensi->where('status', 'terlambat')->count(),
-            'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi->where('status', 'alpha')->count(),
+            'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
         ];
 
         // Guru yang belum absen
@@ -71,10 +71,10 @@ class MonitoringController extends Controller
 
         $stats = [
             'total' => $absensi_bulan_ini->count(),
-            'hadir' => $absensi_bulan_ini->where('status', 'hadir')->count(),
-            'terlambat' => $absensi_bulan_ini->where('status', 'terlambat')->count(),
-            'izin' => $absensi_bulan_ini->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi_bulan_ini->where('status', 'alpha')->count(),
+            'hadir' => $absensi_bulan_ini->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi_bulan_ini->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi_bulan_ini->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi_bulan_ini->where('status_kehadiran', 'alpha')->count(),
         ];
 
         return view('guru-piket.monitoring.detail', compact('guru', 'absensi_bulan_ini', 'stats'));
@@ -94,10 +94,10 @@ class MonitoringController extends Controller
                           ->get();
 
         $stats = [
-            'hadir' => $absensi->where('status', 'hadir')->count(),
-            'terlambat' => $absensi->where('status', 'terlambat')->count(),
-            'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $absensi->where('status', 'alpha')->count(),
+            'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
         ];
 
         return response()->json([

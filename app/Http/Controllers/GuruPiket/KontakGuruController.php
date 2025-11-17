@@ -48,10 +48,10 @@ class KontakGuruController extends Controller
 
         // Statistik bulan ini
         $stats = [
-            'hadir' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status', 'hadir')->count(),
-            'terlambat' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status', 'terlambat')->count(),
-            'izin' => $guru->absensi()->whereMonth('tanggal', now()->month)->whereIn('status', ['izin', 'sakit'])->count(),
-            'alpha' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status', 'alpha')->count(),
+            'hadir' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => $guru->absensi()->whereMonth('tanggal', now()->month)->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+            'alpha' => $guru->absensi()->whereMonth('tanggal', now()->month)->where('status_kehadiran', 'alpha')->count(),
         ];
 
         return view('guru-piket.kontak-guru.show', compact('guru', 'jadwal', 'stats'));
@@ -62,7 +62,9 @@ class KontakGuruController extends Controller
      */
     public function export()
     {
-        $guru = Guru::where('status', 'aktif')
+        $guru = Guru::whereHas('user', function($q) {
+                        $q->where('status', 'aktif');
+                    })
                     ->orderBy('nama')
                     ->get();
 

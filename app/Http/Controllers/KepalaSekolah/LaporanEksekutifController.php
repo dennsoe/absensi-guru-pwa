@@ -121,10 +121,10 @@ class LaporanEksekutifController extends Controller
             $rekap_kelas[] = [
                 'kelas' => $kelas,
                 'total' => $absensi->count(),
-                'hadir' => $absensi->where('status', 'hadir')->count(),
-                'terlambat' => $absensi->where('status', 'terlambat')->count(),
-                'izin' => $absensi->whereIn('status', ['izin', 'sakit'])->count(),
-                'alpha' => $absensi->where('status', 'alpha')->count(),
+                'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),
+                'terlambat' => $absensi->where('status_kehadiran', 'terlambat')->count(),
+                'izin' => $absensi->whereIn('status_kehadiran', ['izin', 'sakit'])->count(),
+                'alpha' => $absensi->where('status_kehadiran', 'alpha')->count(),
             ];
         }
 

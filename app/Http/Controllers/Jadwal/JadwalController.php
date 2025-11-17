@@ -52,7 +52,9 @@ class JadwalController extends Controller
      */
     public function perGuru(Request $request)
     {
-        $guru = Guru::where('status', 'aktif')->get();
+        $guru = Guru::whereHas('user', function($q) {
+            $q->where('status', 'aktif');
+        })->get();
         $guruId = $request->get('guru_id');
 
         $jadwal = collect();
@@ -74,10 +76,10 @@ class JadwalController extends Controller
     public function generateQrCode(Request $request)
     {
         $validated = $request->validate([
-            'jadwal_mengajar_id' => 'required|exists:jadwal_mengajar,id',
+            'jadwal_id' => 'required|exists:jadwal_mengajar,id',
         ]);
 
-        $jadwal = JadwalMengajar::findOrFail($validated['jadwal_mengajar_id']);
+        $jadwal = JadwalMengajar::findOrFail($validated['jadwal_id']);
 
         // Generate kode unik
         $kode = Str::uuid()->toString();
@@ -88,7 +90,7 @@ class JadwalController extends Controller
 
         // Simpan QR Code
         $qrCode = QrCode::create([
-            'jadwal_mengajar_id' => $jadwal->id,
+            'jadwal_id' => $jadwal->id,
             'guru_id' => $jadwal->guru_id,
             'kode' => $kode,
             'waktu_dibuat' => now(),

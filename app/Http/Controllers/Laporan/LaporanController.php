@@ -30,8 +30,7 @@ class LaporanController extends Controller
                             DB::raw('SUM(CASE WHEN status_kehadiran = "sakit" THEN 1 ELSE 0 END) as sakit'),
                             DB::raw('SUM(CASE WHEN status_kehadiran = "alpha" THEN 1 ELSE 0 END) as alpha'),
                             DB::raw('SUM(CASE WHEN status_kehadiran = "dinas_luar" THEN 1 ELSE 0 END) as dinas_luar'),
-                            DB::raw('SUM(CASE WHEN status_keterlambatan = "terlambat" THEN 1 ELSE 0 END) as terlambat'),
-                            DB::raw('SUM(menit_terlambat) as total_menit_terlambat')
+                            DB::raw('SUM(CASE WHEN status_kehadiran = "terlambat" THEN 1 ELSE 0 END) as terlambat')
                         )
                         ->whereMonth('tanggal', $bulan)
                         ->whereYear('tanggal', $tahun)
@@ -43,7 +42,9 @@ class LaporanController extends Controller
         }
 
         $rekap = $query->get();
-        $guru = Guru::where('status', 'aktif')->get();
+        $guru = Guru::whereHas('user', function($q) {
+            $q->where('status', 'aktif');
+        })->get();
 
         return view('laporan.index', compact('rekap', 'bulan', 'tahun', 'guru', 'guruId'));
     }
@@ -64,7 +65,7 @@ class LaporanController extends Controller
                             DB::raw('SUM(CASE WHEN status_kehadiran = "izin" THEN 1 ELSE 0 END) as izin'),
                             DB::raw('SUM(CASE WHEN status_kehadiran = "sakit" THEN 1 ELSE 0 END) as sakit'),
                             DB::raw('SUM(CASE WHEN status_kehadiran = "alpha" THEN 1 ELSE 0 END) as alpha'),
-                            DB::raw('SUM(CASE WHEN status_keterlambatan = "terlambat" THEN 1 ELSE 0 END) as terlambat')
+                            DB::raw('SUM(CASE WHEN status_kehadiran = "terlambat" THEN 1 ELSE 0 END) as terlambat')
                         )
                         ->whereMonth('tanggal', $bulan)
                         ->whereYear('tanggal', $tahun)

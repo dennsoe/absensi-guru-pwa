@@ -60,27 +60,27 @@ class User extends Authenticatable
      */
     public function guru()
     {
-        return $this->hasOne(Guru::class);
+        return $this->hasOne(Guru::class, 'user_id');
     }
 
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class);
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     public function notifikasi()
     {
-        return $this->hasMany(Notifikasi::class);
+        return $this->hasMany(Notifikasi::class, 'user_id');
     }
 
     public function logAktivitas()
     {
-        return $this->hasMany(LogAktivitas::class);
+        return $this->hasMany(LogAktivitas::class, 'user_id');
     }
 
     public function pushSubscriptions()
     {
-        return $this->hasMany(PushSubscription::class);
+        return $this->hasMany(PushSubscription::class, 'user_id');
     }
 
     /**

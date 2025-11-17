@@ -28,7 +28,7 @@ class GuruPengganti extends Model
     /**
      * Relationships
      */
-    public function jadwal()
+    public function jadwalAsli()
     {
         return $this->belongsTo(JadwalMengajar::class, 'jadwal_id');
     }

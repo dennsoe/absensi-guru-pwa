@@ -106,14 +106,11 @@ class AbsensiController extends Controller
 
         // Simpan absensi
         $absensi = Absensi::create([
-            'jadwal_mengajar_id' => $jadwal->id,
+            'jadwal_id' => $jadwal->id,
             'guru_id' => $guru->id,
-            'qr_code_id' => $qrCode->id,
             'tanggal' => today(),
-            'waktu_masuk' => $waktuMasuk->format('H:i:s'),
-            'status_kehadiran' => 'hadir',
-            'status_keterlambatan' => $statusKeterlambatan,
-            'menit_terlambat' => $menitTerlambat,
+            'jam_masuk' => $waktuMasuk->format('H:i:s'),
+            'status_kehadiran' => $statusKeterlambatan,
             'metode_absensi' => 'qr_code',
             'latitude' => $validated['latitude'],
             'longitude' => $validated['longitude'],
@@ -187,16 +184,16 @@ class AbsensiController extends Controller
 
         // Simpan absensi
         $absensi = Absensi::create([
-            'jadwal_mengajar_id' => $jadwal->id,
+            'jadwal_id' => $jadwal->id,
             'guru_id' => $guru->id,
             'tanggal' => today(),
-            'waktu_masuk' => now()->format('H:i:s'),
+            'jam_masuk' => now()->format('H:i:s'),
             'status_kehadiran' => 'hadir',
             'metode_absensi' => 'selfie',
             'foto_selfie' => $fotoPath,
             'latitude' => $validated['latitude'],
             'longitude' => $validated['longitude'],
-            'is_validasi_ketua_kelas' => false, // Perlu validasi
+            'validasi_ketua_kelas' => false, // Perlu validasi
         ]);
 
         return response()->json([

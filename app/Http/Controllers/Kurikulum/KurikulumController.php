@@ -87,7 +87,9 @@ class KurikulumController extends Controller
 
     public function createJadwal()
     {
-        $guru = Guru::where('status', 'aktif')->get();
+        $guru = Guru::whereHas('user', function($q) {
+            $q->where('status', 'aktif');
+        })->get();
         $kelas = Kelas::all();
         $mapel = MataPelajaran::all();
 
@@ -132,7 +134,9 @@ class KurikulumController extends Controller
 
     public function editJadwal(JadwalMengajar $jadwal)
     {
-        $guru = Guru::where('status', 'aktif')->get();
+        $guru = Guru::whereHas('user', function($q) {
+            $q->where('status', 'aktif');
+        })->get();
         $kelas = Kelas::all();
         $mapel = MataPelajaran::all();
 
