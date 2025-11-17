@@ -126,7 +126,7 @@
                         <select name="bulan" class="form-select">
                             @for ($i = 1; $i <= 12; $i++)
                                 <option value="{{ $i }}" {{ $bulan == $i ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
+                                    {{ \Carbon\Carbon::createFromDate(null, $i, 1)->translatedFormat('F') }}
                                 </option>
                             @endfor
                         </select>

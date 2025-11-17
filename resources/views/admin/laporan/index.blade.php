@@ -74,7 +74,7 @@
                                 @for ($i = 1; $i <= 12; $i++)
                                     <option value="{{ $i }}"
                                         {{ request('bulan', now()->month) == $i ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
+                                        {{ \Carbon\Carbon::createFromDate(null, $i, 1)->translatedFormat('F') }}
                                     </option>
                                 @endfor
                             </select>
@@ -240,7 +240,7 @@
                             <select name="bulan" class="form-select" required>
                                 @for ($i = 1; $i <= 12; $i++)
                                     <option value="{{ $i }}" {{ now()->month == $i ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
+                                        {{ \Carbon\Carbon::createFromDate(null, $i, 1)->translatedFormat('F') }}
                                     </option>
                                 @endfor
                             </select>
@@ -271,7 +271,7 @@
                             <select name="bulan" class="form-select" required>
                                 @for ($i = 1; $i <= 12; $i++)
                                     <option value="{{ $i }}" {{ now()->month == $i ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
+                                        {{ \Carbon\Carbon::createFromDate(null, $i, 1)->translatedFormat('F') }}
                                     </option>
                                 @endfor
                             </select>

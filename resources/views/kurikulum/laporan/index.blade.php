@@ -92,7 +92,7 @@
                                 <select name="bulan" class="form-select form-select-sm">
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}" {{ date('n') == $i ? 'selected' : '' }}>
-                                            {{ \Carbon\Carbon::create()->month($i)->format('F') }}
+                                            {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}
                                         </option>
                                     @endfor
                                 </select>

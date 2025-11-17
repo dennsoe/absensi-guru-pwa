@@ -34,8 +34,6 @@ class Absensi extends Model
 
     protected $casts = [
         'tanggal' => 'date',
-        'jam_masuk' => 'datetime:H:i',
-        'jam_keluar' => 'datetime:H:i',
         'validasi_gps' => 'boolean',
         'validasi_ketua_kelas' => 'boolean',
         'waktu_validasi_ketua' => 'datetime',

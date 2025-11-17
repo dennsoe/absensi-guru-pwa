@@ -27,7 +27,7 @@ class MonitoringController extends Controller
         // Ambil semua absensi untuk tanggal tersebut
         $absensi = Absensi::whereDate('tanggal', $tanggal)
                           ->with(['guru', 'jadwal.kelas', 'jadwal.mataPelajaran'])
-                          ->orderBy('waktu_absen', 'desc')
+                          ->orderBy('jam_masuk', 'desc')
                           ->get();
 
         // Statistik
@@ -90,7 +90,7 @@ class MonitoringController extends Controller
 
         $absensi = Absensi::whereDate('tanggal', $tanggal)
                           ->with(['guru', 'jadwal.kelas', 'jadwal.mataPelajaran'])
-                          ->orderBy('waktu_absen', 'desc')
+                          ->orderBy('jam_masuk', 'desc')
                           ->get();
 
         $stats = [

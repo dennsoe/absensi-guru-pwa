@@ -134,10 +134,15 @@ class LaporanController extends Controller
             ->orderBy('tanggal', 'asc')
             ->get();
 
-        // Group by guru
+        // Group by guru nama untuk view
+        $absensis_by_guru = $absensi_list->groupBy(function($item) {
+            return $item->guru->nama;
+        });
+
+        // Statistik per guru
         $by_guru = $absensi_list->groupBy(function($item) {
             return $item->guru->id;
-        })->map(function($items, $guru_id) use ($absensi_list) {
+        })->map(function($items, $guru_id) {
             $guru = $items->first()->guru;
             return [
                 'guru' => $guru,
@@ -149,6 +154,6 @@ class LaporanController extends Controller
             ];
         });
 
-        return view('admin.laporan.per-kelas', compact('kelas', 'absensi_list', 'by_guru', 'bulan', 'tahun'));
+        return view('admin.laporan.per-kelas', compact('kelas', 'absensi_list', 'absensis_by_guru', 'by_guru', 'bulan', 'tahun'));
     }
 }
