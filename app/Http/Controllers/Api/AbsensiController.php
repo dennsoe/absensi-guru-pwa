@@ -15,7 +15,7 @@ class AbsensiController extends Controller
     public function checkStatus(Request $request)
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,
@@ -51,7 +51,7 @@ class AbsensiController extends Controller
     public function today()
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,
@@ -79,7 +79,7 @@ class AbsensiController extends Controller
         // Check which jadwal sudah/belum absen
         $jadwal_data = $jadwal_hari_ini->map(function($jadwal) use ($absensi_hari_ini) {
             $absensi = $absensi_hari_ini->firstWhere('jadwal_id', $jadwal->id);
-            
+
             return [
                 'jadwal_id' => $jadwal->id,
                 'kelas' => $jadwal->kelas->nama_kelas,
@@ -110,7 +110,7 @@ class AbsensiController extends Controller
     public function history(Request $request)
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,

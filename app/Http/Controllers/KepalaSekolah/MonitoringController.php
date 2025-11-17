@@ -16,7 +16,7 @@ class MonitoringController extends Controller
     public function index(Request $request)
     {
         $periode = $request->get('periode', 'hari-ini');
-        
+
         // Tentukan range tanggal berdasarkan periode
         switch ($periode) {
             case 'minggu-ini':
@@ -41,9 +41,9 @@ class MonitoringController extends Controller
             'izin' => Absensi::whereBetween('tanggal', [$start, $end])->whereIn('status', ['izin', 'sakit'])->count(),
             'alpha' => Absensi::whereBetween('tanggal', [$start, $end])->where('status', 'alpha')->count(),
         ];
-        
-        $stats['persentase_kehadiran'] = $total_absensi > 0 
-            ? round(($stats['hadir'] / $total_absensi) * 100, 1) 
+
+        $stats['persentase_kehadiran'] = $total_absensi > 0
+            ? round(($stats['hadir'] / $total_absensi) * 100, 1)
             : 0;
 
         // Guru dengan pelanggaran tertinggi
@@ -95,13 +95,13 @@ class MonitoringController extends Controller
     public function realtime()
     {
         $hari_ini = now()->locale('id')->dayName;
-        
+
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
                                         ->where('status', 'aktif')
                                         ->count();
-        
+
         $absensi_hari_ini = Absensi::whereDate('tanggal', today())->count();
-        
+
         $stats = [
             'total_jadwal' => $jadwal_hari_ini,
             'sudah_absen' => $absensi_hari_ini,
@@ -125,7 +125,7 @@ class MonitoringController extends Controller
     public function perKelas($kelasId)
     {
         $kelas = Kelas::with('waliKelas')->findOrFail($kelasId);
-        
+
         $absensi = Absensi::whereHas('jadwal', function($q) use ($kelasId) {
                             $q->where('kelas_id', $kelasId);
                         })

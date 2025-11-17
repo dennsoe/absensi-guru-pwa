@@ -15,7 +15,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,
@@ -48,7 +48,7 @@ class NotificationController extends Controller
     public function unreadCount()
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,
@@ -72,7 +72,7 @@ class NotificationController extends Controller
     public function markAsRead($id)
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,
@@ -105,7 +105,7 @@ class NotificationController extends Controller
     public function markAllAsRead()
     {
         $guru = Guru::where('user_id', Auth::id())->first();
-        
+
         if (!$guru) {
             return response()->json([
                 'success' => false,

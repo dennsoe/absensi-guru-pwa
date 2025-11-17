@@ -15,7 +15,7 @@ class JadwalController extends Controller
     public function index(Request $request)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $hari = $request->get('hari');
         $tahun_ajaran = $request->get('tahun_ajaran', '2025/2026');
         $semester = $request->get('semester', 1);
@@ -79,7 +79,7 @@ class JadwalController extends Controller
     public function show($id)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                 ->where('guru_id', $guru->id)
                                 ->findOrFail($id);

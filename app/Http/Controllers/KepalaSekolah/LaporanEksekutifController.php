@@ -95,7 +95,7 @@ class LaporanEksekutifController extends Controller
         ])->get();
 
         $pdf = Pdf::loadView('kepala-sekolah.laporan.pdf', compact('rekap_guru', 'bulan', 'tahun'));
-        
+
         return $pdf->download('laporan-eksekutif-' . $bulan . '-' . $tahun . '.pdf');
     }
 
@@ -108,7 +108,7 @@ class LaporanEksekutifController extends Controller
         $tahun = $request->get('tahun', now()->year);
 
         $kelas_list = Kelas::with('waliKelas')->get();
-        
+
         $rekap_kelas = [];
         foreach ($kelas_list as $kelas) {
             $absensi = Absensi::whereHas('jadwal', function($q) use ($kelas) {

@@ -160,7 +160,7 @@ class JadwalMengajarController extends Controller
     public function destroy($id)
     {
         $jadwal = JadwalMengajar::findOrFail($id);
-        
+
         // Check if has absensi
         if ($jadwal->absensi()->count() > 0) {
             return back()->with('error', 'Tidak dapat menghapus jadwal yang sudah memiliki data absensi.');

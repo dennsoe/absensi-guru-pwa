@@ -14,6 +14,7 @@
 ## 🚀 INSTALASI & DEPLOYMENT
 
 ### 1. Clone/Download Project
+
 ```bash
 # Jika dari Git
 git clone <repository-url>
@@ -23,16 +24,19 @@ cd absen-guru
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 composer install
 ```
 
 ### 3. Konfigurasi Environment
+
 ```bash
 cp .env.example .env
 ```
 
 Edit file `.env`:
+
 ```env
 APP_NAME="Sistem Absensi Guru"
 APP_ENV=local
@@ -48,33 +52,39 @@ DB_PASSWORD=
 ```
 
 ### 4. Generate Application Key
+
 ```bash
 php artisan key:generate
 ```
 
 ### 5. Buat Database
+
 ```sql
 CREATE DATABASE absen_guru CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 6. Run Migrations & Seeders
+
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
 ### 7. Create Storage Link
+
 ```bash
 php artisan storage:link
 ```
 
 ### 8. Set Permissions (Linux/Mac)
+
 ```bash
 chmod -R 775 storage
 chmod -R 775 bootstrap/cache
 ```
 
 ### 9. Start Development Server
+
 ```bash
 php artisan serve
 ```
@@ -87,21 +97,22 @@ Akses: http://localhost:8000
 
 Gunakan akun berikut untuk testing:
 
-| Role | Email | Password | Deskripsi |
-|------|-------|----------|-----------|
-| Admin | admin@sekolah.com | password123 | Full access |
-| Guru Piket | piket@sekolah.com | password123 | Monitoring harian |
-| Kepala Sekolah | kepsek@sekolah.com | password123 | Approval & analytics |
-| Kurikulum | kurikulum@sekolah.com | password123 | Jadwal & laporan |
-| Guru | guru1@sekolah.com | password123 | Personal schedule |
-| Guru | guru2@sekolah.com | password123 | Personal schedule |
-| Ketua Kelas | ketua@sekolah.com | password123 | Generate QR |
+| Role           | Email                 | Password    | Deskripsi            |
+| -------------- | --------------------- | ----------- | -------------------- |
+| Admin          | admin@sekolah.com     | password123 | Full access          |
+| Guru Piket     | piket@sekolah.com     | password123 | Monitoring harian    |
+| Kepala Sekolah | kepsek@sekolah.com    | password123 | Approval & analytics |
+| Kurikulum      | kurikulum@sekolah.com | password123 | Jadwal & laporan     |
+| Guru           | guru1@sekolah.com     | password123 | Personal schedule    |
+| Guru           | guru2@sekolah.com     | password123 | Personal schedule    |
+| Ketua Kelas    | ketua@sekolah.com     | password123 | Generate QR          |
 
 ---
 
 ## 📚 FITUR UTAMA
 
 ### ✅ 6 Role Pengguna
+
 1. **Admin** - User & system management
 2. **Guru Piket** - Real-time monitoring
 3. **Kepala Sekolah** - Approval & executive reports
@@ -110,15 +121,16 @@ Gunakan akun berikut untuk testing:
 6. **Ketua Kelas** - QR Code generation
 
 ### ✅ Core Features
-- QR Code attendance system
-- Real-time monitoring (AJAX)
-- Leave/permit management
-- Substitute teacher assignment
-- Advanced analytics (Chart.js)
-- PDF reports export
-- Multi-role access control
-- File upload support
-- Mobile responsive
+
+-   QR Code attendance system
+-   Real-time monitoring (AJAX)
+-   Leave/permit management
+-   Substitute teacher assignment
+-   Advanced analytics (Chart.js)
+-   PDF reports export
+-   Multi-role access control
+-   File upload support
+-   Mobile responsive
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
@@ -136,19 +148,19 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 
 ### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+-   **[Vehikl](https://vehikl.com/)**
+-   **[Tighten Co.](https://tighten.co)**
+-   **[WebReinvent](https://webreinvent.com/)**
+-   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+-   **[64 Robots](https://64robots.com)**
+-   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+-   **[Cyber-Duck](https://cyber-duck.co.uk)**
+-   **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+-   **[Jump24](https://jump24.co.uk)**
+-   **[Redberry](https://redberry.international/laravel/)**
+-   **[Active Logic](https://activelogic.com)**
+-   **[byte5](https://byte5.de)**
+-   **[OP.GG](https://op.gg)**
 
 ## Contributing
 

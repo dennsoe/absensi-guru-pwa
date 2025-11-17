@@ -33,10 +33,10 @@ class AnalyticsController extends Controller
             $date = now()->subMonths($i);
             $bulan = $date->month;
             $tahun = $date->year;
-            
+
             $total = Absensi::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->count();
             $hadir = Absensi::whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->where('status', 'hadir')->count();
-            
+
             $perbandingan_bulanan[] = [
                 'bulan' => $date->translatedFormat('M Y'),
                 'total' => $total,
@@ -103,19 +103,19 @@ class AnalyticsController extends Controller
     public function perGuru($guruId)
     {
         $guru = Guru::findOrFail($guruId);
-        
+
         // Trend 6 bulan terakhir
         $trend_guru = [];
         for ($i = 5; $i >= 0; $i--) {
             $date = now()->subMonths($i);
             $bulan = $date->month;
             $tahun = $date->year;
-            
+
             $absensi = Absensi::where('guru_id', $guruId)
                              ->whereMonth('tanggal', $bulan)
                              ->whereYear('tanggal', $tahun)
                              ->get();
-            
+
             $trend_guru[] = [
                 'bulan' => $date->translatedFormat('M Y'),
                 'total' => $absensi->count(),

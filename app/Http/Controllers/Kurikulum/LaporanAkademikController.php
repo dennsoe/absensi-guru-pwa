@@ -148,7 +148,7 @@ class LaporanAkademikController extends Controller
                       ->get();
 
         $pdf = Pdf::loadView('kurikulum.laporan.pdf', compact('laporan', 'tahun_ajaran', 'semester'));
-        
+
         return $pdf->download('laporan-akademik-' . $tahun_ajaran . '.pdf');
     }
 }

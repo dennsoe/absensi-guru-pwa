@@ -62,7 +62,7 @@ class ApprovalController extends Controller
     public function approve(Request $request, $id)
     {
         $izin = IzinCuti::findOrFail($id);
-        
+
         if ($izin->status !== 'pending') {
             return back()->with('error', 'Permohonan sudah diproses sebelumnya.');
         }
@@ -88,7 +88,7 @@ class ApprovalController extends Controller
         ]);
 
         $izin = IzinCuti::findOrFail($id);
-        
+
         if ($izin->status !== 'pending') {
             return back()->with('error', 'Permohonan sudah diproses sebelumnya.');
         }

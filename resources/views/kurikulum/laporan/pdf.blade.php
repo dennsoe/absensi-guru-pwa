@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Laporan Kehadiran Guru - {{ $bulan }}/{{ $tahun }}</title>
@@ -8,64 +9,80 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
         }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             border-bottom: 3px solid #000;
             padding-bottom: 10px;
         }
+
         .header h2 {
             margin: 5px 0;
         }
+
         .info {
             margin-bottom: 20px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
+
         .center {
             text-align: center;
         }
+
         .right {
             text-align: right;
         }
+
         .footer {
             margin-top: 50px;
             text-align: right;
         }
+
         .signature {
             margin-top: 80px;
         }
+
         .badge {
             padding: 3px 8px;
             border-radius: 3px;
             font-weight: bold;
         }
+
         .badge-success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .badge-warning {
             background-color: #fff3cd;
             color: #856404;
         }
+
         .badge-danger {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div class="header">
@@ -114,27 +131,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($laporan as $index => $lap)
-            <tr>
-                <td class="center">{{ $index + 1 }}</td>
-                <td>{{ $lap['guru']->nip }}</td>
-                <td>{{ $lap['guru']->nama }}</td>
-                <td class="center">{{ $lap['hadir'] }}</td>
-                <td class="center">{{ $lap['terlambat'] }}</td>
-                <td class="center">{{ $lap['izin'] }}</td>
-                <td class="center">{{ $lap['alpha'] }}</td>
-                <td class="center">{{ $lap['total_hari'] }}</td>
-                <td class="center">{{ number_format($lap['persentase'], 1) }}%</td>
-                <td class="center">
-                    @if($lap['persentase'] >= 90)
-                        <span class="badge badge-success">Sangat Baik</span>
-                    @elseif($lap['persentase'] >= 75)
-                        <span class="badge badge-warning">Baik</span>
-                    @else
-                        <span class="badge badge-danger">Perlu Perhatian</span>
-                    @endif
-                </td>
-            </tr>
+            @foreach ($laporan as $index => $lap)
+                <tr>
+                    <td class="center">{{ $index + 1 }}</td>
+                    <td>{{ $lap['guru']->nip }}</td>
+                    <td>{{ $lap['guru']->nama }}</td>
+                    <td class="center">{{ $lap['hadir'] }}</td>
+                    <td class="center">{{ $lap['terlambat'] }}</td>
+                    <td class="center">{{ $lap['izin'] }}</td>
+                    <td class="center">{{ $lap['alpha'] }}</td>
+                    <td class="center">{{ $lap['total_hari'] }}</td>
+                    <td class="center">{{ number_format($lap['persentase'], 1) }}%</td>
+                    <td class="center">
+                        @if ($lap['persentase'] >= 90)
+                            <span class="badge badge-success">Sangat Baik</span>
+                        @elseif($lap['persentase'] >= 75)
+                            <span class="badge badge-warning">Baik</span>
+                        @else
+                            <span class="badge badge-danger">Perlu Perhatian</span>
+                        @endif
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -159,4 +176,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -14,7 +14,7 @@ class SettingsController extends Controller
     public function index($category = 'all')
     {
         $cacheKey = 'app_settings_' . $category;
-        
+
         $settings = Cache::remember($cacheKey, 3600, function() use ($category) {
             $allSettings = [
                 'absensi' => [
@@ -78,7 +78,7 @@ class SettingsController extends Controller
     public function show($category, $key)
     {
         $settings = $this->index($category)->getData();
-        
+
         if (!$settings->success) {
             return response()->json([
                 'success' => false,

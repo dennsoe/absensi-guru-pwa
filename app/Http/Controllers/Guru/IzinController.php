@@ -15,7 +15,7 @@ class IzinController extends Controller
     public function index(Request $request)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $status = $request->get('status');
         $jenis = $request->get('jenis');
 
@@ -86,7 +86,7 @@ class IzinController extends Controller
     public function show($id)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $izin = IzinCuti::where('guru_id', $guru->id)->findOrFail($id);
 
         return view('guru.izin.show', compact('izin'));
@@ -98,7 +98,7 @@ class IzinController extends Controller
     public function edit($id)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $izin = IzinCuti::where('guru_id', $guru->id)
                        ->where('status', 'pending')
                        ->findOrFail($id);
@@ -112,7 +112,7 @@ class IzinController extends Controller
     public function update(Request $request, $id)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $izin = IzinCuti::where('guru_id', $guru->id)
                        ->where('status', 'pending')
                        ->findOrFail($id);
@@ -149,7 +149,7 @@ class IzinController extends Controller
     public function destroy($id)
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        
+
         $izin = IzinCuti::where('guru_id', $guru->id)
                        ->where('status', 'pending')
                        ->findOrFail($id);

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'read_at']);
         });
     }

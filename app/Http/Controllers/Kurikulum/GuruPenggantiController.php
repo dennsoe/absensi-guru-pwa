@@ -92,7 +92,7 @@ class GuruPenggantiController extends Controller
     public function approve($id)
     {
         $pengganti = GuruPengganti::findOrFail($id);
-        
+
         $pengganti->update([
             'status' => 'approved',
             'approved_by' => Auth::id(),
@@ -108,7 +108,7 @@ class GuruPenggantiController extends Controller
     public function reject(Request $request, $id)
     {
         $pengganti = GuruPengganti::findOrFail($id);
-        
+
         $pengganti->update([
             'status' => 'rejected',
             'approved_by' => Auth::id(),
@@ -125,7 +125,7 @@ class GuruPenggantiController extends Controller
     public function destroy($id)
     {
         $pengganti = GuruPengganti::findOrFail($id);
-        
+
         if ($pengganti->status === 'approved') {
             return back()->with('error', 'Tidak dapat menghapus penugasan yang sudah disetujui.');
         }
