@@ -194,31 +194,13 @@ class AdminController extends Controller
                     ->with('error', 'Akses ditolak.');
             }
 
-            // Auto-create profil guru jika role memerlukan guru tapi belum dipilih
-            $rolesYangPerluGuru = ['guru', 'guru_piket', 'kepala_sekolah', 'kurikulum'];
-            $guru_id = $request->guru_id;
-
-            if (in_array($request->role, $rolesYangPerluGuru) && !$guru_id) {
-                // Buat profil guru baru otomatis dengan data lengkap
-                $guruBaru = Guru::create([
-                    'nama' => $request->nama,
-                    'nip' => $request->nip,
-                    'email' => $request->email,
-                    'no_hp' => $request->no_hp,
-                    'jenis_kelamin' => $request->jenis_kelamin,
-                    'tanggal_lahir' => $request->tanggal_lahir,
-                    'alamat' => $request->alamat,
-                    'status_kepegawaian' => $request->status_kepegawaian ?? 'Honorer',
-                ]);
-                $guru_id = $guruBaru->id;
-            }
-
             // Validasi: jika role ketua_kelas, harus ada kelas_id
             if ($request->role === 'ketua_kelas' && !$request->kelas_id) {
                 return back()->withErrors(['kelas_id' => 'Kelas harus dipilih untuk role Ketua Kelas.'])
                     ->withInput();
             }
 
+            // Prepare user data (tanpa guru_id dulu)
             $userData = [
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
@@ -227,7 +209,7 @@ class AdminController extends Controller
                 'nip' => $request->nip,
                 'no_hp' => $request->no_hp,
                 'role' => $request->role,
-                'guru_id' => $guru_id,
+                'guru_id' => $request->guru_id, // Akan diupdate jika auto-create
                 'kelas_id' => $request->kelas_id,
                 'status' => $request->status,
             ];
@@ -240,7 +222,28 @@ class AdminController extends Controller
                 $userData['foto_profil'] = $path;
             }
 
-            User::create($userData);
+            // Buat user dulu
+            $newUser = User::create($userData);
+
+            // Auto-create profil guru SETELAH user dibuat (agar bisa set user_id)
+            $rolesYangPerluGuru = ['guru', 'guru_piket', 'kepala_sekolah', 'kurikulum'];
+            if (in_array($request->role, $rolesYangPerluGuru) && !$request->guru_id) {
+                // Buat profil guru baru otomatis dengan data lengkap
+                $guruBaru = Guru::create([
+                    'user_id' => $newUser->id, // Link ke user yang baru dibuat
+                    'nama' => $request->nama,
+                    'nip' => $request->nip,
+                    'email' => $request->email,
+                    'no_hp' => $request->no_hp,
+                    'jenis_kelamin' => $request->jenis_kelamin,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'alamat' => $request->alamat,
+                    'status_kepegawaian' => $request->status_kepegawaian ?? 'Honorer',
+                ]);
+
+                // Update user dengan guru_id
+                $newUser->update(['guru_id' => $guruBaru->id]);
+            }
 
             return redirect()->route('admin.users')
                 ->with('success', 'User berhasil ditambahkan.');
@@ -312,11 +315,24 @@ class AdminController extends Controller
 
             $user_edit = User::findOrFail($id);
 
-            // Auto-create profil guru jika role memerlukan guru tapi belum ada
-            $rolesYangPerluGuru = ['guru', 'guru_piket', 'kepala_sekolah', 'kurikulum'];
-            $guru_id = $request->guru_id ?: $user_edit->guru_id;
+            // Prepare data untuk update user
+            $data = [
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'nip' => $request->nip,
+                'no_hp' => $request->no_hp,
+                'role' => $request->role,
+                'guru_id' => $request->guru_id ?: $user_edit->guru_id,
+                'kelas_id' => $request->kelas_id,
+                'status' => $request->status,
+            ];
 
+            // Handle profil guru untuk role yang memerlukan
+            $rolesYangPerluGuru = ['guru', 'guru_piket', 'kepala_sekolah', 'kurikulum'];
             if (in_array($request->role, $rolesYangPerluGuru)) {
+                $guru_id = $request->guru_id ?: $user_edit->guru_id;
+
                 if ($guru_id) {
                     // Update profil guru yang sudah ada
                     $guru = Guru::find($guru_id);
@@ -332,9 +348,11 @@ class AdminController extends Controller
                             'status_kepegawaian' => $request->status_kepegawaian,
                         ]);
                     }
+                    $data['guru_id'] = $guru_id;
                 } else {
                     // Buat profil guru baru jika belum ada
                     $guruBaru = Guru::create([
+                        'user_id' => $user_edit->id, // Link ke user yang sedang diedit
                         'nama' => $request->nama,
                         'nip' => $request->nip,
                         'email' => $request->email,
@@ -344,21 +362,9 @@ class AdminController extends Controller
                         'alamat' => $request->alamat,
                         'status_kepegawaian' => $request->status_kepegawaian ?? 'Honorer',
                     ]);
-                    $guru_id = $guruBaru->id;
+                    $data['guru_id'] = $guruBaru->id;
                 }
             }
-
-            $data = [
-                'username' => $request->username,
-                'nama' => $request->nama,
-                'email' => $request->email,
-                'nip' => $request->nip,
-                'no_hp' => $request->no_hp,
-                'role' => $request->role,
-                'guru_id' => $guru_id,
-                'kelas_id' => $request->kelas_id,
-                'status' => $request->status,
-            ];
 
             // Update password hanya jika diisi
             if ($request->filled('password')) {

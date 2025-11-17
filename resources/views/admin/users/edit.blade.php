@@ -336,6 +336,16 @@
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            // Initialize Select2 for Profil Guru dropdown
+            $('#guru_id').select2({
+                theme: 'bootstrap-5',
+                placeholder: '-- Pilih Guru --',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+
         // Preview foto
         function previewFoto(event) {
             const file = event.target.files[0];

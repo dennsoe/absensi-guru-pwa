@@ -89,8 +89,15 @@ class User extends Authenticatable
      */
     public function getFotoUrlAttribute()
     {
-        if ($this->foto_profil && file_exists(storage_path('app/public/' . $this->foto_profil))) {
-            return asset('storage/' . $this->foto_profil);
+        if ($this->foto_profil) {
+            // Cek apakah path sudah include 'foto-profil' atau belum
+            $path = str_contains($this->foto_profil, 'foto-profil')
+                ? $this->foto_profil
+                : 'foto-profil/' . $this->foto_profil;
+
+            if (file_exists(storage_path('app/public/' . $path))) {
+                return asset('storage/' . $path);
+            }
         }
         return asset('assets/images/avatars/default-avatar.svg');
     }
