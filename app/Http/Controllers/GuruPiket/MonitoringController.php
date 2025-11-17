@@ -61,7 +61,7 @@ class MonitoringController extends Controller
     public function detail($guruId)
     {
         $guru = Guru::findOrFail($guruId);
-        
+
         $absensi_bulan_ini = Absensi::where('guru_id', $guruId)
                                     ->whereMonth('tanggal', now()->month)
                                     ->whereYear('tanggal', now()->year)
