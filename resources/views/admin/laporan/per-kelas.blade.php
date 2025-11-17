@@ -180,7 +180,7 @@
                                             <td>{{ $absensi->jadwal->mataPelajaran->nama_mapel }}</td>
                                             <td>{{ $absensi->jadwal->jam_mulai }} - {{ $absensi->jadwal->jam_selesai }}
                                             </td>
-                                            <td>{{ $absensi->waktu_absen ? \Carbon\Carbon::parse($absensi->waktu_absen)->format('H:i') : '-' }}
+                                            <td>{{ $absensi->jam_masuk ? \Carbon\Carbon::parse($absensi->jam_masuk)->format('H:i') : '-' }}
                                             </td>
                                             <td>
                                                 @if ($absensi->status_kehadiran == 'hadir')

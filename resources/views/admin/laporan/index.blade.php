@@ -204,7 +204,7 @@
                                                 <span class="badge bg-danger">Alpha</span>
                                             @endif
                                         </td>
-                                        <td>{{ $absensi->waktu_absen ? \Carbon\Carbon::parse($absensi->waktu_absen)->format('H:i') : '-' }}
+                                        <td>{{ $absensi->jam_masuk ? \Carbon\Carbon::parse($absensi->jam_masuk)->format('H:i') : '-' }}
                                         </td>
                                     </tr>
                                 @endforeach

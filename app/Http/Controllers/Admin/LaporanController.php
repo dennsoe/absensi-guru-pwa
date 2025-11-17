@@ -42,7 +42,7 @@ class LaporanController extends Controller
         }
 
         $absensi_list = $query->orderBy('tanggal', 'desc')
-                              ->orderBy('waktu_absen', 'desc')
+                              ->orderBy('jam_masuk', 'desc')
                               ->paginate(50)
                               ->withQueryString();
 
@@ -100,6 +100,7 @@ class LaporanController extends Controller
             ->get();
 
         $stats = [
+            'total' => $absensi_list->count(),
             'hadir' => $absensi_list->where('status_kehadiran', 'hadir')->count(),
             'terlambat' => $absensi_list->where('status_kehadiran', 'terlambat')->count(),
             'izin' => $absensi_list->whereIn('status_kehadiran', ['izin', 'sakit', 'cuti', 'dinas'])->count(),

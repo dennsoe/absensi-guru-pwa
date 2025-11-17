@@ -128,20 +128,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/jadwal/{jadwal}', [AdminJadwalController::class, 'update'])->name('jadwal.update');
         Route::delete('/jadwal/{jadwal}', [AdminJadwalController::class, 'destroy'])->name('jadwal.destroy');
 
-        // Absensi Management (placeholder)
-        Route::get('/absensi', function() {
-            return redirect()->route('admin.dashboard')->with('info', 'Fitur Monitoring Absensi sedang dalam pengembangan');
-        })->name('absensi.index');
+        // Absensi Management (Rekap/Monitoring)
+        Route::get('/absensi', [AdminController::class, 'rekapAbsensi'])->name('absensi.index');
 
         // Laporan Absensi
         Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/per-guru', [AdminLaporanController::class, 'perGuru'])->name('laporan.per-guru');
         Route::get('/laporan/per-kelas', [AdminLaporanController::class, 'perKelas'])->name('laporan.per-kelas');
-
-        // Settings (placeholder)
-        Route::get('/settings', function() {
-            return redirect()->route('admin.dashboard')->with('info', 'Fitur Pengaturan sedang dalam pengembangan');
-        })->name('settings');
     });
 
     /*

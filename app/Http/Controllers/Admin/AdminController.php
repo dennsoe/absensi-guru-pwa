@@ -972,18 +972,20 @@ class AdminController extends Controller
                 ->with('error', 'Akses ditolak.');
         }
 
-        // Load settings dari config atau database
+        // Load settings dari database
+        $pengaturan = \App\Models\PengaturanSistem::pluck('value', 'key')->toArray();
+
         $settings = [
-            'school_name' => env('SCHOOL_NAME', 'SMK Negeri Kasomalang'),
-            'school_address' => env('SCHOOL_ADDRESS', ''),
-            'school_year' => env('SCHOOL_YEAR', '2024/2025'),
-            'school_latitude' => env('SCHOOL_LATITUDE', '-6.200000'),
-            'school_longitude' => env('SCHOOL_LONGITUDE', '106.816666'),
-            'gps_radius' => env('GPS_RADIUS', 200),
-            'toleransi_terlambat' => env('TOLERANSI_TERLAMBAT', 15),
-            'qr_expiry_minutes' => env('QR_EXPIRY_MINUTES', 15),
-            'enable_selfie' => env('ENABLE_SELFIE', true),
-            'enable_qr' => env('ENABLE_QR', true),
+            'school_name' => $pengaturan['school_name'] ?? 'SMK Negeri Kasomalang',
+            'school_address' => $pengaturan['school_address'] ?? '',
+            'school_year' => $pengaturan['school_year'] ?? '2024/2025',
+            'school_latitude' => $pengaturan['school_latitude'] ?? '-6.200000',
+            'school_longitude' => $pengaturan['school_longitude'] ?? '106.816666',
+            'gps_radius' => $pengaturan['gps_radius'] ?? 200,
+            'toleransi_terlambat' => $pengaturan['toleransi_terlambat'] ?? 15,
+            'qr_expiry_minutes' => $pengaturan['qr_expiry_minutes'] ?? 15,
+            'enable_selfie' => $pengaturan['enable_selfie'] ?? true,
+            'enable_qr' => $pengaturan['enable_qr'] ?? true,
             'updated_at' => now()->format('d M Y H:i'),
         ];
 
@@ -1014,15 +1016,40 @@ class AdminController extends Controller
                     ->with('error', 'Akses ditolak.');
             }
 
-            // Update .env file (simplified - dalam production gunakan package seperti vlucas/phpdotenv)
-            // Untuk demo, simpan ke session atau database
+            DB::beginTransaction();
 
-            session()->flash('settings_updated', $request->all());
+            // Update or create settings di database
+            $settingsToUpdate = [
+                'school_name' => $request->school_name,
+                'school_address' => $request->school_address,
+                'school_year' => $request->school_year,
+                'school_latitude' => $request->school_latitude,
+                'school_longitude' => $request->school_longitude,
+                'gps_radius' => $request->gps_radius,
+                'toleransi_terlambat' => $request->toleransi_terlambat,
+                'qr_expiry_minutes' => $request->qr_expiry_minutes,
+                'enable_selfie' => $request->has('enable_selfie') ? 1 : 0,
+                'enable_qr' => $request->has('enable_qr') ? 1 : 0,
+            ];
+
+            foreach ($settingsToUpdate as $key => $value) {
+                \App\Models\PengaturanSistem::updateOrCreate(
+                    ['key' => $key],
+                    [
+                        'value' => $value ?? '',
+                        'kategori' => 'sistem',
+                        'tipe_data' => is_numeric($value) ? 'number' : 'string',
+                    ]
+                );
+            }
+
+            DB::commit();
 
             return redirect()->route('admin.settings')
-                ->with('success', 'Pengaturan sistem berhasil diupdate. (Note: Perlu restart server untuk apply changes di .env)');
+                ->with('success', 'Pengaturan sistem berhasil diupdate!');
 
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error update settings: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])
                 ->withInput();
@@ -1089,5 +1116,62 @@ class AdminController extends Controller
         });
 
         return view('admin.activity-log', compact('activities', 'stats'));
+    }
+
+    /**
+     * Rekap/Monitoring Absensi
+     */
+    public function rekapAbsensi(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'admin') {
+            return redirect()->route('dashboard')
+                ->with('error', 'Akses ditolak.');
+        }
+
+        // Tanggal filter (default hari ini)
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
+        $guru_id = $request->input('guru_id');
+        $kelas_id = $request->input('kelas_id');
+        $status = $request->input('status');
+
+        // Query absensi
+        $query = Absensi::with(['guru', 'jadwal.kelas', 'jadwal.mataPelajaran'])
+            ->where('tanggal', $tanggal);
+
+        if ($guru_id) {
+            $query->where('guru_id', $guru_id);
+        }
+
+        if ($kelas_id) {
+            $query->whereHas('jadwal', function($q) use ($kelas_id) {
+                $q->where('kelas_id', $kelas_id);
+            });
+        }
+
+        if ($status) {
+            $query->where('status_kehadiran', $status);
+        }
+
+        $absensi_list = $query->orderBy('jam_masuk', 'desc')->get();
+
+        // Statistik hari ini
+        $stats = [
+            'total_jadwal' => JadwalMengajar::where('hari', strtolower(Carbon::parse($tanggal)->translatedFormat('l')))->count(),
+            'total_absen' => Absensi::where('tanggal', $tanggal)->count(),
+            'hadir' => Absensi::where('tanggal', $tanggal)->where('status_kehadiran', 'hadir')->count(),
+            'terlambat' => Absensi::where('tanggal', $tanggal)->where('status_kehadiran', 'terlambat')->count(),
+            'izin' => Absensi::where('tanggal', $tanggal)->whereIn('status_kehadiran', ['izin', 'sakit', 'cuti', 'dinas'])->count(),
+            'alpha' => Absensi::where('tanggal', $tanggal)->where('status_kehadiran', 'alpha')->count(),
+        ];
+
+        $stats['belum_absen'] = $stats['total_jadwal'] - $stats['total_absen'];
+
+        // List untuk filter
+        $guru_list = Guru::orderBy('nama')->get();
+        $kelas_list = Kelas::orderBy('nama_kelas')->get();
+
+        return view('admin.absensi.rekap', compact('absensi_list', 'stats', 'tanggal', 'guru_list', 'kelas_list'));
     }
 }

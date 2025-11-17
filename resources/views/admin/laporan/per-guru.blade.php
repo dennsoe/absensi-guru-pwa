@@ -52,8 +52,9 @@
                             </tr>
                             <tr>
                                 <td>Periode</td>
-                                <td>: <strong>{{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }}
-                                        {{ $tahun }}</strong></td>
+                                <td>:
+                                    <strong>{{ \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->translatedFormat('F Y') }}</strong>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -179,7 +180,7 @@
                                         <td>{{ $absensi->jadwal->kelas->nama_kelas }}</td>
                                         <td>{{ $absensi->jadwal->mataPelajaran->nama_mapel }}</td>
                                         <td>{{ $absensi->jadwal->jam_mulai }} - {{ $absensi->jadwal->jam_selesai }}</td>
-                                        <td>{{ $absensi->waktu_absen ? \Carbon\Carbon::parse($absensi->waktu_absen)->format('H:i') : '-' }}
+                                        <td>{{ $absensi->jam_masuk ? \Carbon\Carbon::parse($absensi->jam_masuk)->format('H:i') : '-' }}
                                         </td>
                                         <td>
                                             @if ($absensi->status_kehadiran == 'hadir')
