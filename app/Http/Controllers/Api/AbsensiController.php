@@ -59,7 +59,7 @@ class AbsensiController extends Controller
             ], 404);
         }
 
-        $hari = now()->locale('id')->dayName;
+        $hari = ucfirst(now()->locale('id')->dayName);
         $tanggal = today()->toDateString();
 
         // Jadwal hari ini

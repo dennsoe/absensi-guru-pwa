@@ -15,7 +15,7 @@ class GuruPiketController extends Controller
     public function dashboard()
     {
         // Get hari ini
-        $hari_ini = now()->locale('id')->dayName;
+        $hari_ini = ucfirst(now()->locale('id')->dayName);
 
         // Jadwal hari ini
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
@@ -90,7 +90,7 @@ class GuruPiketController extends Controller
                     })
                     ->get();
 
-        $jadwal = JadwalMengajar::where('hari', now()->locale('id')->dayName)
+        $jadwal = JadwalMengajar::where('hari', ucfirst(now()->locale('id')->dayName))
                                 ->where('status', 'aktif')
                                 ->with(['guru', 'kelas', 'mataPelajaran'])
                                 ->get();

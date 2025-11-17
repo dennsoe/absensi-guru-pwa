@@ -14,7 +14,7 @@ class KurikulumController extends Controller
      */
     public function dashboard()
     {
-        $hari_ini = now()->locale('id')->dayName;
+        $hari_ini = ucfirst(now()->locale('id')->dayName);
 
         // Total jadwal hari ini
         $total_jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)

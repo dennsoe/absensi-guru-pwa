@@ -23,7 +23,7 @@ class GuruController extends Controller
         $data = [
             'guru' => $guru,
             'jadwal_hari_ini' => JadwalMengajar::where('guru_id', $guru->id)
-                                               ->where('hari', now()->locale('id')->dayName)
+                                               ->where('hari', ucfirst(now()->locale('id')->dayName))
                                                ->where('status', 'aktif')
                                                ->with(['kelas', 'mataPelajaran'])
                                                ->orderBy('jam_mulai')

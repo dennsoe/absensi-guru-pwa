@@ -15,7 +15,7 @@ class JadwalController extends Controller
      */
     public function hariIni()
     {
-        $hari = now()->locale('id')->dayName;
+        $hari = ucfirst(now()->locale('id')->dayName);
 
         $jadwal = JadwalMengajar::where('hari', $hari)
                                 ->where('status', 'aktif')

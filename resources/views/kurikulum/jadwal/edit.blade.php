@@ -76,10 +76,10 @@
                                     <label class="form-label">Hari <span class="text-danger">*</span></label>
                                     <select name="hari" class="form-select @error('hari') is-invalid @enderror" required>
                                         <option value="">Pilih Hari</option>
-                                        @foreach (['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $hari)
+                                        @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
                                             <option value="{{ $hari }}"
                                                 {{ old('hari', $jadwal->hari) === $hari ? 'selected' : '' }}>
-                                                {{ ucfirst($hari) }}</option>
+                                                {{ $hari }}</option>
                                         @endforeach
                                     </select>
                                     @error('hari')
@@ -132,11 +132,11 @@
                                     <label class="form-label">Semester <span class="text-danger">*</span></label>
                                     <select name="semester" class="form-select @error('semester') is-invalid @enderror"
                                         required>
-                                        <option value="1"
-                                            {{ old('semester', $jadwal->semester) == '1' ? 'selected' : '' }}>Semester 1
+                                        <option value="Ganjil"
+                                            {{ old('semester', $jadwal->semester) == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil
                                         </option>
-                                        <option value="2"
-                                            {{ old('semester', $jadwal->semester) == '2' ? 'selected' : '' }}>Semester 2
+                                        <option value="Genap"
+                                            {{ old('semester', $jadwal->semester) == 'Genap' ? 'selected' : '' }}>Semester Genap
                                         </option>
                                     </select>
                                     @error('semester')

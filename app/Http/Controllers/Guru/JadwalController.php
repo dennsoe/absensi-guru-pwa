@@ -18,14 +18,14 @@ class JadwalController extends Controller
 
         $hari = $request->get('hari');
         $tahun_ajaran = $request->get('tahun_ajaran', '2025/2026');
-        $semester = $request->get('semester', 1);
+        $semester = $request->get('semester', 'Ganjil');
 
         $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                 ->where('guru_id', $guru->id)
                                 ->where('tahun_ajaran', $tahun_ajaran)
                                 ->where('semester', $semester)
                                 ->where('status', 'aktif')
-                                ->when($hari, fn($q) => $q->where('hari', $hari))
+                                ->when($hari, fn($q) => $q->where('hari', ucfirst($hari)))
                                 ->orderBy('hari')
                                 ->orderBy('jam_mulai')
                                 ->get();
@@ -61,7 +61,7 @@ class JadwalController extends Controller
     public function today()
     {
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
-        $hari = now()->locale('id')->dayName;
+        $hari = ucfirst(now()->locale('id')->dayName);
 
         $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                 ->where('guru_id', $guru->id)

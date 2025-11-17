@@ -75,16 +75,14 @@
                                     <label class="form-label">Hari <span class="text-danger">*</span></label>
                                     <select name="hari" class="form-select @error('hari') is-invalid @enderror" required>
                                         <option value="">Pilih Hari</option>
-                                        <option value="senin" {{ old('hari') === 'senin' ? 'selected' : '' }}>Senin
+                                        <option value="Senin" {{ old('hari') === 'Senin' ? 'selected' : '' }}>Senin
                                         </option>
-                                        <option value="selasa" {{ old('hari') === 'selasa' ? 'selected' : '' }}>Selasa
+                                        <option value="Selasa" {{ old('hari') === 'Selasa' ? 'selected' : '' }}>Selasa
                                         </option>
-                                        <option value="rabu" {{ old('hari') === 'rabu' ? 'selected' : '' }}>Rabu</option>
-                                        <option value="kamis" {{ old('hari') === 'kamis' ? 'selected' : '' }}>Kamis
+                                        <option value="Rabu" {{ old('hari') === 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                        <option value="Kamis" {{ old('hari') === 'Kamis' ? 'selected' : '' }}>Kamis
                                         </option>
-                                        <option value="jumat" {{ old('hari') === 'jumat' ? 'selected' : '' }}>Jumat
-                                        </option>
-                                        <option value="sabtu" {{ old('hari') === 'sabtu' ? 'selected' : '' }}>Sabtu
+                                        <option value="Jumat" {{ old('hari') === 'Jumat' ? 'selected' : '' }}>Jumat
                                         </option>
                                     </select>
                                     @error('hari')
@@ -137,9 +135,9 @@
                                     <label class="form-label">Semester <span class="text-danger">*</span></label>
                                     <select name="semester" class="form-select @error('semester') is-invalid @enderror"
                                         required>
-                                        <option value="1" {{ old('semester') == '1' ? 'selected' : '' }}>Semester 1
+                                        <option value="Ganjil" {{ old('semester') == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil
                                         </option>
-                                        <option value="2" {{ old('semester') == '2' ? 'selected' : '' }}>Semester 2
+                                        <option value="Genap" {{ old('semester') == 'Genap' ? 'selected' : '' }}>Semester Genap
                                         </option>
                                     </select>
                                     @error('semester')

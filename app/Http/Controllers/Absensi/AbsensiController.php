@@ -79,7 +79,7 @@ class AbsensiController extends Controller
 
         // Cek jadwal mengajar hari ini
         $jadwal = JadwalMengajar::where('guru_id', $guru->id)
-                                ->where('hari', now()->locale('id')->dayName)
+                                ->where('hari', ucfirst(now()->locale('id')->dayName))
                                 ->where('status', 'aktif')
                                 ->orderBy('jam_mulai')
                                 ->first();
@@ -170,7 +170,7 @@ class AbsensiController extends Controller
 
         // Cek jadwal
         $jadwal = JadwalMengajar::where('guru_id', $guru->id)
-                                ->where('hari', now()->locale('id')->dayName)
+                                ->where('hari', ucfirst(now()->locale('id')->dayName))
                                 ->where('status', 'aktif')
                                 ->orderBy('jam_mulai')
                                 ->first();

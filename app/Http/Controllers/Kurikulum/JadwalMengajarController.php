@@ -65,12 +65,12 @@ class JadwalMengajarController extends Controller
             'guru_id' => 'required|exists:guru,id',
             'kelas_id' => 'required|exists:kelas,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'hari' => 'required|in:senin,selasa,rabu,kamis,jumat,sabtu',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required|after:jam_mulai',
             'ruangan' => 'nullable|string|max:50',
             'tahun_ajaran' => 'required|string|max:20',
-            'semester' => 'required|in:1,2',
+            'semester' => 'required|in:Ganjil,Genap',
             'status' => 'required|in:aktif,nonaktif',
         ]);
 
@@ -124,12 +124,12 @@ class JadwalMengajarController extends Controller
             'guru_id' => 'required|exists:guru,id',
             'kelas_id' => 'required|exists:kelas,id',
             'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'hari' => 'required|in:senin,selasa,rabu,kamis,jumat,sabtu',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required|after:jam_mulai',
             'ruangan' => 'nullable|string|max:50',
             'tahun_ajaran' => 'required|string|max:20',
-            'semester' => 'required|in:1,2',
+            'semester' => 'required|in:Ganjil,Genap',
             'status' => 'required|in:aktif,nonaktif',
         ]);
 

@@ -50,16 +50,14 @@
                                 <label class="form-label">Hari</label>
                                 <select name="hari" class="form-select" onchange="this.form.submit()">
                                     <option value="">Semua Hari</option>
-                                    <option value="senin" {{ request('hari') === 'senin' ? 'selected' : '' }}>Senin
+                                    <option value="Senin" {{ request('hari') === 'Senin' ? 'selected' : '' }}>Senin
                                     </option>
-                                    <option value="selasa" {{ request('hari') === 'selasa' ? 'selected' : '' }}>Selasa
+                                    <option value="Selasa" {{ request('hari') === 'Selasa' ? 'selected' : '' }}>Selasa
                                     </option>
-                                    <option value="rabu" {{ request('hari') === 'rabu' ? 'selected' : '' }}>Rabu</option>
-                                    <option value="kamis" {{ request('hari') === 'kamis' ? 'selected' : '' }}>Kamis
+                                    <option value="Rabu" {{ request('hari') === 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                    <option value="Kamis" {{ request('hari') === 'Kamis' ? 'selected' : '' }}>Kamis
                                     </option>
-                                    <option value="jumat" {{ request('hari') === 'jumat' ? 'selected' : '' }}>Jumat
-                                    </option>
-                                    <option value="sabtu" {{ request('hari') === 'sabtu' ? 'selected' : '' }}>Sabtu
+                                    <option value="Jumat" {{ request('hari') === 'Jumat' ? 'selected' : '' }}>Jumat
                                     </option>
                                 </select>
                             </div>

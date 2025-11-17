@@ -49,9 +49,9 @@
                                 <label class="form-label">Filter Hari</label>
                                 <select name="hari" class="form-select" onchange="this.form.submit()">
                                     <option value="">Semua Hari</option>
-                                    @foreach (['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $h)
-                                        <option value="{{ $h }}" {{ request('hari') === $h ? 'selected' : '' }}>
-                                            {{ ucfirst($h) }}</option>
+                                    @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $h)
+                                        <option value="{{ strtolower($h) }}" {{ request('hari') === strtolower($h) ? 'selected' : '' }}>
+                                            {{ $h }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -63,10 +63,8 @@
                             <div class="col-md-3">
                                 <label class="form-label">Semester</label>
                                 <select name="semester" class="form-select" onchange="this.form.submit()">
-                                    <option value="1" {{ request('semester', 1) == 1 ? 'selected' : '' }}>Semester 1
-                                    </option>
-                                    <option value="2" {{ request('semester') == 2 ? 'selected' : '' }}>Semester 2
-                                    </option>
+                                    <option value="Ganjil" {{ request('semester', 'Ganjil') == 'Ganjil' ? 'selected' : '' }}>Semester Ganjil</option>
+                                    <option value="Genap" {{ request('semester') == 'Genap' ? 'selected' : '' }}>Semester Genap</option>
                                 </select>
                             </div>
                         </form>
@@ -76,11 +74,11 @@
         </div>
 
         <!-- Jadwal Grouped by Day -->
-        @foreach (['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'] as $hari)
+        @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
             @if ($jadwal_grouped->has($hari))
                 <div class="card mb-3">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-calendar-day"></i> {{ ucfirst($hari) }}</h5>
+                        <h5 class="mb-0"><i class="bi bi-calendar-day"></i> {{ $hari }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

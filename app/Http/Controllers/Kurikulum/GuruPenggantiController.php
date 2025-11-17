@@ -41,7 +41,7 @@ class GuruPenggantiController extends Controller
                              ->get();
 
         // Jadwal hari ini
-        $hari_ini = now()->locale('id')->dayName;
+        $hari_ini = ucfirst(now()->locale('id')->dayName);
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
                                         ->where('status', 'aktif')
                                         ->with(['guru', 'kelas', 'mataPelajaran'])

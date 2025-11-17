@@ -94,7 +94,7 @@ class MonitoringController extends Controller
      */
     public function realtime()
     {
-        $hari_ini = now()->locale('id')->dayName;
+        $hari_ini = ucfirst(now()->locale('id')->dayName);
 
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
                                         ->where('status', 'aktif')

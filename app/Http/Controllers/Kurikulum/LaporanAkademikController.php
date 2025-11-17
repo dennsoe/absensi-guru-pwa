@@ -62,7 +62,7 @@ class LaporanAkademikController extends Controller
     {
         $guru_id = $request->get('guru_id');
         $tahun_ajaran = $request->get('tahun_ajaran', '2025/2026');
-        $semester = $request->get('semester', 1);
+        $semester = $request->get('semester', 'Ganjil');
 
         $guru_list = Guru::whereHas('user', function($q) {
             $q->where('status', 'aktif');
@@ -102,7 +102,7 @@ class LaporanAkademikController extends Controller
     {
         $mapel_id = $request->get('mapel_id');
         $tahun_ajaran = $request->get('tahun_ajaran', '2025/2026');
-        $semester = $request->get('semester', 1);
+        $semester = $request->get('semester', 'Ganjil');
 
         $mapel_list = MataPelajaran::orderBy('nama_mapel')->get();
 
