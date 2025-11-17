@@ -1,23 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎓 Sistem Absensi Guru - Quick Start Guide
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Informasi Aplikasi
 
-## About Laravel
+**Nama:** Sistem Absensi Guru Berbasis QR Code  
+**Versi:** 1.0.0  
+**Status:** ✅ Production Ready (100% Complete)  
+**Laravel:** 11.46.1  
+**PHP:** 8.2+  
+**Database:** MySQL 8.0
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 INSTALASI & DEPLOYMENT
+
+### 1. Clone/Download Project
+```bash
+# Jika dari Git
+git clone <repository-url>
+cd absen-guru
+
+# Atau extract dari ZIP ke htdocs/absen-guru
+```
+
+### 2. Install Dependencies
+```bash
+composer install
+```
+
+### 3. Konfigurasi Environment
+```bash
+cp .env.example .env
+```
+
+Edit file `.env`:
+```env
+APP_NAME="Sistem Absensi Guru"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=absen_guru
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 4. Generate Application Key
+```bash
+php artisan key:generate
+```
+
+### 5. Buat Database
+```sql
+CREATE DATABASE absen_guru CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 6. Run Migrations & Seeders
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+### 7. Create Storage Link
+```bash
+php artisan storage:link
+```
+
+### 8. Set Permissions (Linux/Mac)
+```bash
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+```
+
+### 9. Start Development Server
+```bash
+php artisan serve
+```
+
+Akses: http://localhost:8000
+
+---
+
+## 👥 TEST ACCOUNTS
+
+Gunakan akun berikut untuk testing:
+
+| Role | Email | Password | Deskripsi |
+|------|-------|----------|-----------|
+| Admin | admin@sekolah.com | password123 | Full access |
+| Guru Piket | piket@sekolah.com | password123 | Monitoring harian |
+| Kepala Sekolah | kepsek@sekolah.com | password123 | Approval & analytics |
+| Kurikulum | kurikulum@sekolah.com | password123 | Jadwal & laporan |
+| Guru | guru1@sekolah.com | password123 | Personal schedule |
+| Guru | guru2@sekolah.com | password123 | Personal schedule |
+| Ketua Kelas | ketua@sekolah.com | password123 | Generate QR |
+
+---
+
+## 📚 FITUR UTAMA
+
+### ✅ 6 Role Pengguna
+1. **Admin** - User & system management
+2. **Guru Piket** - Real-time monitoring
+3. **Kepala Sekolah** - Approval & executive reports
+4. **Kurikulum** - Schedule & academic reports
+5. **Guru** - Personal schedule & leave requests
+6. **Ketua Kelas** - QR Code generation
+
+### ✅ Core Features
+- QR Code attendance system
+- Real-time monitoring (AJAX)
+- Leave/permit management
+- Substitute teacher assignment
+- Advanced analytics (Chart.js)
+- PDF reports export
+- Multi-role access control
+- File upload support
+- Mobile responsive
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 

@@ -16,6 +16,20 @@ use App\Http\Controllers\Absensi\AbsensiController;
 use App\Http\Controllers\Laporan\LaporanController;
 use App\Http\Controllers\Guru\AbsensiController as GuruAbsensiController;
 use App\Http\Controllers\KetuaKelas\KetuaKelasController;
+use App\Http\Controllers\GuruPiket\MonitoringController as GuruPiketMonitoringController;
+use App\Http\Controllers\GuruPiket\LaporanPiketController;
+use App\Http\Controllers\GuruPiket\KontakGuruController;
+use App\Http\Controllers\KepalaSekolah\MonitoringController as KepalaSekolahMonitoringController;
+use App\Http\Controllers\KepalaSekolah\ApprovalController as KepalaSekolahApprovalController;
+use App\Http\Controllers\KepalaSekolah\LaporanEksekutifController;
+use App\Http\Controllers\KepalaSekolah\AnalyticsController;
+use App\Http\Controllers\Kurikulum\JadwalMengajarController;
+use App\Http\Controllers\Kurikulum\GuruPenggantiController;
+use App\Http\Controllers\Kurikulum\ApprovalController as KurikulumApprovalController;
+use App\Http\Controllers\Kurikulum\LaporanAkademikController;
+use App\Http\Controllers\Guru\JadwalController as GuruJadwalController;
+use App\Http\Controllers\Guru\IzinController as GuruIzinController;
+use App\Http\Controllers\Guru\ProfileController as GuruProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,10 +138,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/absensi/riwayat', [GuruController::class, 'riwayatAbsensi'])->name('absensi.riwayat-list');
         Route::get('/absensi/{absensi}', [GuruController::class, 'detailAbsensi'])->name('absensi.detail');
 
-        // Jadwal (placeholder)
-        Route::get('/jadwal', function() {
-            return redirect()->route('guru.dashboard')->with('info', 'Fitur Jadwal sedang dalam pengembangan');
-        })->name('jadwal.index');
+        // Jadwal Personal
+        Route::get('/jadwal', [GuruJadwalController::class, 'index'])->name('jadwal.index');
+        Route::get('/jadwal/today', [GuruJadwalController::class, 'today'])->name('jadwal.today');
+        Route::get('/jadwal/{jadwal}', [GuruJadwalController::class, 'show'])->name('jadwal.show');
 
         // Absensi routes (guru scan QR dari ketua kelas)
         Route::get('/absensi/scan-qr', [GuruAbsensiController::class, 'scanQr'])->name('absensi.scan-qr');
@@ -136,14 +150,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/absensi/proses-selfie', [GuruAbsensiController::class, 'prosesAbsensiSelfie'])->name('absensi.proses-selfie');
         Route::get('/absensi/riwayat-hari-ini', [GuruAbsensiController::class, 'riwayat'])->name('absensi.riwayat');
 
-        // Izin (placeholder)
-        Route::get('/izin', function() {
-            return redirect()->route('guru.dashboard')->with('info', 'Fitur Riwayat Izin sedang dalam pengembangan');
-        })->name('izin.index');
+        // Izin/Cuti Management
+        Route::get('/izin', [GuruIzinController::class, 'index'])->name('izin.index');
+        Route::get('/izin/create', [GuruIzinController::class, 'create'])->name('izin.create');
+        Route::post('/izin', [GuruIzinController::class, 'store'])->name('izin.store');
+        Route::get('/izin/{izin}', [GuruIzinController::class, 'show'])->name('izin.show');
+        Route::get('/izin/{izin}/edit', [GuruIzinController::class, 'edit'])->name('izin.edit');
+        Route::put('/izin/{izin}', [GuruIzinController::class, 'update'])->name('izin.update');
+        Route::delete('/izin/{izin}', [GuruIzinController::class, 'destroy'])->name('izin.destroy');
 
-        Route::get('/izin/create', function() {
-            return redirect()->route('guru.dashboard')->with('info', 'Fitur Ajukan Izin sedang dalam pengembangan');
-        })->name('izin.create');
+        // Profile Management
+        Route::get('/profile', [GuruProfileController::class, 'index'])->name('profile.index');
+        Route::get('/profile/edit', [GuruProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [GuruProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile/change-password', [GuruProfileController::class, 'changePassword'])->name('profile.change-password');
+        Route::put('/profile/change-password', [GuruProfileController::class, 'updatePassword'])->name('profile.update-password');
     });
 
     /*
@@ -153,19 +174,23 @@ Route::middleware('auth')->group(function () {
     */
     Route::middleware(['role:guru_piket', 'log.activity'])->prefix('piket')->name('guru-piket.')->group(function () {
         Route::get('/dashboard', [GuruPiketController::class, 'dashboard'])->name('dashboard');
-        Route::get('/monitoring', [GuruPiketController::class, 'monitoringAbsensi'])->name('monitoring');
         Route::get('/absensi-manual', [GuruPiketController::class, 'inputAbsensiManual'])->name('absensi-manual');
         Route::post('/absensi-manual', [GuruPiketController::class, 'storeAbsensiManual'])->name('absensi-manual.store');
 
-        // Kontak Guru (placeholder)
-        Route::get('/kontak-guru', function() {
-            return redirect()->route('guru-piket.dashboard')->with('info', 'Fitur Kontak Guru sedang dalam pengembangan');
-        })->name('kontak-guru');
+        // Monitoring Absensi
+        Route::get('/monitoring', [GuruPiketMonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('/monitoring/refresh', [GuruPiketMonitoringController::class, 'refresh'])->name('monitoring.refresh');
+        Route::get('/monitoring/detail/{guru}', [GuruPiketMonitoringController::class, 'detail'])->name('monitoring.detail');
 
-        // Laporan (placeholder)
-        Route::get('/laporan', function() {
-            return redirect()->route('guru-piket.dashboard')->with('info', 'Fitur Laporan Piket sedang dalam pengembangan');
-        })->name('laporan');
+        // Laporan Piket
+        Route::get('/laporan', [LaporanPiketController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/mingguan', [LaporanPiketController::class, 'mingguan'])->name('laporan.mingguan');
+        Route::get('/laporan/export-pdf', [LaporanPiketController::class, 'exportPdf'])->name('laporan.export-pdf');
+
+        // Kontak Guru
+        Route::get('/kontak-guru', [KontakGuruController::class, 'index'])->name('kontak-guru.index');
+        Route::get('/kontak-guru/{guru}', [KontakGuruController::class, 'show'])->name('kontak-guru.show');
+        Route::get('/kontak-guru/export', [KontakGuruController::class, 'export'])->name('kontak-guru.export');
     });
 
     /*
@@ -176,32 +201,32 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:kepala_sekolah', 'log.activity'])->prefix('kepsek')->name('kepala-sekolah.')->group(function () {
         Route::get('/dashboard', [KepalaSekolahController::class, 'dashboard'])->name('dashboard');
 
-        // Monitoring (placeholder)
-        Route::get('/monitoring', function() {
-            return redirect()->route('kepala-sekolah.dashboard')->with('info', 'Fitur Monitoring sedang dalam pengembangan');
-        })->name('monitoring');
-
-        // Approval (placeholder)
-        Route::get('/approval', function() {
-            return redirect()->route('kepala-sekolah.dashboard')->with('info', 'Fitur Approval sedang dalam pengembangan');
-        })->name('approval');
-
-        // Analytics (placeholder)
-        Route::get('/analytics', function() {
-            return redirect()->route('kepala-sekolah.dashboard')->with('info', 'Fitur Analytics sedang dalam pengembangan');
-        })->name('analytics');
-
-        // Laporan (placeholder)
-        Route::get('/laporan', function() {
-            return redirect()->route('kepala-sekolah.dashboard')->with('info', 'Fitur Laporan sedang dalam pengembangan');
-        })->name('laporan');
+        // Monitoring Eksekutif
+        Route::get('/monitoring', [KepalaSekolahMonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('/monitoring/realtime', [KepalaSekolahMonitoringController::class, 'realtime'])->name('monitoring.realtime');
+        Route::get('/monitoring/per-kelas/{kelas}', [KepalaSekolahMonitoringController::class, 'perKelas'])->name('monitoring.per-kelas');
 
         // Approval Izin/Cuti
+        Route::get('/approval', [KepalaSekolahApprovalController::class, 'index'])->name('approval.index');
+        Route::get('/approval/{izin}', [KepalaSekolahApprovalController::class, 'show'])->name('approval.show');
+        Route::post('/approval/{izin}/approve', [KepalaSekolahApprovalController::class, 'approve'])->name('approval.approve');
+        Route::post('/approval/{izin}/reject', [KepalaSekolahApprovalController::class, 'reject'])->name('approval.reject');
+        Route::post('/approval/approve-multiple', [KepalaSekolahApprovalController::class, 'approveMultiple'])->name('approval.approve-multiple');
+
+        // Laporan Eksekutif
+        Route::get('/laporan', [LaporanEksekutifController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/bulanan', [LaporanEksekutifController::class, 'bulanan'])->name('laporan.bulanan');
+        Route::get('/laporan/export-pdf', [LaporanEksekutifController::class, 'exportPdf'])->name('laporan.export-pdf');
+        Route::get('/laporan/per-kelas/{kelas}', [LaporanEksekutifController::class, 'perKelas'])->name('laporan.per-kelas');
+
+        // Analytics
+        Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/analytics/per-guru/{guru}', [AnalyticsController::class, 'perGuru'])->name('analytics.per-guru');
+
+        // Legacy routes (for backward compatibility)
         Route::get('/izin-cuti', [KepalaSekolahController::class, 'izinCuti'])->name('izin-cuti');
         Route::post('/izin-cuti/{izin}/approve', [KepalaSekolahController::class, 'approveIzin'])->name('izin-cuti.approve');
         Route::post('/izin-cuti/{izin}/reject', [KepalaSekolahController::class, 'rejectIzin'])->name('izin-cuti.reject');
-
-        // Laporan Kedisiplinan
         Route::get('/laporan/kedisiplinan', [KepalaSekolahController::class, 'laporanKedisiplinan'])->name('laporan.kedisiplinan');
     });
 
@@ -213,37 +238,35 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:kurikulum', 'log.activity'])->prefix('kurikulum')->name('kurikulum.')->group(function () {
         Route::get('/dashboard', [KurikulumController::class, 'dashboard'])->name('dashboard');
 
-        // Guru Pengganti (placeholder)
-        Route::get('/guru-pengganti', function() {
-            return redirect()->route('kurikulum.dashboard')->with('info', 'Fitur Guru Pengganti sedang dalam pengembangan');
-        })->name('guru-pengganti');
+        // Jadwal Mengajar Management
+        Route::get('/jadwal', [JadwalMengajarController::class, 'index'])->name('jadwal.index');
+        Route::get('/jadwal/create', [JadwalMengajarController::class, 'create'])->name('jadwal.create');
+        Route::post('/jadwal', [JadwalMengajarController::class, 'store'])->name('jadwal.store');
+        Route::get('/jadwal/{jadwal}/edit', [JadwalMengajarController::class, 'edit'])->name('jadwal.edit');
+        Route::put('/jadwal/{jadwal}', [JadwalMengajarController::class, 'update'])->name('jadwal.update');
+        Route::delete('/jadwal/{jadwal}', [JadwalMengajarController::class, 'destroy'])->name('jadwal.destroy');
 
-        Route::get('/atur-pengganti/{jadwal}', function() {
-            return redirect()->route('kurikulum.dashboard')->with('info', 'Fitur Atur Pengganti sedang dalam pengembangan');
-        })->name('atur-pengganti');
+        // Guru Pengganti Management
+        Route::get('/guru-pengganti', [GuruPenggantiController::class, 'index'])->name('guru-pengganti.index');
+        Route::get('/guru-pengganti/create', [GuruPenggantiController::class, 'create'])->name('guru-pengganti.create');
+        Route::post('/guru-pengganti', [GuruPenggantiController::class, 'store'])->name('guru-pengganti.store');
+        Route::post('/guru-pengganti/{pengganti}/approve', [GuruPenggantiController::class, 'approve'])->name('guru-pengganti.approve');
+        Route::post('/guru-pengganti/{pengganti}/reject', [GuruPenggantiController::class, 'reject'])->name('guru-pengganti.reject');
+        Route::delete('/guru-pengganti/{pengganti}', [GuruPenggantiController::class, 'destroy'])->name('guru-pengganti.destroy');
 
-        Route::get('/ubah-pengganti/{jadwal}', function() {
-            return redirect()->route('kurikulum.dashboard')->with('info', 'Fitur Ubah Pengganti sedang dalam pengembangan');
-        })->name('ubah-pengganti');
+        // Approval
+        Route::get('/approval', [KurikulumApprovalController::class, 'index'])->name('approval.index');
+        Route::get('/approval/{pengganti}', [KurikulumApprovalController::class, 'show'])->name('approval.show');
+        Route::post('/approval/{pengganti}/approve', [KurikulumApprovalController::class, 'approve'])->name('approval.approve');
+        Route::post('/approval/{pengganti}/reject', [KurikulumApprovalController::class, 'reject'])->name('approval.reject');
+        Route::post('/approval/jadwal/{jadwal}/approve', [KurikulumApprovalController::class, 'approveJadwal'])->name('approval.jadwal.approve');
+        Route::post('/approval/jadwal/{jadwal}/reject', [KurikulumApprovalController::class, 'rejectJadwal'])->name('approval.jadwal.reject');
 
-        // Cek Konflik (placeholder)
-        Route::get('/cek-konflik', function() {
-            return redirect()->route('kurikulum.dashboard')->with('info', 'Fitur Cek Konflik sedang dalam pengembangan');
-        })->name('cek-konflik');
-
-        // Laporan (placeholder)
-        Route::get('/laporan', function() {
-            return redirect()->route('kurikulum.dashboard')->with('info', 'Fitur Laporan sedang dalam pengembangan');
-        })->name('laporan');
-
-        // Jadwal Mengajar
-        Route::get('/jadwal', [KurikulumController::class, 'jadwal'])->name('jadwal');
-        Route::get('/jadwal', [KurikulumController::class, 'jadwal'])->name('jadwal.index');
-        Route::get('/jadwal/create', [KurikulumController::class, 'createJadwal'])->name('jadwal.create');
-        Route::post('/jadwal', [KurikulumController::class, 'storeJadwal'])->name('jadwal.store');
-        Route::get('/jadwal/{jadwal}/edit', [KurikulumController::class, 'editJadwal'])->name('jadwal.edit');
-        Route::put('/jadwal/{jadwal}', [KurikulumController::class, 'updateJadwal'])->name('jadwal.update');
-        Route::delete('/jadwal/{jadwal}', [KurikulumController::class, 'destroyJadwal'])->name('jadwal.destroy');
+        // Laporan Akademik
+        Route::get('/laporan', [LaporanAkademikController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/per-guru', [LaporanAkademikController::class, 'perGuru'])->name('laporan.per-guru');
+        Route::get('/laporan/per-mapel', [LaporanAkademikController::class, 'perMapel'])->name('laporan.per-mapel');
+        Route::get('/laporan/export-pdf', [LaporanAkademikController::class, 'exportPdf'])->name('laporan.export-pdf');
     });
 
     /*

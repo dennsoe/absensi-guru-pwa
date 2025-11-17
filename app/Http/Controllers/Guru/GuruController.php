@@ -34,11 +34,11 @@ class GuruController extends Controller
                                           ->get(),
             'total_hadir' => Absensi::where('guru_id', $guru->id)
                                     ->whereMonth('tanggal', now()->month)
-                                    ->where('status_kehadiran', 'hadir')
+                                    ->whereIn('status', ['hadir', 'terlambat'])
                                     ->count(),
             'total_terlambat' => Absensi::where('guru_id', $guru->id)
                                         ->whereMonth('tanggal', now()->month)
-                                        ->where('status_keterlambatan', 'terlambat')
+                                        ->where('status', 'terlambat')
                                         ->count(),
             'total_izin' => IzinCuti::where('guru_id', $guru->id)
                                     ->whereMonth('tanggal_mulai', now()->month)
