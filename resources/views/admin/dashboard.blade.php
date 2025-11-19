@@ -1,12 +1,8 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Dashboard Admin')
 
-@section('breadcrumb')
-    <li class="breadcrumb-item active">Dashboard</li>
-@endsection
-
-@section('main-content')
+@section('content')
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -84,7 +80,7 @@
                         <div class="flex-grow-1 ms-3">
                             <div class="text-muted small mb-1">Izin Pending</div>
                             <div class="fs-4 fw-bold">{{ $izin_pending ?? 0 }}</div>
-                            <a href="{{ route('admin.izin-cuti.index', ['status' => 'pending']) }}"
+                            <a href="{{ route('admin.izin.index', ['status' => 'pending']) }}"
                                 class="text-warning small text-decoration-none">
                                 Lihat detail <i class="bi bi-arrow-right"></i>
                             </a>
@@ -217,7 +213,7 @@
                                                 {{ \Carbon\Carbon::parse($absensi->tanggal)->format('d M Y') }}</div>
                                         </td>
                                         <td>
-                                            <div class="fw-medium">{{ $absensi->guru->nama_lengkap ?? 'N/A' }}</div>
+                                            <div class="fw-medium">{{ $absensi->guru->nama ?? 'N/A' }}</div>
                                             <div class="small text-muted">{{ $absensi->guru->nip ?? '-' }}</div>
                                         </td>
                                         <td>
@@ -245,10 +241,10 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.absensi.show', $absensi->id) }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
+                                            <span
+                                                class="badge bg-{{ $absensi->status_kehadiran === 'hadir' ? 'success' : ($absensi->status_kehadiran === 'terlambat' ? 'warning' : 'secondary') }}">
+                                                {{ ucfirst($absensi->status_kehadiran) }}
+                                            </span>
                                         </td>
                                     </tr>
                                 @empty
@@ -271,19 +267,19 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Permohonan Izin</h5>
-                    <a href="{{ route('admin.izin-cuti.index') }}" class="btn btn-sm btn-outline-primary">
+                    <a href="{{ route('admin.izin.index') }}" class="btn btn-sm btn-outline-primary">
                         Lihat Semua
                     </a>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
                         @forelse($pending_izin ?? [] as $izin)
-                            <a href="{{ route('admin.izin-cuti.show', $izin->id) }}"
+                            <a href="{{ route('admin.izin.show', $izin->id) }}"
                                 class="list-group-item list-group-item-action">
                                 <div class="d-flex align-items-start">
                                     <div class="flex-grow-1">
-                                        <div class="fw-medium small">{{ $izin->guru->nama_lengkap ?? 'N/A' }}</div>
-                                        <div class="text-muted small">{{ $izin->jenis_izin }}</div>
+                                        <div class="fw-medium small">{{ $izin->guru->nama ?? 'N/A' }}</div>
+                                        <div class="text-muted small">{{ ucfirst($izin->jenis ?? 'Izin') }}</div>
                                         <div class="text-muted small">
                                             <i class="bi bi-calendar3"></i>
                                             {{ \Carbon\Carbon::parse($izin->tanggal_mulai)->format('d M') }} -
@@ -315,11 +311,11 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('admin.qr-codes.create') }}" class="quick-action-card">
+                            <a href="{{ route('admin.settings') }}" class="quick-action-card">
                                 <div class="quick-action-icon bg-primary-light text-primary">
-                                    <i class="bi bi-qr-code"></i>
+                                    <i class="bi bi-gear"></i>
                                 </div>
-                                <div class="quick-action-title">Generate QR Code</div>
+                                <div class="quick-action-title">Pengaturan Sistem</div>
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-4 col-lg-3">
@@ -538,7 +534,6 @@
 
             // Auto-refresh every 30 seconds
             setInterval(refreshLiveStatus, 30000);
-            });
         </script>
     @endpush
 @endsection

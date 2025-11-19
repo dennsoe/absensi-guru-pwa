@@ -28,7 +28,7 @@ class GuruPiketController extends Controller
 
         // JADWAL HARI INI dengan status absensi
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['guru.user', 'kelas', 'mataPelajaran', 'absensi' => function($q) use ($tanggal) {
                 $q->whereDate('tanggal', $tanggal);
             }])
@@ -136,7 +136,7 @@ class GuruPiketController extends Controller
             $tanggal = Carbon::today();
 
             $jadwal = JadwalMengajar::where('hari', $hari_ini)
-                ->where('status', 'aktif')
+                
                 ->with(['guru.user', 'kelas', 'mataPelajaran', 'absensi' => function($q) use ($tanggal) {
                     $q->whereDate('tanggal', $tanggal);
                 }])
@@ -200,7 +200,7 @@ class GuruPiketController extends Controller
 
         // Jadwal yang belum diabsen
         $jadwal_belum_absen = JadwalMengajar::where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->whereDoesntHave('absensi', function($q) use ($tanggal) {
                 $q->whereDate('tanggal', $tanggal);
             })
@@ -312,7 +312,7 @@ class GuruPiketController extends Controller
 
         // Jadwal pada tanggal tersebut
         $jadwal = JadwalMengajar::where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->with(['guru.user', 'kelas', 'mataPelajaran', 'absensi' => function($q) use ($tanggal) {
                 $q->whereDate('tanggal', $tanggal);
             }])

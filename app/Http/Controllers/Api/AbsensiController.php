@@ -66,7 +66,7 @@ class AbsensiController extends Controller
         $jadwal_hari_ini = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                          ->where('guru_id', $guru->id)
                                          ->where('hari', $hari)
-                                         ->where('status', 'aktif')
+                                         
                                          ->orderBy('jam_mulai')
                                          ->get();
 

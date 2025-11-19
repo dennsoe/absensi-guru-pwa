@@ -339,7 +339,7 @@ class IzinCutiService
             // Get jadwal for this day
             $jadwalList = JadwalMengajar::where('guru_id', $izinCuti->guru_id)
                 ->where('hari', $hari)
-                ->where('status', 'aktif')
+                
                 ->get();
 
             foreach ($jadwalList as $jadwal) {

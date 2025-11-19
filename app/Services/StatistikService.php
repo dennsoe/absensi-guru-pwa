@@ -133,7 +133,7 @@ class StatistikService
     {
         $tahun = $tahun ?? Carbon::now()->year;
 
-        $guruList = Guru::where('status', 'aktif')->get();
+        $guruList = Guru::all();
         $rankings = [];
 
         foreach ($guruList as $guru) {
@@ -164,7 +164,7 @@ class StatistikService
     {
         $tahun = $tahun ?? Carbon::now()->year;
 
-        $guruList = Guru::where('status', 'aktif')->get();
+        $guruList = Guru::all();
         $rankings = [];
 
         foreach ($guruList as $guru) {
@@ -201,7 +201,7 @@ class StatistikService
         $kelas = Kelas::findOrFail($kelasId);
 
         $jadwalList = JadwalMengajar::where('kelas_id', $kelasId)
-            ->where('status', 'aktif')
+            
             ->with('guru')
             ->get();
 
@@ -253,7 +253,7 @@ class StatistikService
 
         $allAbsensi = $query->get();
 
-        $guruAktif = Guru::where('status', 'aktif')->count();
+        $guruAktif = Guru::count();
         $kelasAktif = Kelas::where('status', 'aktif')->count();
 
         return [

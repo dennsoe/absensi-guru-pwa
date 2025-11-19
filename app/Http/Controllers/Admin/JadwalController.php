@@ -82,7 +82,7 @@ class JadwalController extends Controller
             ->where('hari', $validated['hari'])
             ->where('tahun_ajaran', $validated['tahun_ajaran'])
             ->where('semester', $validated['semester'])
-            ->where('status', 'aktif')
+            
             ->where(function($q) use ($validated) {
                 $q->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
                   ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
@@ -138,7 +138,7 @@ class JadwalController extends Controller
             ->where('hari', $validated['hari'])
             ->where('tahun_ajaran', $validated['tahun_ajaran'])
             ->where('semester', $validated['semester'])
-            ->where('status', 'aktif')
+            
             ->where(function($q) use ($validated) {
                 $q->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
                   ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])

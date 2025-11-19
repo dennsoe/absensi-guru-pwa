@@ -20,13 +20,13 @@ class LaporanAkademikController extends Controller
         // Total jadwal aktif
         $total_jadwal = JadwalMengajar::where('tahun_ajaran', $tahun_ajaran)
                                       ->where('semester', $semester)
-                                      ->where('status', 'aktif')
+                                      
                                       ->count();
 
         // Total jam mengajar (per minggu)
         $total_jam = JadwalMengajar::where('tahun_ajaran', $tahun_ajaran)
                                    ->where('semester', $semester)
-                                   ->where('status', 'aktif')
+                                   
                                    ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, jam_mulai, jam_selesai)) as total')
                                    ->first()
                                    ->total ?? 0;
@@ -34,14 +34,14 @@ class LaporanAkademikController extends Controller
         // Guru teaching this semester
         $total_guru_mengajar = JadwalMengajar::where('tahun_ajaran', $tahun_ajaran)
                                              ->where('semester', $semester)
-                                             ->where('status', 'aktif')
+                                             
                                              ->distinct('guru_id')
                                              ->count('guru_id');
 
         // Mapel aktif
         $total_mapel = JadwalMengajar::where('tahun_ajaran', $tahun_ajaran)
                                      ->where('semester', $semester)
-                                     ->where('status', 'aktif')
+                                     
                                      ->distinct('mapel_id')
                                      ->count('mapel_id');
 
@@ -65,23 +65,23 @@ class LaporanAkademikController extends Controller
         $semester = $request->get('semester', 'Ganjil');
 
         $guru_list = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->orderBy('nama')->get();
 
         $laporan = Guru::with(['jadwalMengajar' => function($q) use ($tahun_ajaran, $semester) {
                           $q->where('tahun_ajaran', $tahun_ajaran)
                             ->where('semester', $semester)
-                            ->where('status', 'aktif')
+                            
                             ->with(['kelas', 'mataPelajaran']);
                       }])
                       ->withCount(['jadwalMengajar as total_jam_perminggu' => function($q) use ($tahun_ajaran, $semester) {
                           $q->where('tahun_ajaran', $tahun_ajaran)
                             ->where('semester', $semester)
-                            ->where('status', 'aktif')
+                            
                             ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, jam_mulai, jam_selesai))');
                       }])
                       ->when($guru_id, fn($q) => $q->where('id', $guru_id))
-                      ->where('status', 'aktif')
+                      
                       ->orderBy('nama')
                       ->paginate(20)
                       ->withQueryString();
@@ -109,13 +109,13 @@ class LaporanAkademikController extends Controller
         $laporan = MataPelajaran::with(['jadwalMengajar' => function($q) use ($tahun_ajaran, $semester) {
                                     $q->where('tahun_ajaran', $tahun_ajaran)
                                       ->where('semester', $semester)
-                                      ->where('status', 'aktif')
+                                      
                                       ->with(['guru', 'kelas']);
                                 }])
                                 ->withCount(['jadwalMengajar as total_kelas' => function($q) use ($tahun_ajaran, $semester) {
                                     $q->where('tahun_ajaran', $tahun_ajaran)
                                       ->where('semester', $semester)
-                                      ->where('status', 'aktif');
+                                      ;
                                 }])
                                 ->when($mapel_id, fn($q) => $q->where('id', $mapel_id))
                                 ->orderBy('nama_mapel')
@@ -142,10 +142,10 @@ class LaporanAkademikController extends Controller
         $laporan = Guru::with(['jadwalMengajar' => function($q) use ($tahun_ajaran, $semester) {
                           $q->where('tahun_ajaran', $tahun_ajaran)
                             ->where('semester', $semester)
-                            ->where('status', 'aktif')
+                            
                             ->with(['kelas', 'mataPelajaran']);
                       }])
-                      ->where('status', 'aktif')
+                      
                       ->orderBy('nama')
                       ->get();
 

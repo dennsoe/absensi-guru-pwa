@@ -18,7 +18,7 @@ class JadwalController extends Controller
         $hari = ucfirst(now()->locale('id')->dayName);
 
         $jadwal = JadwalMengajar::where('hari', $hari)
-                                ->where('status', 'aktif')
+                                
                                 ->with(['guru', 'kelas', 'mataPelajaran'])
                                 ->orderBy('jam_mulai')
                                 ->get();
@@ -37,7 +37,7 @@ class JadwalController extends Controller
         $jadwal = collect();
         if ($kelasId) {
             $jadwal = JadwalMengajar::where('kelas_id', $kelasId)
-                                    ->where('status', 'aktif')
+                                    
                                     ->with(['guru', 'mataPelajaran'])
                                     ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat')")
                                     ->orderBy('jam_mulai')
@@ -53,14 +53,14 @@ class JadwalController extends Controller
     public function perGuru(Request $request)
     {
         $guru = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->get();
         $guruId = $request->get('guru_id');
 
         $jadwal = collect();
         if ($guruId) {
             $jadwal = JadwalMengajar::where('guru_id', $guruId)
-                                    ->where('status', 'aktif')
+                                    
                                     ->with(['kelas', 'mataPelajaran'])
                                     ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat')")
                                     ->orderBy('jam_mulai')

@@ -30,18 +30,18 @@ class DashboardController extends Controller
             ->where('status', 'Aktif')
             ->count();
 
-        $total_pengganti_aktif = GuruPengganti::where('status', 'Disetujui')
+        $total_pengganti_aktif = GuruPengganti::where('status', 'approved')
             ->whereDate('tanggal', '>=', $today)
             ->count();
 
-        $izin_pending = IzinCuti::where('status_approval', 'Pending')->count();
+        $izin_pending = IzinCuti::where('status', 'pending')->count();
 
         // Teachers Coverage
         $guru_dengan_jadwal = Jadwal::where('status', 'Aktif')
             ->distinct('guru_id')
             ->count('guru_id');
 
-        $total_guru_aktif = Guru::where('status', 'Aktif')->count();
+        $total_guru_aktif = Guru::count();
         $persentase_coverage = $total_guru_aktif > 0
             ? round(($guru_dengan_jadwal / $total_guru_aktif) * 100, 1)
             : 0;
@@ -52,7 +52,7 @@ class DashboardController extends Controller
             ->where('status', 'Aktif')
             ->whereHas('guru', function($query) use ($today) {
                 $query->whereHas('izinCuti', function($q) use ($today) {
-                    $q->where('status_approval', 'Disetujui')
+                    $q->where('status', 'approved')
                         ->whereDate('tanggal_mulai', '<=', $today)
                         ->whereDate('tanggal_selesai', '>=', $today);
                 });
@@ -77,7 +77,7 @@ class DashboardController extends Controller
 
         // Pending Approvals
         $pending_approvals = IzinCuti::with(['guru'])
-            ->where('status_approval', 'Pending')
+            ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();

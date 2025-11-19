@@ -33,7 +33,7 @@ class MonitoringService
      */
     public function getGuruAktifCount()
     {
-        return Guru::where('status', 'aktif')->count();
+        return Guru::count();
     }
 
     /**
@@ -42,7 +42,7 @@ class MonitoringService
     public function getJadwalHariIni($hari)
     {
         $jadwalList = JadwalMengajar::where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->with(['guru', 'kelas', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get();
@@ -79,7 +79,7 @@ class MonitoringService
     public function getGuruPiketHariIni($hari)
     {
         $guruPiketList = GuruPiket::where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->with('guru')
             ->get();
 
@@ -116,7 +116,7 @@ class MonitoringService
 
         // Alert: Jadwal yang sedang berlangsung tapi belum absen
         $jadwalBerlangsung = JadwalMengajar::where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->whereTime('jam_mulai', '<=', $currentTime)
             ->whereTime('jam_selesai', '>=', $currentTime)
             ->with('guru')
@@ -187,7 +187,7 @@ class MonitoringService
         $hari = ucfirst(Carbon::parse($date)->locale('id')->dayName);
 
         $totalJadwal = JadwalMengajar::where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->count();
 
         $sudahAbsen = Absensi::whereDate('tanggal', $date)->count();
@@ -204,9 +204,8 @@ class MonitoringService
         $hari = ucfirst($date->locale('id')->dayName);
         $currentTime = Carbon::now();
 
-        $guruList = Guru::where('status', 'aktif')
-            ->with(['jadwalMengajar' => function($q) use ($hari) {
-                $q->where('hari', $hari)->where('status', 'aktif');
+        $guruList = Guru::with(['jadwalMengajar' => function($q) use ($hari) {
+                $q->where('hari', $hari);
             }])
             ->get();
 

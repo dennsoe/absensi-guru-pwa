@@ -27,7 +27,7 @@ class KepalaSekolahController extends Controller
 
         // STATISTIK BULAN INI
         $total_guru = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->count();
 
         $total_absensi_bulan_ini = Absensi::whereMonth('tanggal', $bulan_ini)
@@ -317,12 +317,12 @@ class KepalaSekolahController extends Controller
         // Laporan per Guru
         $laporan = Guru::with('user')
             ->whereHas('user', function($q) {
-                $q->where('status', 'aktif');
+                $q;
             })
             ->get()
             ->map(function($guru) use ($bulan, $tahun) {
                 $total_jadwal = JadwalMengajar::where('guru_id', $guru->id)
-                    ->where('status', 'aktif')
+                    
                     ->count();
 
                 $absensi_data = Absensi::whereHas('jadwal', function($q) use ($guru) {
@@ -386,7 +386,7 @@ class KepalaSekolahController extends Controller
         // Guru dengan Pelanggaran
         $laporan = Guru::with('user')
             ->whereHas('user', function($q) {
-                $q->where('status', 'aktif');
+                $q;
             })
             ->get()
             ->map(function($guru) use ($bulan, $tahun) {

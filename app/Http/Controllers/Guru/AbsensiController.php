@@ -46,7 +46,7 @@ class AbsensiController extends Controller
         $hari_ini = ucfirst(Carbon::now()->locale('id')->dayName);
         $jadwal_hari_ini = JadwalMengajar::where('guru_id', $guru->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->whereDoesntHave('absensi', function($q) {
                 $q->whereDate('tanggal', Carbon::today());
             })
@@ -78,7 +78,7 @@ class AbsensiController extends Controller
         $hari_ini = ucfirst(Carbon::now()->locale('id')->dayName);
         $jadwal_hari_ini = JadwalMengajar::where('guru_id', $guru->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->whereDoesntHave('absensi', function($q) {
                 $q->whereDate('tanggal', Carbon::today());
             })

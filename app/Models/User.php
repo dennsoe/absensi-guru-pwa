@@ -116,7 +116,7 @@ class User extends Authenticatable
      */
     public function scopeAktif($query)
     {
-        return $query->where('status', 'aktif');
+        return $query;
     }
 
     public function scopeRole($query, $role)

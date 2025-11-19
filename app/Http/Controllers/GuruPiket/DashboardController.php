@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $now = Carbon::now();
 
         // Real-time statistics
-        $totalGuruAktif = Guru::where('status', 'aktif')->count();
+        $totalGuruAktif = Guru::count();
         $sudahAbsen = Absensi::whereDate('tanggal', $today)
             ->whereIn('status', ['hadir', 'terlambat'])
             ->distinct('guru_id')
@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $belumAbsen = $totalGuruAktif - $sudahAbsen;
         $guruIzin = Izin::whereDate('tanggal_mulai', '<=', $today)
             ->whereDate('tanggal_selesai', '>=', $today)
-            ->where('status_approval', 'approved')
+            ->where('status', 'approved')
             ->distinct('guru_id')
             ->count('guru_id');
 
@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $dayOfWeek = $today->dayOfWeek === 0 ? 7 : $today->dayOfWeek; // Convert Sunday (0) to 7
         $jadwalHariIni = Jadwal::with(['guru', 'kelas', 'mataPelajaran'])
             ->where('hari', $dayOfWeek)
-            ->where('status', 'aktif')
+            
             ->orderBy('jam_mulai')
             ->get();
 
@@ -49,10 +49,10 @@ class DashboardController extends Controller
 
         // Guru yang belum absen (memiliki jadwal hari ini tapi belum absen)
         $guruBelumAbsen = Guru::with('user')
-            ->where('status', 'aktif')
+            
             ->whereHas('jadwals', function($query) use ($dayOfWeek) {
                 $query->where('hari', $dayOfWeek)
-                    ->where('status', 'aktif');
+                    ;
             })
             ->whereDoesntHave('absensis', function($query) use ($today) {
                 $query->whereDate('tanggal', $today);
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             ->whereDoesntHave('izins', function($query) use ($today) {
                 $query->whereDate('tanggal_mulai', '<=', $today)
                     ->whereDate('tanggal_selesai', '>=', $today)
-                    ->where('status_approval', 'approved');
+                    ->where('status', 'approved');
             })
             ->limit(15)
             ->get();
@@ -69,18 +69,18 @@ class DashboardController extends Controller
         $guruSedangIzin = Izin::with(['guru.user'])
             ->whereDate('tanggal_mulai', '<=', $today)
             ->whereDate('tanggal_selesai', '>=', $today)
-            ->where('status_approval', 'approved')
+            ->where('status', 'approved')
             ->orderBy('tanggal_mulai', 'desc')
             ->get();
 
         // Jadwal yang perlu pengganti (guru izin tapi belum ada pengganti)
         $jadwalPerluPengganti = Jadwal::with(['guru.user', 'kelas', 'mataPelajaran'])
             ->where('hari', $dayOfWeek)
-            ->where('status', 'aktif')
+            
             ->whereHas('guru.izins', function($query) use ($today) {
                 $query->whereDate('tanggal_mulai', '<=', $today)
                     ->whereDate('tanggal_selesai', '>=', $today)
-                    ->where('status_approval', 'approved');
+                    ->where('status', 'approved');
             })
             ->whereDoesntHave('guruPenggantiRelations', function($query) use ($today) {
                 $query->whereDate('tanggal', $today);
@@ -116,7 +116,7 @@ class DashboardController extends Controller
     {
         $today = Carbon::today();
 
-        $totalGuruAktif = Guru::where('status', 'aktif')->count();
+        $totalGuruAktif = Guru::count();
         $sudahAbsen = Absensi::whereDate('tanggal', $today)
             ->whereIn('status', ['hadir', 'terlambat'])
             ->distinct('guru_id')
@@ -124,7 +124,7 @@ class DashboardController extends Controller
         $belumAbsen = $totalGuruAktif - $sudahAbsen;
         $guruIzin = Izin::whereDate('tanggal_mulai', '<=', $today)
             ->whereDate('tanggal_selesai', '>=', $today)
-            ->where('status_approval', 'approved')
+            ->where('status', 'approved')
             ->distinct('guru_id')
             ->count('guru_id');
 

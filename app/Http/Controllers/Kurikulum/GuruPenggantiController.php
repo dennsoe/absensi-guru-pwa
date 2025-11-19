@@ -43,14 +43,14 @@ class GuruPenggantiController extends Controller
         // Jadwal hari ini
         $hari_ini = ucfirst(now()->locale('id')->dayName);
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
-                                        ->where('status', 'aktif')
+                                        
                                         ->with(['guru', 'kelas', 'mataPelajaran'])
                                         ->orderBy('jam_mulai')
                                         ->get();
 
         // Guru yang available (tidak izin, tidak punya jadwal bentrok)
         $guru_available = Guru::whereHas('user', function($q) {
-                                    $q->where('status', 'aktif');
+                                    $q;
                                 })
                              ->whereDoesntHave('izinCuti', function($q) {
                                  $q->where('status', 'approved')

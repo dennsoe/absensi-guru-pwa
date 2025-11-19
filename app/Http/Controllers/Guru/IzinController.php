@@ -50,8 +50,7 @@ class IzinController extends Controller
         // Get available guru for pengganti suggestion
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
 
-        $availableGuru = Guru::where('status', 'aktif')
-            ->where('id', '!=', $guru->id)
+        $availableGuru = Guru::where('id', '!=', $guru->id)
             ->with('user')
             ->orderBy('nama')
             ->get();
@@ -67,7 +66,7 @@ class IzinController extends Controller
         $guru = Guru::where('user_id', Auth::id())->firstOrFail();
 
         $validated = $request->validate([
-            'jenis_izin' => 'required|in:izin,cuti,sakit',
+            'jenis' => 'required|in:izin,cuti,sakit',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'keterangan' => 'required|string|min:10|max:500',
@@ -82,7 +81,7 @@ class IzinController extends Controller
 
         $validated['guru_id'] = $guru->id;
         $validated['durasi_hari'] = $durasi;
-        $validated['status_approval'] = 'pending';
+        $validated['status'] = 'pending';
 
         if ($request->hasFile('file_dokumen')) {
             $file = $request->file('file_dokumen');

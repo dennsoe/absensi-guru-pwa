@@ -60,7 +60,7 @@ class AdminController extends Controller
 
             // Active Users by Role
             $users_by_role = User::select('role', DB::raw('count(*) as total'))
-                ->where('status', 'aktif')
+                
                 ->groupBy('role')
                 ->get()
                 ->keyBy('role');
@@ -592,7 +592,7 @@ class AdminController extends Controller
             ->findOrFail($id);
 
         // Statistik
-        $totalJadwal = $guru->jadwalMengajar()->where('status', 'aktif')->count();
+        $totalJadwal = $guru->jadwalMengajar()->count();
 
         $totalAbsensi = Absensi::where('guru_id', $guru->id)->count();
 
@@ -620,7 +620,7 @@ class AdminController extends Controller
         // Jadwal mengajar
         $jadwalMengajar = $guru->jadwalMengajar()
             ->with(['mataPelajaran', 'kelas'])
-            ->where('status', 'aktif')
+            
             ->orderBy('hari')
             ->orderBy('jam_mulai')
             ->get();
@@ -806,12 +806,12 @@ class AdminController extends Controller
 
         $guru_list = Guru::with('user')
             ->whereHas('user', function($q) {
-                $q->where('status', 'aktif');
+                $q;
             })
             ->get();
 
         $ketua_kelas_list = User::where('role', 'ketua_kelas')
-            ->where('status', 'aktif')
+            
             ->whereDoesntHave('kelas')
             ->get();
 
@@ -868,12 +868,12 @@ class AdminController extends Controller
 
         $guru_list = Guru::with('user')
             ->whereHas('user', function($q) {
-                $q->where('status', 'aktif');
+                $q;
             })
             ->get();
 
         $ketua_kelas_list = User::where('role', 'ketua_kelas')
-            ->where('status', 'aktif')
+            
             ->where(function($q) use ($kelas) {
                 $q->whereDoesntHave('kelas')
                   ->orWhere('id', $kelas->ketua_kelas_user_id);

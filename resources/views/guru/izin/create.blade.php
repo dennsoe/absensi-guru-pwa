@@ -22,17 +22,17 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Jenis Permohonan <span class="text-danger">*</span></label>
-                                <select name="jenis_izin" class="form-select @error('jenis_izin') is-invalid @enderror"
+                                <select name="jenis" class="form-select @error('jenis') is-invalid @enderror"
                                     required>
                                     <option value="">Pilih Jenis</option>
-                                    <option value="izin" {{ old('jenis_izin') === 'izin' ? 'selected' : '' }}>Izin
+                                    <option value="izin" {{ old('jenis') === 'izin' ? 'selected' : '' }}>Izin
                                     </option>
-                                    <option value="cuti" {{ old('jenis_izin') === 'cuti' ? 'selected' : '' }}>Cuti
+                                    <option value="cuti" {{ old('jenis') === 'cuti' ? 'selected' : '' }}>Cuti
                                     </option>
-                                    <option value="sakit" {{ old('jenis_izin') === 'sakit' ? 'selected' : '' }}>Sakit
+                                    <option value="sakit" {{ old('jenis') === 'sakit' ? 'selected' : '' }}>Sakit
                                     </option>
                                 </select>
-                                @error('jenis_izin')
+                                @error('jenis')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

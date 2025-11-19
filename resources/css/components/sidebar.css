@@ -13,7 +13,7 @@
     background-color: var(--color-primary);
     display: flex;
     flex-direction: column;
-    z-index: var(--z-fixed);
+    z-index: 1010;
     transition: transform var(--transition-base);
     overflow-x: hidden;
 }

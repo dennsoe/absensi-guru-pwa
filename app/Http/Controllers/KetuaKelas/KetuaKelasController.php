@@ -33,7 +33,7 @@ class KetuaKelasController extends Controller
         // Jadwal kelas hari ini
         $jadwal_kelas_hari_ini = JadwalMengajar::where('kelas_id', $kelas->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['guru', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get();
@@ -100,7 +100,7 @@ class KetuaKelasController extends Controller
         // Ambil jadwal kelas hari ini
         $jadwal_tersedia = JadwalMengajar::where('kelas_id', $kelas->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['guru', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get();
@@ -340,7 +340,7 @@ class KetuaKelasController extends Controller
         $statistik = [
             'total_jadwal' => JadwalMengajar::where('kelas_id', $kelas->id)
                 ->where('hari', ucfirst(Carbon::parse($tanggal)->locale('id')->dayName))
-                ->where('status', 'aktif')
+                
                 ->count(),
 
             'total_absensi' => Absensi::whereDate('tanggal', $tanggal)
@@ -403,7 +403,7 @@ class KetuaKelasController extends Controller
 
         $jadwal = JadwalMengajar::where('kelas_id', $kelas->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['guru', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get()

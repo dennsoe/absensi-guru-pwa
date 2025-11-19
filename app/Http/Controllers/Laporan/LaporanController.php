@@ -43,7 +43,7 @@ class LaporanController extends Controller
 
         $rekap = $query->get();
         $guru = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->get();
 
         return view('laporan.index', compact('rekap', 'bulan', 'tahun', 'guru', 'guruId'));

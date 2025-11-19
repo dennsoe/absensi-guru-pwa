@@ -26,12 +26,12 @@ class IzinController extends Controller
 
         // Filter by status
         if ($request->has('status') && $request->status != '') {
-            $query->where('status_approval', $request->status);
+            $query->where('status', $request->status);
         }
 
         // Filter by jenis
         if ($request->has('jenis') && $request->jenis != '') {
-            $query->where('jenis_izin', $request->jenis);
+            $query->where('jenis', $request->jenis);
         }
 
         // Filter by date range
@@ -55,9 +55,9 @@ class IzinController extends Controller
 
         // Statistics
         $totalIzin = IzinCuti::count();
-        $pending = IzinCuti::where('status_approval', 'pending')->count();
-        $approved = IzinCuti::where('status_approval', 'approved')->count();
-        $rejected = IzinCuti::where('status_approval', 'rejected')->count();
+        $pending = IzinCuti::where('status', 'pending')->count();
+        $approved = IzinCuti::where('status', 'approved')->count();
+        $rejected = IzinCuti::where('status', 'rejected')->count();
 
         return view('admin.izin.index', compact(
             'izins',
@@ -134,7 +134,7 @@ class IzinController extends Controller
         $izin = IzinCuti::findOrFail($id);
 
         // Only allow deletion if status is pending
-        if ($izin->status_approval !== 'pending') {
+        if ($izin->status !== 'pending') {
             return redirect()->route('admin.izin.index')
                 ->with('error', 'Hanya izin dengan status pending yang dapat dihapus.');
         }

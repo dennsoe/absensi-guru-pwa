@@ -20,7 +20,7 @@ class LaporanPiketController extends Controller
 
         // Jadwal hari tersebut
         $jadwal = JadwalMengajar::where('hari', $hari)
-                                ->where('status', 'aktif')
+                                
                                 ->with(['guru', 'kelas', 'mataPelajaran'])
                                 ->orderBy('jam_mulai')
                                 ->get();
@@ -67,7 +67,7 @@ class LaporanPiketController extends Controller
         $hari = Carbon::parse($tanggal)->locale('id')->dayName;
 
         $jadwal = JadwalMengajar::where('hari', $hari)
-                                ->where('status', 'aktif')
+                                
                                 ->with(['guru', 'kelas', 'mataPelajaran'])
                                 ->orderBy('jam_mulai')
                                 ->get();

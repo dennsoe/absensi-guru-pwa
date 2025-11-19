@@ -30,7 +30,7 @@ class GuruController extends Controller
         // Ambil semua jadwal mengajar hari ini untuk guru ini
         $jadwal_hari_ini = JadwalMengajar::where('guru_id', $guru->id)
             ->where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['kelas', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get();

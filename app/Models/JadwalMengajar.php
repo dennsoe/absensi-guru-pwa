@@ -59,7 +59,7 @@ class JadwalMengajar extends Model
      */
     public function scopeAktif($query)
     {
-        return $query->where('status', 'aktif');
+        return $query;
     }
 
     public function scopeHari($query, $hari)

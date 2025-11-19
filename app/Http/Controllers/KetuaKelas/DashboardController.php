@@ -46,7 +46,7 @@ class DashboardController extends Controller
         $jadwalHariIni = Jadwal::with(['guru.user', 'mataPelajaran'])
             ->where('kelas_id', $kelas->id)
             ->where('hari', $dayOfWeek)
-            ->where('status', 'aktif')
+            
             ->orderBy('jam_mulai')
             ->get();
 
@@ -72,7 +72,7 @@ class DashboardController extends Controller
                 $izin = $jadwal->guru->izins()
                     ->whereDate('tanggal_mulai', '<=', $today)
                     ->whereDate('tanggal_selesai', '>=', $today)
-                    ->where('status_approval', 'approved')
+                    ->where('status', 'approved')
                     ->exists();
 
                 if ($izin) {
@@ -92,7 +92,7 @@ class DashboardController extends Controller
             $jadwalHari = Jadwal::with(['guru.user', 'mataPelajaran'])
                 ->where('kelas_id', $kelas->id)
                 ->where('hari', $day)
-                ->where('status', 'aktif')
+                
                 ->orderBy('jam_mulai')
                 ->get();
 

@@ -64,7 +64,7 @@ class DashboardController extends Controller
 
         // Pending Izin List (last 5)
         $pending_izin = IzinCuti::with(['guru'])
-            ->where('status_approval', 'Pending')
+            ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
@@ -121,7 +121,7 @@ class DashboardController extends Controller
             'guru_terlambat' => $absensi['terlambat'],
             'guru_izin' => $absensi['izin'],
             'alpha' => $absensi['alpha'],
-            'izin_pending' => IzinCuti::where('status_approval', 'Pending')->count(),
+            'izin_pending' => IzinCuti::where('status', 'pending')->count(),
             'alerts_count' => count($dashboardData['alerts']),
         ];
 

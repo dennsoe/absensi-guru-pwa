@@ -208,6 +208,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/broadcast/send', [BroadcastController::class, 'send'])->name('broadcast.send');
         Route::get('/broadcast/{id}', [BroadcastController::class, 'show'])->name('broadcast.show');
         Route::delete('/broadcast/{id}', [BroadcastController::class, 'destroy'])->name('broadcast.destroy');
+
+        // Izin/Cuti Management for Admin
+        Route::get('/izin', [AdminIzinController::class, 'index'])->name('izin.index');
+        Route::get('/izin/{id}', [AdminIzinController::class, 'show'])->name('izin.show');
+        Route::post('/izin/{id}/approve', [AdminIzinController::class, 'approve'])->name('izin.approve');
+        Route::post('/izin/{id}/reject', [AdminIzinController::class, 'reject'])->name('izin.reject');
+        Route::delete('/izin/{id}', [AdminIzinController::class, 'destroy'])->name('izin.destroy');
     });
 
     /*

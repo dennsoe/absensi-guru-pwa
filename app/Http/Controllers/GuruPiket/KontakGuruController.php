@@ -40,7 +40,7 @@ class KontakGuruController extends Controller
                     ->findOrFail($id);
 
         // Jadwal mengajar
-        $jadwal = $guru->jadwalMengajar()->where('status', 'aktif')
+        $jadwal = $guru->jadwalMengajar()
                                           ->orderBy('hari')
                                           ->orderBy('jam_mulai')
                                           ->get()
@@ -63,7 +63,7 @@ class KontakGuruController extends Controller
     public function export()
     {
         $guru = Guru::whereHas('user', function($q) {
-                        $q->where('status', 'aktif');
+                        $q;
                     })
                     ->orderBy('nama')
                     ->get();

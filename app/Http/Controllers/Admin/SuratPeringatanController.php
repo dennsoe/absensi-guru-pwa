@@ -55,7 +55,7 @@ class SuratPeringatanController extends Controller
      */
     public function generate()
     {
-        $totalGuruAktif = Guru::where('status', 'aktif')->count();
+        $totalGuruAktif = Guru::count();
         $totalAbsensiBulanIni = Absensi::whereMonth('tanggal', Carbon::now()->month)
             ->whereYear('tanggal', Carbon::now()->year)
             ->count();
@@ -65,7 +65,7 @@ class SuratPeringatanController extends Controller
             ->count();
 
         // Calculate potential SP
-        $guruList = Guru::where('status', 'aktif')->get();
+        $guruList = Guru::all();
         $potensiSP = 0;
 
         foreach ($guruList as $guru) {
@@ -109,7 +109,7 @@ class SuratPeringatanController extends Controller
             $periodeAwal = Carbon::create($tahun, $bulan, 1)->startOfMonth();
             $periodeAkhir = Carbon::create($tahun, $bulan, 1)->endOfMonth();
 
-            $guruList = Guru::where('status', 'aktif')->get();
+            $guruList = Guru::all();
             $generated = 0;
 
             foreach ($guruList as $guru) {

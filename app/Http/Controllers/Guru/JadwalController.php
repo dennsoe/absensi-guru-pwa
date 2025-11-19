@@ -24,7 +24,7 @@ class JadwalController extends Controller
                                 ->where('guru_id', $guru->id)
                                 ->where('tahun_ajaran', $tahun_ajaran)
                                 ->where('semester', $semester)
-                                ->where('status', 'aktif')
+                                
                                 ->when($hari, fn($q) => $q->where('hari', ucfirst($hari)))
                                 ->orderBy('hari')
                                 ->orderBy('jam_mulai')
@@ -66,7 +66,7 @@ class JadwalController extends Controller
         $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                 ->where('guru_id', $guru->id)
                                 ->where('hari', $hari)
-                                ->where('status', 'aktif')
+                                
                                 ->orderBy('jam_mulai')
                                 ->get();
 
@@ -105,7 +105,7 @@ class JadwalController extends Controller
         $jadwal = JadwalMengajar::with(['kelas', 'mataPelajaran'])
                                 ->where('guru_id', $guru->id)
                                 ->where('hari', $hari)
-                                ->where('status', 'aktif')
+                                
                                 ->orderBy('jam_mulai')
                                 ->get();
 

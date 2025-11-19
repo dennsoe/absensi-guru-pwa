@@ -48,7 +48,7 @@ class JadwalMengajarController extends Controller
     public function create()
     {
         $guru_list = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->orderBy('nama')->get();
         $kelas_list = Kelas::orderBy('nama_kelas')->get();
         $mapel_list = MataPelajaran::orderBy('nama_mapel')->get();
@@ -105,7 +105,7 @@ class JadwalMengajarController extends Controller
     {
         $jadwal = JadwalMengajar::findOrFail($id);
         $guru_list = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->orderBy('nama')->get();
         $kelas_list = Kelas::orderBy('nama_kelas')->get();
         $mapel_list = MataPelajaran::orderBy('nama_mapel')->get();

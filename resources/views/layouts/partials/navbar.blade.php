@@ -20,8 +20,8 @@
     {{-- Navbar Actions --}}
     <div class="navbar-actions">
         {{-- Notification Dropdown --}}
-        <div class="navbar-notification">
-            <button class="navbar-notification-btn" data-bs-toggle="dropdown">
+        <div class="dropdown navbar-notification">
+            <button class="navbar-notification-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-bell"></i>
                 @php
                     $unreadCount = auth()->user()->notifikasi()->where('is_read', false)->count();
@@ -31,10 +31,10 @@
                 @endif
             </button>
 
-            <div class="navbar-notification-menu dropdown-menu dropdown-menu-end">
-                <div class="navbar-notification-header">
+            <ul class="dropdown-menu dropdown-menu-end navbar-notification-menu" style="min-width: 320px;">
+                <li class="navbar-notification-header">
                     <strong>Notifikasi</strong>
-                </div>
+                </li>
 
                 <div class="navbar-notification-list">
                     @php
@@ -42,33 +42,36 @@
                     @endphp
 
                     @forelse($notifications as $notif)
-                        <div class="navbar-notification-item {{ !$notif->is_read ? 'unread' : '' }}"
-                            onclick="window.location.href='{{ route('notifikasi.show', $notif->id) }}'">
-                            <div class="navbar-notification-item-title">{{ $notif->judul }}</div>
-                            <div class="navbar-notification-item-message">{{ $notif->pesan }}</div>
-                            <div class="navbar-notification-item-time">
-                                {{ $notif->created_at->diffForHumans() }}
-                            </div>
-                        </div>
+                        <li>
+                            <a class="dropdown-item navbar-notification-item {{ !$notif->is_read ? 'unread' : '' }}"
+                                href="{{ route('notifikasi.show', $notif->id) }}">
+                                <div class="navbar-notification-item-title">{{ $notif->judul }}</div>
+                                <div class="navbar-notification-item-message">{{ $notif->pesan }}</div>
+                                <div class="navbar-notification-item-time">
+                                    {{ $notif->created_at->diffForHumans() }}
+                                </div>
+                            </a>
+                        </li>
                     @empty
-                        <div class="navbar-notification-empty">
+                        <li class="navbar-notification-empty">
                             <i class="bi bi-bell-slash"></i>
                             <p>Tidak ada notifikasi</p>
-                        </div>
+                        </li>
                     @endforelse
                 </div>
 
                 @if ($notifications->count() > 0)
-                    <div class="navbar-notification-footer">
-                        <a href="{{ route('notifikasi.index') }}">Lihat semua notifikasi</a>
-                    </div>
+                    <li class="navbar-notification-footer">
+                        <a href="{{ route('notifikasi.index') }}" class="dropdown-item text-center">Lihat semua
+                            notifikasi</a>
+                    </li>
                 @endif
-            </div>
+            </ul>
         </div>
 
         {{-- User Profile Dropdown --}}
-        <div class="navbar-profile">
-            <button class="navbar-profile-btn" data-bs-toggle="dropdown">
+        <div class="dropdown navbar-profile">
+            <button class="navbar-profile-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="navbar-profile-avatar">
                     <x-user-avatar :user="auth()->user()" size="sm" />
                 </div>
@@ -79,24 +82,32 @@
                 <i class="bi bi-chevron-down"></i>
             </button>
 
-            <div class="navbar-profile-menu dropdown-menu dropdown-menu-end">
-                <a href="{{ route('profile.index') }}" class="navbar-profile-menu-item">
-                    <i class="bi bi-person"></i>
-                    Profil Saya
-                </a>
-                <a href="{{ route('profile.edit') }}" class="navbar-profile-menu-item">
-                    <i class="bi bi-gear"></i>
-                    Pengaturan
-                </a>
-                <div class="navbar-profile-menu-divider"></div>
-                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                    @csrf
-                    <button type="submit" class="navbar-profile-menu-item">
-                        <i class="bi bi-box-arrow-right"></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
+            <ul class="dropdown-menu dropdown-menu-end navbar-profile-menu">
+                <li>
+                    <a href="{{ route('profile.index') }}" class="dropdown-item navbar-profile-menu-item">
+                        <i class="bi bi-person"></i>
+                        Profil Saya
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('profile.edit') }}" class="dropdown-item navbar-profile-menu-item">
+                        <i class="bi bi-gear"></i>
+                        Pengaturan
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider navbar-profile-menu-divider">
+                </li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="dropdown-item navbar-profile-menu-item">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

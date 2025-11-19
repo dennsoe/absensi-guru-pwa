@@ -30,7 +30,7 @@ class LaporanService
         // Calculate statistics
         $statistics = [
             'total_jadwal' => JadwalMengajar::where('guru_id', $guruId)
-                ->where('status', 'aktif')
+                
                 ->count(),
             'total_absensi' => $absensiData->count(),
             'hadir' => $absensiData->where('status_kehadiran', 'hadir')->count(),
@@ -84,7 +84,7 @@ class LaporanService
 
         // Get jadwal for this class
         $jadwalList = JadwalMengajar::where('kelas_id', $kelasId)
-            ->where('status', 'aktif')
+            
             ->with('guru', 'mataPelajaran')
             ->get();
 
@@ -139,7 +139,7 @@ class LaporanService
         $endDate = Carbon::create($tahun, $bulan, 1)->endOfMonth();
 
         // Get all active guru
-        $guruList = Guru::where('status', 'aktif')->get();
+        $guruList = Guru::all();
 
         $rekapData = [];
         foreach ($guruList as $guru) {
@@ -150,7 +150,7 @@ class LaporanService
             $rekapData[] = [
                 'guru' => $guru,
                 'total_jadwal' => JadwalMengajar::where('guru_id', $guru->id)
-                    ->where('status', 'aktif')
+                    
                     ->count(),
                 'total' => $absensi->count(),
                 'hadir' => $absensi->where('status_kehadiran', 'hadir')->count(),

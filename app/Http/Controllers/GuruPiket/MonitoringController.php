@@ -19,7 +19,7 @@ class MonitoringController extends Controller
 
         // Jadwal hari ini
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
-                                        ->where('status', 'aktif')
+                                        
                                         ->with(['guru', 'kelas', 'mataPelajaran'])
                                         ->orderBy('jam_mulai')
                                         ->get();

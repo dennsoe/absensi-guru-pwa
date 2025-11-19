@@ -74,7 +74,7 @@ class Guru extends Model
     public function scopeAktif($query)
     {
         return $query->whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         });
     }
 

@@ -36,12 +36,12 @@ class SendIzinApprovedNotification implements ShouldQueue
             }
 
             // Send notification to guru
-            $statusText = $izinCuti->status_approval === 'disetujui' ? 'disetujui' : 'ditolak';
+            $statusText = $izinCuti->status === 'disetujui' ? 'disetujui' : 'ditolak';
             $title = 'Izin/Cuti ' . ucfirst($statusText);
 
             $message = "Permohonan {$izinCuti->jenis} Anda telah {$statusText}";
 
-            if ($izinCuti->status_approval === 'ditolak' && $izinCuti->alasan_penolakan) {
+            if ($izinCuti->status === 'ditolak' && $izinCuti->alasan_penolakan) {
                 $message .= ". Alasan: {$izinCuti->alasan_penolakan}";
             }
 
@@ -49,12 +49,12 @@ class SendIzinApprovedNotification implements ShouldQueue
                 $guru->user,
                 $title,
                 $message,
-                $izinCuti->status_approval === 'disetujui' ? 'success' : 'danger',
+                $izinCuti->status === 'disetujui' ? 'success' : 'danger',
                 '/guru/izin/' . $izinCuti->id
             );
 
             // If approved and guru pengganti assigned, notify them
-            if ($izinCuti->status_approval === 'disetujui' && $izinCuti->guru_pengganti_id) {
+            if ($izinCuti->status === 'disetujui' && $izinCuti->guru_pengganti_id) {
                 $guruPengganti = $izinCuti->guruPengganti;
 
                 if ($guruPengganti && $guruPengganti->user) {

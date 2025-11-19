@@ -18,7 +18,7 @@ class ValidationService
 
         $query = JadwalMengajar::where('guru_id', $guruId)
             ->where('hari', $hari)
-            ->where('status', 'aktif')
+            
             ->where(function($q) use ($jamMulai, $jamSelesai) {
                 $q->where(function($q2) use ($jamMulai, $jamSelesai) {
                     $q2->whereTime('jam_mulai', '<=', $jamMulai)

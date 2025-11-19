@@ -46,7 +46,7 @@ class AbsensiController extends Controller
 
         // Validasi QR Code
         $qrCode = QrCode::where('kode', $validated['qr_code'])
-                        ->where('status', 'aktif')
+                        
                         ->where('waktu_kadaluarsa', '>', now())
                         ->first();
 
@@ -80,7 +80,7 @@ class AbsensiController extends Controller
         // Cek jadwal mengajar hari ini
         $jadwal = JadwalMengajar::where('guru_id', $guru->id)
                                 ->where('hari', ucfirst(now()->locale('id')->dayName))
-                                ->where('status', 'aktif')
+                                
                                 ->orderBy('jam_mulai')
                                 ->first();
 
@@ -171,7 +171,7 @@ class AbsensiController extends Controller
         // Cek jadwal
         $jadwal = JadwalMengajar::where('guru_id', $guru->id)
                                 ->where('hari', ucfirst(now()->locale('id')->dayName))
-                                ->where('status', 'aktif')
+                                
                                 ->orderBy('jam_mulai')
                                 ->first();
 

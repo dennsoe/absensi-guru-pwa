@@ -27,7 +27,7 @@ class KurikulumController extends Controller
 
         // STATISTIK UMUM
         $total_guru = Guru::whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->count();
 
         $total_kelas = Kelas::count();
@@ -36,7 +36,7 @@ class KurikulumController extends Controller
 
         // JADWAL HARI INI
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
-            ->where('status', 'aktif')
+            
             ->with(['guru.user', 'kelas', 'mataPelajaran'])
             ->orderBy('jam_mulai')
             ->get();
@@ -54,7 +54,7 @@ class KurikulumController extends Controller
         foreach ($guru_izin_hari_ini as $izin) {
             $jadwal_guru = JadwalMengajar::where('guru_id', $izin->guru_id)
                 ->where('hari', $hari_ini)
-                ->where('status', 'aktif')
+                
                 ->with(['guru.user', 'kelas', 'mataPelajaran'])
                 ->get();
 
@@ -183,7 +183,7 @@ class KurikulumController extends Controller
             ->paginate(50);
 
         $guru_list = Guru::with('user')->whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->get();
 
         $kelas_list = Kelas::all();
@@ -209,7 +209,7 @@ class KurikulumController extends Controller
         }
 
         $guru = Guru::with('user')->whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->get();
 
         $kelas = Kelas::all();
@@ -252,7 +252,7 @@ class KurikulumController extends Controller
             // CEK KONFLIK GURU (guru sama, hari sama, waktu overlap)
             $konflik_guru = JadwalMengajar::where('guru_id', $request->guru_id)
                 ->where('hari', $request->hari)
-                ->where('status', 'aktif')
+                
                 ->get()
                 ->filter(function($jadwal) use ($request) {
                     return $this->isTimeOverlap(
@@ -273,7 +273,7 @@ class KurikulumController extends Controller
             // CEK KONFLIK KELAS (kelas sama, hari sama, waktu overlap)
             $konflik_kelas = JadwalMengajar::where('kelas_id', $request->kelas_id)
                 ->where('hari', $request->hari)
-                ->where('status', 'aktif')
+                
                 ->get()
                 ->filter(function($jadwal) use ($request) {
                     return $this->isTimeOverlap(
@@ -329,7 +329,7 @@ class KurikulumController extends Controller
         $jadwal = JadwalMengajar::with(['guru.user', 'kelas', 'mataPelajaran'])->findOrFail($id);
 
         $guru = Guru::with('user')->whereHas('user', function($q) {
-            $q->where('status', 'aktif');
+            $q;
         })->get();
 
         $kelas = Kelas::all();
@@ -375,7 +375,7 @@ class KurikulumController extends Controller
             // CEK KONFLIK GURU (exclude jadwal ini)
             $konflik_guru = JadwalMengajar::where('guru_id', $request->guru_id)
                 ->where('hari', $request->hari)
-                ->where('status', 'aktif')
+                
                 ->where('id', '!=', $id)
                 ->get()
                 ->filter(function($j) use ($request) {
@@ -397,7 +397,7 @@ class KurikulumController extends Controller
             // CEK KONFLIK KELAS (exclude jadwal ini)
             $konflik_kelas = JadwalMengajar::where('kelas_id', $request->kelas_id)
                 ->where('hari', $request->hari)
-                ->where('status', 'aktif')
+                
                 ->where('id', '!=', $id)
                 ->get()
                 ->filter(function($j) use ($request) {
@@ -491,12 +491,12 @@ class KurikulumController extends Controller
 
         $laporan = Guru::with('user')
             ->whereHas('user', function($q) {
-                $q->where('status', 'aktif');
+                $q;
             })
             ->get()
             ->map(function($guru) use ($bulan, $tahun) {
                 $total_jadwal = JadwalMengajar::where('guru_id', $guru->id)
-                    ->where('status', 'aktif')
+                    
                     ->count();
 
                 $total_mengajar = Absensi::whereHas('jadwal', function($q) use ($guru) {

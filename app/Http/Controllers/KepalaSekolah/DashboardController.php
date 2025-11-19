@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $thisYear = Carbon::now()->year;
 
         // Executive Summary
-        $total_guru = Guru::where('status', 'Aktif')->count();
+        $total_guru = Guru::count();
         $total_kelas = DB::table('kelas')->count();
         $total_mata_pelajaran = DB::table('mata_pelajaran')->count();
 
@@ -54,7 +54,7 @@ class DashboardController extends Controller
             : 0;
 
         // Pending Approvals
-        $izin_pending = IzinCuti::where('status_approval', 'Pending')->count();
+        $izin_pending = IzinCuti::where('status', 'pending')->count();
 
         // Monthly Trend (Last 30 days)
         $trend_data = [];

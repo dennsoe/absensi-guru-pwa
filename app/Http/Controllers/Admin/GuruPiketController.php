@@ -59,13 +59,10 @@ class GuruPiketController extends Controller
         }
 
         // Get all active guru
-        $availableGuru = Guru::where('status', 'aktif')
-            ->orderBy('nama')
-            ->get();
+        $availableGuru = Guru::orderBy('nama')->get();
 
         // Summary by day
         $summaryByDay = GuruPiket::select('hari', DB::raw('count(*) as total'))
-            ->where('status', 'aktif')
             ->groupBy('hari')
             ->get()
             ->pluck('total', 'hari')

@@ -82,6 +82,56 @@
     <!-- Bootstrap JS Local -->
     <script src="{{ asset('assets/vendor/bootstrap-5.3.3/js/bootstrap.bundle.min.js') }}"></script>
 
+    <!-- Bootstrap Dropdown Initialize & Debug -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== DROPDOWN DEBUG START ===');
+            console.log('Bootstrap loaded:', typeof bootstrap !== 'undefined');
+            console.log('jQuery loaded:', typeof jQuery !== 'undefined');
+
+            // Find all dropdown buttons
+            var dropdownButtons = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            console.log('Found dropdown buttons:', dropdownButtons.length);
+
+            dropdownButtons.forEach(function(btn, index) {
+                console.log(`Button ${index}:`, btn);
+                console.log('  - Has data-bs-toggle:', btn.getAttribute('data-bs-toggle'));
+                console.log('  - Type:', btn.getAttribute('type'));
+                console.log('  - Computed z-index:', window.getComputedStyle(btn).zIndex);
+                console.log('  - Pointer events:', window.getComputedStyle(btn).pointerEvents);
+
+                // Add manual click listener for testing
+                btn.addEventListener('click', function(e) {
+                    console.log('BUTTON CLICKED!', this);
+                    console.log('Event:', e);
+                });
+
+                // Initialize Bootstrap dropdown
+                try {
+                    new bootstrap.Dropdown(btn);
+                    console.log(`  ✓ Bootstrap Dropdown initialized for button ${index}`);
+                } catch (error) {
+                    console.error(`  ✗ Failed to initialize dropdown ${index}:`, error);
+                }
+            });
+
+            // Check for overlapping elements
+            setTimeout(function() {
+                dropdownButtons.forEach(function(btn, index) {
+                    var rect = btn.getBoundingClientRect();
+                    var elementAtPoint = document.elementFromPoint(rect.left + rect.width / 2, rect
+                        .top + rect.height / 2);
+                    console.log(`Element at button ${index} position:`, elementAtPoint);
+                    if (elementAtPoint !== btn && !btn.contains(elementAtPoint)) {
+                        console.warn(`⚠️ Button ${index} is being covered by:`, elementAtPoint);
+                    }
+                });
+            }, 500);
+
+            console.log('=== DROPDOWN DEBUG END ===');
+        });
+    </script>
+
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 

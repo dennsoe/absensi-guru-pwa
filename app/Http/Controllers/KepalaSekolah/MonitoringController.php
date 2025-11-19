@@ -97,7 +97,7 @@ class MonitoringController extends Controller
         $hari_ini = ucfirst(now()->locale('id')->dayName);
 
         $jadwal_hari_ini = JadwalMengajar::where('hari', $hari_ini)
-                                        ->where('status', 'aktif')
+                                        
                                         ->count();
 
         $absensi_hari_ini = Absensi::whereDate('tanggal', today())->count();

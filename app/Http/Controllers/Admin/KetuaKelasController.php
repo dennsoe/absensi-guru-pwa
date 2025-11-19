@@ -44,7 +44,7 @@ class KetuaKelasController extends Controller
         $kelasWithKetua = Kelas::whereNotNull('ketua_kelas_id')->count();
         $kelasWithoutKetua = $totalKelas - $kelasWithKetua;
         $ketuaKelasAktif = Guru::whereHas('kelasAsKetua')
-            ->where('status', 'aktif')
+            
             ->count();
 
         return view('admin.ketua-kelas.index', compact(
@@ -82,7 +82,7 @@ class KetuaKelasController extends Controller
 
         // Get all active guru (with kelas count)
         $availableGuru = Guru::withCount('kelasAsKetua')
-            ->where('status', 'aktif')
+            
             ->orderBy('nama')
             ->get();
 

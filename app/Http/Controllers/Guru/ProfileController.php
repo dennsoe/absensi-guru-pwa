@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
         // Get statistics
         $total_jadwal = $guru->jadwalMengajar()
-                            ->where('status', 'aktif')
+                            
                             ->where('tahun_ajaran', '2025/2026')
                             ->count();
 

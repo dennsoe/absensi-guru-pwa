@@ -46,13 +46,13 @@
                 <!-- Manage Users -->
                 <div class="sidebar-nav-title">Manajemen Pengguna</div>
 
-                <a href="{{ route('admin.users.index') }}"
+                <a href="{{ route('admin.users') }}"
                     class="sidebar-nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <i class="bi bi-people"></i>
                     <span>Daftar User</span>
                 </a>
 
-                <a href="{{ route('admin.guru.index') }}"
+                <a href="{{ route('admin.guru') }}"
                     class="sidebar-nav-item {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
                     <i class="bi bi-person-badge"></i>
                     <span>Data Guru</span>
@@ -67,12 +67,6 @@
                     <span>Data Absensi</span>
                 </a>
 
-                <a href="{{ route('admin.qr-codes.index') }}"
-                    class="sidebar-nav-item {{ request()->routeIs('admin.qr-codes.*') ? 'active' : '' }}">
-                    <i class="bi bi-qr-code"></i>
-                    <span>QR Code</span>
-                </a>
-
                 <!-- Jadwal -->
                 <div class="sidebar-nav-title">Jadwal</div>
 
@@ -85,19 +79,13 @@
                 <!-- Izin & Cuti -->
                 <div class="sidebar-nav-title">Izin & Cuti</div>
 
-                <a href="{{ route('admin.izin-cuti.index') }}"
-                    class="sidebar-nav-item {{ request()->routeIs('admin.izin-cuti.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.izin.index') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.izin.*') ? 'active' : '' }}">
                     <i class="bi bi-file-earmark-text"></i>
                     <span>Permohonan Izin</span>
                     @if (isset($pendingIzinCount) && $pendingIzinCount > 0)
                         <span class="badge badge-danger ms-auto">{{ $pendingIzinCount }}</span>
                     @endif
-                </a>
-
-                <a href="{{ route('admin.guru-pengganti.index') }}"
-                    class="sidebar-nav-item {{ request()->routeIs('admin.guru-pengganti.*') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus"></i>
-                    <span>Guru Pengganti</span>
                 </a>
 
                 <!-- Laporan -->
@@ -109,23 +97,23 @@
                     <span>Laporan</span>
                 </a>
 
-                <a href="{{ route('admin.rekap.index') }}"
-                    class="sidebar-nav-item {{ request()->routeIs('admin.rekap.*') ? 'active' : '' }}">
-                    <i class="bi bi-clipboard-data"></i>
-                    <span>Rekap Absensi</span>
+                <a href="{{ route('admin.guru-piket.index') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.guru-piket.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>Guru Piket</span>
                 </a>
 
                 <!-- Settings -->
                 <div class="sidebar-nav-title">Pengaturan</div>
 
-                <a href="{{ route('admin.settings.index') }}"
+                <a href="{{ route('admin.settings') }}"
                     class="sidebar-nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                     <i class="bi bi-gear"></i>
                     <span>Pengaturan Sistem</span>
                 </a>
 
-                <a href="{{ route('admin.logs.index') }}"
-                    class="sidebar-nav-item {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.activity-log') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.activity-log') ? 'active' : '' }}">
                     <i class="bi bi-clock-history"></i>
                     <span>Activity Log</span>
                 </a>
@@ -184,10 +172,8 @@
                         @endif
                     </button>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg">
-                        <div class="dropdown-header d-flex justify-content-between align-items-center">
+                        <div class="dropdown-header">
                             <span class="fw-semibold">Notifikasi</span>
-                            <a href="{{ route('admin.notifications.mark-all-read') }}" class="text-primary small">Tandai
-                                semua dibaca</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <!-- Notification items would go here -->
@@ -214,11 +200,8 @@
                             <div class="text-muted small">{{ auth()->user()->email }}</div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ route('admin.profile') }}" class="dropdown-item">
-                            <i class="bi bi-person me-2"></i> Profile
-                        </a>
-                        <a href="{{ route('admin.settings.account') }}" class="dropdown-item">
-                            <i class="bi bi-gear me-2"></i> Pengaturan
+                        <a href="{{ route('admin.settings') }}" class="dropdown-item">
+                            <i class="bi bi-gear me-2"></i> Pengaturan Akun
                         </a>
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
