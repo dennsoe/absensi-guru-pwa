@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>SIAG NEKAS - Dashboard</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #198754;
+            --primary-rgb: 25, 135, 84;
+            --primary-dark: #146c43;
+            --secondary: #6c757d;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #0dcaf0;
+            --success: #198754;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-app: #f5f5f5;
+            --bg-card: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(0, 0, 0, 0.06);
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-tertiary: #adb5bd;
+            --border-color: #e9ecef;
+            --shadow-sm: rgba(0, 0, 0, 0.05);
+            --shadow-md: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-app: #121212;
+            --bg-card: #1e1e1e;
+            --glass-bg: rgba(30, 30, 30, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #6c6c6c;
+            --border-color: #2c2c2c;
+            --shadow-sm: rgba(0, 0, 0, 0.3);
+            --shadow-md: rgba(0, 0, 0, 0.4);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-app);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Liquid Glass Mixin */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(100px) saturate(180%) brightness(105%);
+            -webkit-backdrop-filter: blur(100px) saturate(180%) brightness(105%);
+            border: 0.5px solid var(--glass-border);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            padding-top: calc(env(safe-area-inset-top) + 16px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .menu-btn span {
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .notification-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-btn i {
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: #dc3545;
+            border-radius: 4px;
+            border: 2px solid var(--bg-card);
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 0 calc(80px + env(safe-area-inset-bottom));
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            margin: 16px;
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.25);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-department {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .attendance-info {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .attendance-label {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .attendance-value {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .location-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .location-icon i {
+            font-size: 16px;
+        }
+
+        .location-details {
+            flex: 1;
+            font-size: 12px;
+        }
+
+        .location-label {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .location-address {
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        .location-distance {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 6px;
+        }
+
+        .calendar-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-btn i {
+            font-size: 20px;
+        }
+
+        .calendar-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Selfie Button */
+        .selfie-button {
+            margin: 16px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .selfie-button:active {
+            transform: scale(0.98);
+        }
+
+        .selfie-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .selfie-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Quick Actions Grid */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-item:active {
+            transform: scale(0.9);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .action-icon.liquid-glass {
+            box-shadow: 0 6px 16px var(--shadow-sm);
+        }
+
+        .action-icon i {
+            font-size: 26px;
+            color: white;
+            z-index: 2;
+            position: relative;
+        }
+
+        .action-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 0 calc(env(safe-area-inset-bottom) + 8px);
+            box-shadow: 0 -2px 12px var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            text-decoration: none;
+            color: var(--text-tertiary);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.center {
+            margin-top: -28px;
+        }
+
+        .nav-icon-wrapper {
+            position: relative;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .nav-item.center .nav-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.3);
+        }
+
+        .nav-item.center .nav-icon {
+            color: white;
+            font-size: 28px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .nav-item:active .nav-icon {
+            transform: scale(0.85);
+        }
+
+        /* Section Header */
+        .section-header {
+            padding: 20px 16px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border: 0.5px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px var(--shadow-sm);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.9);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .quick-actions {
+                gap: 8px;
+            }
+
+            .action-icon {
+                width: 52px;
+                height: 52px;
+            }
+
+            .action-icon i {
+                font-size: 24px;
+            }
+
+            .action-label {
+                font-size: 10px;
+            }
+        }
+
+        /* Loading animation */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--border-color) 25%, var(--bg-card) 50%, var(--border-color) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Prevent overscroll */
+        body {
+            overscroll-behavior-y: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="header-title">SIAG NEKAS</div>
+        <div class="notification-btn">
+            <i class="bi bi-bell-fill"></i>
+            <span class="notif-badge"></span>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="calendar-btn">
+                <i class="bi bi-calendar-event-fill"></i>
+            </div>
+
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-department">DINAS KESEHATAN</div>
+                    <div class="profile-name">DWI PUTRI GANTINI</div>
+                    <div class="profile-role">NUTRISIONIS TERAMPIL</div>
+                </div>
+            </div>
+
+            <div class="attendance-info">
+                <div class="attendance-label">Skema</div>
+                <div class="attendance-value">ABSENSI DIKANTOR</div>
+            </div>
+
+            <div class="location-info">
+                <div class="location-icon">
+                    <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <div class="location-details">
+                    <div class="location-label">Lokasi : UPTD RUMAH SAKIT UMUM DAERAH AL-IHSAN</div>
+                    <div class="location-address">Jarak realtime : 100000 M</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selfie Button -->
+        <div class="selfie-button">
+            <div class="selfie-text">Selfie foto divalidasi dengan face recognition</div>
+            <div class="selfie-time">Minggu , 08 May 2022 10:06:13</div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="section-header">
+            <div class="section-title">Quick Access</div>
+            <div class="theme-toggle" id="themeToggle">
+                <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+                    <i class="bi bi-envelope-fill"></i>
+                </div>
+                <span class="action-label">Surat</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #dc3545, #b02a37);">
+                    <i class="bi bi-fire"></i>
+                </div>
+                <span class="action-label">EWS</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+                <span class="action-label">Persetujuan</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #6f42c1, #59339d);">
+                    <i class="bi bi-key-fill"></i>
+                </div>
+                <span class="action-label">E-signature</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #fd7e14, #ca6510);">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+                <span class="action-label">Laporan</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+                    <i class="bi bi-briefcase-fill"></i>
+                </div>
+                <span class="action-label">Dinas Luar</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #198754, #146c43);">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <span class="action-label">Cuti</span>
+            </a>
+
+            <a href="#" class="action-item">
+                <div class="action-icon liquid-glass" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <span class="action-label">Izin</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-item active">
+                <div class="nav-icon-wrapper">
+                    <i class="bi bi-house-door-fill nav-icon"></i>
+                </div>
+                <span class="nav-label">Beranda</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <div class="nav-icon-wrapper">
+                    <i class="bi bi-grid-fill nav-icon"></i>
+                </div>
+                <span class="nav-label">Aplikasi</span>
+            </a>
+
+            <a href="#" class="nav-item center">
+                <div class="nav-icon-wrapper">
+                    <i class="bi bi-plus-lg nav-icon"></i>
+                </div>
+            </a>
+
+            <a href="#" class="nav-item">
+                <div class="nav-icon-wrapper">
+                    <i class="bi bi-sliders nav-icon"></i>
+                </div>
+                <span class="nav-label">Pengaturan</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <div class="nav-icon-wrapper">
+                    <i class="bi bi-person-circle nav-icon"></i>
+                </div>
+                <span class="nav-label">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Theme Manager
+        const ThemeManager = {
+            key: 'siag-kmob-theme',
+            current: 'system',
+
+            init() {
+                this.load();
+                this.bind();
+                this.watch();
+            },
+
+            load() {
+                const saved = localStorage.getItem(this.key) || 'system';
+                this.apply(saved, false);
+            },
+
+            apply(theme, save = true) {
+                if (save) localStorage.setItem(this.key, theme);
+
+                this.current = theme;
+                const actual = theme === 'system'
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : theme;
+
+                document.documentElement.setAttribute('data-theme', actual);
+                this.updateIcon(theme);
+                this.updateMeta(actual);
+            },
+
+            updateIcon(theme) {
+                const icons = {
+                    light: 'bi-sun-fill',
+                    dark: 'bi-moon-stars-fill',
+                    system: 'bi-circle-half'
+                };
+                document.getElementById('themeIcon').className = `bi ${icons[theme]}`;
+            },
+
+            updateMeta(theme) {
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.content = theme === 'dark' ? '#121212' : '#ffffff';
+            },
+
+            bind() {
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    const themes = ['light', 'dark', 'system'];
+                    const current = themes.indexOf(this.current);
+                    const next = themes[(current + 1) % themes.length];
+                    this.apply(next);
+                });
+            },
+
+            watch() {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (this.current === 'system') this.apply('system', false);
+                });
+            }
+        };
+
+        // Navigation Handler
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!item.classList.contains('center')) {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Haptic Feedback
+        document.querySelectorAll('.action-item, .nav-item, .theme-toggle').forEach(el => {
+            el.addEventListener('touchstart', () => {
+                if (navigator.vibrate) navigator.vibrate(3);
+            });
+        });
+
+        // Menu Toggle
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (navigator.vibrate) navigator.vibrate(5);
+        });
+
+        // Initialize
+        ThemeManager.init();
+    </script>
+</body>
+</html>

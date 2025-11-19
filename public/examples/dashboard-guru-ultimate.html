@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#6366F1">
+    <title>Dashboard Guru - SIAG NEKAS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%);
+            padding: 20px;
+            color: white;
+            border-radius: 0 0 24px 24px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .user-info h3 {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .user-info h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger);
+            color: white;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            min-width: 18px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 20px;
+            background: white;
+        }
+
+        .category-item {
+            text-align: center;
+            text-decoration: none;
+            color: var(--gray-700);
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 8px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .category-item span {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Content */
+        .content {
+            padding: 0 20px 20px;
+            background: var(--gray-50);
+        }
+
+        /* Alert */
+        .alert {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left: 4px solid var(--warning);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--warning);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .alert-text {
+            font-size: 13px;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .alert-meta {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        /* Announcement */
+        .announcement {
+            background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #FCA5A5 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            color: white;
+            position: relative;
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .announcement-title {
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .announcement-text {
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        /* Status Card */
+        .status-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .status-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            background: #D1FAE5;
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .status-label {
+            color: var(--gray-500);
+        }
+
+        .status-value {
+            font-weight: 600;
+        }
+
+        .status-value.success {
+            color: var(--success);
+        }
+
+        .status-value.muted {
+            color: var(--gray-500);
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .add-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 8px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-icon.success {
+            background: var(--success);
+        }
+
+        .stat-icon.warning {
+            background: var(--warning);
+        }
+
+        .stat-icon.info {
+            background: #3B82F6;
+        }
+
+        .stat-icon.danger {
+            background: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        /* Schedule List */
+        .schedule-list {
+            margin-bottom: 24px;
+        }
+
+        .schedule-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-item.completed {
+            background: linear-gradient(135deg, #D1FAE5 0%, #ECFDF5 100%);
+        }
+
+        .schedule-item.active {
+            border: 2px solid var(--primary);
+        }
+
+        .schedule-time {
+            text-align: center;
+            padding-right: 16px;
+            border-right: 2px solid var(--gray-200);
+        }
+
+        .schedule-time .time {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .schedule-time .duration {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .schedule-content {
+            flex: 1;
+        }
+
+        .schedule-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .schedule-meta {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .schedule-meta i {
+            margin-right: 4px;
+        }
+
+        .schedule-status {
+            font-size: 24px;
+        }
+
+        .schedule-status.success {
+            color: var(--success);
+        }
+
+        .schedule-status.pending {
+            color: var(--gray-400);
+        }
+
+        /* Checklist */
+
+        .checklist-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .checklist-item.completed {
+            background: linear-gradient(135deg, #D1FAE5 0%, #ECFDF5 100%);
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .checklist-content {
+            flex: 1;
+        }
+
+        .checklist-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .checklist-time {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--gray-500);
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="user-section">
+                    <div class="avatar">BS</div>
+                    <div class="user-info">
+                        <h3>Selamat Pagi 👋</h3>
+                        <h2>Budi Santoso</h2>
+                    </div>
+                </div>
+                <button class="notification-btn">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+            </div>
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Cari jadwal, kelas, mata pelajaran...">
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <a href="#" class="category-item">
+                <div class="category-icon">
+                    <i class="bi bi-clipboard-check-fill"></i>
+                </div>
+                <span>Absensi</span>
+            </a>
+            <a href="#" class="category-item">
+                <div class="category-icon">
+                    <i class="bi bi-calendar-event-fill"></i>
+                </div>
+                <span>Jadwal</span>
+            </a>
+            <a href="#" class="category-item">
+                <div class="category-icon">
+                    <i class="bi bi-file-text-fill"></i>
+                </div>
+                <span>Izin</span>
+            </a>
+            <a href="#" class="category-item">
+                <div class="category-icon">
+                    <i class="bi bi-three-dots"></i>
+                </div>
+                <span>Lainnya</span>
+            </a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Announcement -->
+            <div class="announcement">
+                <div class="announcement-header">
+                    <div class="announcement-title">
+                        <i class="bi bi-megaphone-fill"></i>
+                        Pengumuman Penting
+                    </div>
+                    <button class="close-btn">×</button>
+                </div>
+                <div class="announcement-text">
+                    Reminder: Harap melakukan absensi tepat waktu. Keterlambatan lebih dari 15 menit akan dicatat sebagai terlambat.
+                </div>
+            </div>
+
+            <!-- Status Card -->
+            <div class="status-card">
+                <div class="status-header">
+                    <div class="status-title">Status Absensi Hari Ini</div>
+                    <span class="status-badge">Sudah Absen</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Absen Masuk</span>
+                    <span class="status-value success">06:55 WIB</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Absen Pulang</span>
+                    <span class="status-value muted">Belum Absen</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Status Kehadiran</span>
+                    <span class="status-value success">Hadir Tepat Waktu</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Total Jam Mengajar</span>
+                    <span class="status-value">3 Jadwal (6 JP)</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid Bulan Ini -->
+            <div class="section-header">
+                <div class="section-title">Statistik Bulan Ini</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon success">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Hadir</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon warning">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Terlambat</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon info">
+                        <i class="bi bi-file-text"></i>
+                    </div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Izin</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon danger">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Alpha</div>
+                </div>
+            </div>
+
+            <!-- Jadwal Hari Ini -->
+            <div class="section-header">
+                <div class="section-title">Jadwal Hari Ini</div>
+                <span class="badge">3 Jadwal</span>
+            </div>
+
+            <div class="schedule-list">
+                <div class="schedule-item completed">
+                    <div class="schedule-time">
+                        <div class="time">07:30</div>
+                        <div class="duration">90 menit</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="schedule-title">Matematika</div>
+                        <div class="schedule-meta">
+                            <i class="bi bi-people"></i> Kelas X-1
+                            <i class="bi bi-geo-alt"></i> Ruang 101
+                        </div>
+                    </div>
+                    <div class="schedule-status success">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                </div>
+
+                <div class="schedule-item active">
+                    <div class="schedule-time">
+                        <div class="time">09:15</div>
+                        <div class="duration">90 menit</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="schedule-title">Matematika</div>
+                        <div class="schedule-meta">
+                            <i class="bi bi-people"></i> Kelas X-2
+                            <i class="bi bi-geo-alt"></i> Ruang 102
+                        </div>
+                    </div>
+                    <div class="schedule-status pending">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="time">13:00</div>
+                        <div class="duration">90 menit</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="schedule-title">Matematika</div>
+                        <div class="schedule-meta">
+                            <i class="bi bi-people"></i> Kelas X-3
+                            <i class="bi bi-geo-alt"></i> Ruang 103
+                        </div>
+                    </div>
+                    <div class="schedule-status pending">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tugas & Reminder -->
+            <div class="section-header">
+                <div class="section-title">Tugas & Reminder</div>
+                <button class="add-btn">+</button>
+            </div>
+
+            <div class="checklist-item completed">
+                <div class="checkbox checked">
+                    <i class="bi bi-check"></i>
+                </div>
+                <div class="checklist-content">
+                    <div class="checklist-title">Persiapan Materi Matematika</div>
+                    <div class="checklist-time">Selesai, 06:30</div>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checkbox">
+                </div>
+                <div class="checklist-content">
+                    <div class="checklist-title">Input Nilai Ujian Kelas X-1</div>
+                    <div class="checklist-time">Deadline: Hari ini, 16:00</div>
+                </div>
+            </div>
+
+            <div class="checklist-item">
+                <div class="checkbox">
+                </div>
+                <div class="checklist-content">
+                    <div class="checklist-title">Rapat Koordinasi Guru</div>
+                    <div class="checklist-time">Hari ini, 14:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="bi bi-house-fill"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-clipboard-check"></i>
+                <span>Absensi</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-qr-code-scan"></i>
+                <span>Scan</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-calendar3"></i>
+                <span>Jadwal</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-person"></i>
+                <span>Profil</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

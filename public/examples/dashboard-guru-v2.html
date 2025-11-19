@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - SIAG NEKAS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E40AF;
+            --secondary: #7C3AED;
+            --accent: #EC4899;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #06B6D4;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --border: #E5E7EB;
+            --text: #111827;
+            --text-light: #6B7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+            padding-top: 40px;
+        }
+
+        .viewport {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header-wrap {
+            background: linear-gradient(180deg, var(--primary) 0%, #1E3A8A 100%);
+            padding: 76px 20px 110px 20px;
+            position: relative;
+            margin-top: -50px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, var(--primary) 0%, #1E3A8A 100%);
+            padding: 12px 16px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .school-info h1 {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.3px;
+            margin: 0;
+        }
+
+        .school-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 2px 0 0 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            background: var(--danger);
+            border-radius: 50%;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+
+        .guru-profile {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .avatar-lg {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 700;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .greeting-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.95;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .greeting-text i {
+            font-size: 16px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .profile-details h2 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .profile-details .nip {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+
+        .profile-details .status-online {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            margin-top: 4px;
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            color: #A7F3D0;
+        }
+
+        .status-online::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #10B981;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .attendance-status {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #BAE6FD;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border: 1px solid #A7F3D0;
+            border-radius: 0;
+            padding: 20px;
+            display: flex;
+            align-items: start;
+            gap: 14px;
+        }
+
+        .alert-banner i {
+            font-size: 24px;
+            color: #10B981;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .alert-banner strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #065F46;
+            margin-bottom: 6px;
+        }
+
+        .alert-banner p {
+            font-size: 13px;
+            color: #047857;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .alert-banner p strong {
+            display: inline;
+            color: #059669;
+            font-weight: 700;
+        }
+
+        .status-summary {
+            padding: 24px 20px;
+        }
+
+        .status-title {
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 18px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .status-row:first-child {
+            padding-top: 0;
+        }
+
+        .status-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .status-label-text {
+            font-size: 14px;
+            color: #4B5563;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-label-text i {
+            font-size: 16px;
+        }
+
+        .status-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .count-display {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .current-time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1E40AF;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .current-time-badge i {
+            font-size: 12px;
+            color: #3B82F6;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .current-time-badge span:first-of-type {
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+            letter-spacing: 0.3px;
+        }
+
+        .current-time-badge span:last-child {
+            color: #6B7280;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .date-badge i {
+            font-size: 12px;
+            color: #10B981;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+
+        .stats-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 28px 24px;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .stat-item {
+            background: #FAFAFA;
+            border-radius: 14px;
+            padding: 18px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid #F3F4F6;
+        }
+
+        .stat-item:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .stat-item:nth-child(1) .stat-icon {
+            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+            color: #047857;
+        }
+
+        .stat-item:nth-child(2) .stat-icon {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            color: #B45309;
+        }
+
+        .stat-item:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+            color: #1E40AF;
+        }
+
+        .stat-item:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            color: #B91C1C;
+        }
+
+        .stat-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        /* Floating Action Card */
+        .floating-action-card {
+            background: white;
+            margin: -70px 20px 24px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 20px;
+            position: relative;
+            z-index: 15;
+        }
+
+        /* Main Content */
+        .content-section {
+            padding: 0 20px 24px;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-head h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .link-more {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .action-item {
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .action-icon-wrap {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s;
+        }
+
+        .action-item:active .action-icon-wrap {
+            transform: scale(0.92);
+        }
+
+        .action-item:nth-child(1) .action-icon-wrap {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+        }
+
+        .action-item:nth-child(2) .action-icon-wrap {
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            color: white;
+        }
+
+        .action-item:nth-child(3) .action-icon-wrap {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+
+        .action-item:nth-child(4) .action-icon-wrap {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+        }
+
+        .action-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #374151;
+            line-height: 1.3;
+        }
+
+        /* Month Summary Card */
+        .summary-card {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .month-badge {
+            padding: 6px 14px;
+            background: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 14px 10px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .summary-item-icon {
+            width: 36px;
+            height: 36px;
+            margin: 0 auto 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .summary-item:nth-child(1) .summary-item-icon {
+            background: #D1FAE5;
+            color: var(--success);
+        }
+
+        .summary-item:nth-child(2) .summary-item-icon {
+            background: #FEF3C7;
+            color: var(--warning);
+        }
+
+        .summary-item:nth-child(3) .summary-item-icon {
+            background: #DBEAFE;
+            color: var(--info);
+        }
+
+        .summary-item:nth-child(4) .summary-item-icon {
+            background: #FEE2E2;
+            color: var(--danger);
+        }
+
+        .summary-item-count {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .summary-item-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Schedule Card */
+        .schedule-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1.5px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .schedule-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+
+        .schedule-card.active::before {
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .schedule-card.completed::before {
+            background: var(--success);
+        }
+
+        .schedule-card.upcoming::before {
+            background: var(--border);
+        }
+
+        .schedule-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .time-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .time-range i {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        .schedule-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-active {
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+            color: var(--primary);
+        }
+
+        .badge-completed {
+            background: #D1FAE5;
+            color: var(--success);
+        }
+
+        .badge-upcoming {
+            background: var(--light);
+            color: var(--text-light);
+        }
+
+        .subject-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .schedule-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-item i {
+            font-size: 15px;
+        }
+
+        /* Reminder Card */
+        .reminder-card {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .reminder-icon {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+
+        .reminder-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .reminder-content p {
+            font-size: 13px;
+            color: #78350F;
+            line-height: 1.5;
+        }
+
+        /* Task List */
+        .task-list-item {
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .task-check {
+            width: 24px;
+            height: 24px;
+            border: 2.5px solid var(--border);
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-list-item.done .task-check {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .task-list-item.done .task-title {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .task-time {
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .priority-label {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .priority-high {
+            background: #FEE2E2;
+            color: var(--danger);
+        }
+
+        .priority-medium {
+            background: #FEF3C7;
+            color: var(--warning);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid var(--border);
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 8px 0;
+            flex: 1;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .nav-item span {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .nav-item.scan {
+            top: -28px;
+        }
+
+        .scan-btn {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+            border: 4px solid white;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewport">
+        <!-- Header -->
+        <div class="header-wrap">
+            <div class="header-top" id="headerTop">
+                <div class="school-info" id="headerInfo">
+                    <h1 id="headerTitle">SIAG NEKAS</h1>
+                    <p id="headerSubtitle">SMK Negeri Kasomalang</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon">
+                        <i class="bi bi-bell-fill"></i>
+                        <span class="notif-badge">3</span>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="bi bi-gear-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="guru-profile">
+                <div class="avatar-lg">DS</div>
+                <div class="profile-details">
+                    <div class="greeting-text">
+                        <i id="greetingIcon" class="bi bi-brightness-high-fill"></i>
+                        <span id="greetingText">Selamat Sore</span>
+                    </div>
+                    <h2>Dedi Suryadi, S.Kom</h2>
+                    <p class="nip">NIP: 197508122006041005</p>
+                    <span class="status-online">Aktif Mengajar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Card -->
+        <div class="floating-action-card">
+            <div class="action-grid">
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap">
+                        <i class="bi bi-qr-code-scan"></i>
+                    </div>
+                    <div class="action-label">Scan Absen</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap">
+                        <i class="bi bi-calendar-week"></i>
+                    </div>
+                    <div class="action-label">Jadwal</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap">
+                        <i class="bi bi-file-earmark-medical"></i>
+                    </div>
+                    <div class="action-label">Izin/Cuti</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="action-label">Statistik</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-section">
+            <!-- Notifikasi Jadwal -->
+            <div class="attendance-status">
+                <div class="card-header-custom">
+                    <div class="current-time-badge">
+                        <i class="bi bi-clock-fill"></i>
+                        <span id="currentTime">--:--:--</span>
+                        <span>WIB</span>
+                    </div>
+                    <div class="date-badge">
+                        <i class="bi bi-calendar3"></i>
+                        <span>Senin, 18 November 2024</span>
+                    </div>
+                </div>
+
+                <div class="alert-banner">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>
+                        <strong>Jadwal Mengajar Hari Ini</strong>
+                        <p>Anda memiliki <strong>4 jadwal</strong> mengajar hari ini. Sudah absen <strong>1 kelas</strong>.</p>
+                    </div>
+                </div>
+
+                <!-- Status Absensi Hari Ini -->
+                <div class="status-summary">
+                    <div class="status-title">Status Absensi Hari Ini</div>
+                    <div class="status-row">
+                        <span class="status-label-text">
+                            <i class="bi bi-calendar-check" style="color: #10B981;"></i>
+                            <span>Jadwal Mengajar</span>
+                        </span>
+                        <span class="status-value">4 Kelas</span>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-label-text">
+                            <i class="bi bi-check-circle" style="color: #10B981;"></i>
+                            <span>Sudah Absen</span>
+                        </span>
+                        <span class="status-value" style="color: #10B981;">1 Kelas</span>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-label-text">
+                            <i class="bi bi-clock-history" style="color: #F59E0B;"></i>
+                            <span>Belum Absen</span>
+                        </span>
+                        <span class="status-value" style="color: #F59E0B;">3 Kelas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistik Bulan Ini -->
+            <div class="stats-section">
+                <div class="status-title">Statistik Bulan Ini</div>
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-label">Hadir</div>
+                            <div class="stat-value">18</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-label">Terlambat</div>
+                            <div class="stat-value">2</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="bi bi-file-text-fill"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-label">Izin/Sakit</div>
+                            <div class="stat-value">1</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-label">Alpha</div>
+                            <div class="stat-value">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Reminder -->
+            <div class="reminder-card">
+                <div class="reminder-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div class="reminder-content">
+                    <h4>Jangan Lupa Absen Pulang!</h4>
+                    <p>Pastikan melakukan absensi pulang setelah jam mengajar terakhir Anda selesai.</p>
+                </div>
+            </div>
+
+            <!-- Schedule Today -->
+            <div class="section-head">
+                <h3>Jadwal Mengajar Hari Ini</h3>
+                <a href="#" class="link-more">
+                    Lihat Semua <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+
+            <div class="schedule-card completed">
+                <div class="schedule-top">
+                    <div class="time-range">
+                        <i class="bi bi-clock"></i>
+                        07:30 - 09:00
+                    </div>
+                    <span class="schedule-badge badge-completed">Selesai</span>
+                </div>
+                <div class="subject-name">Pemrograman Web dan Perangkat Bergerak</div>
+                <div class="schedule-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-people-fill"></i>
+                        XII RPL 1
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Lab Komputer 1
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-book-fill"></i>
+                        2 JP
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card active">
+                <div class="schedule-top">
+                    <div class="time-range">
+                        <i class="bi bi-clock"></i>
+                        09:15 - 10:45
+                    </div>
+                    <span class="schedule-badge badge-active">Sedang Berjalan</span>
+                </div>
+                <div class="subject-name">Pemrograman Berorientasi Objek</div>
+                <div class="schedule-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-people-fill"></i>
+                        XI RPL 2
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Lab Komputer 2
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-book-fill"></i>
+                        2 JP
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card upcoming">
+                <div class="schedule-top">
+                    <div class="time-range">
+                        <i class="bi bi-clock"></i>
+                        11:00 - 12:30
+                    </div>
+                    <span class="schedule-badge badge-upcoming">Akan Datang</span>
+                </div>
+                <div class="subject-name">Basis Data</div>
+                <div class="schedule-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-people-fill"></i>
+                        XI RPL 1
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Lab Komputer 1
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-book-fill"></i>
+                        2 JP
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card upcoming">
+                <div class="schedule-top">
+                    <div class="time-range">
+                        <i class="bi bi-clock"></i>
+                        13:30 - 15:00
+                    </div>
+                    <span class="schedule-badge badge-upcoming">Akan Datang</span>
+                </div>
+                <div class="subject-name">Pemrograman Web dan Perangkat Bergerak</div>
+                <div class="schedule-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-people-fill"></i>
+                        XII RPL 2
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Lab Komputer 2
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-book-fill"></i>
+                        2 JP
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task & Reminder -->
+            <div class="section-head" style="margin-top: 32px;">
+                <h3>Tugas & Pengingat</h3>
+                <a href="#" class="link-more">
+                    + Tambah Baru
+                </a>
+            </div>
+
+            <div class="task-list-item done">
+                <div class="task-check">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <div class="task-info">
+                    <div class="task-title">Persiapan Materi Pembelajaran</div>
+                    <div class="task-time">
+                        <i class="bi bi-calendar3"></i>
+                        Selesai pukul 06:20 WIB
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list-item">
+                <div class="task-check"></div>
+                <div class="task-info">
+                    <div class="task-title">
+                        Input Nilai Ujian Tengah Semester
+                        <span class="priority-label priority-high">Penting</span>
+                    </div>
+                    <div class="task-time">
+                        <i class="bi bi-clock"></i>
+                        Deadline: Hari ini, 16:00 WIB
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list-item">
+                <div class="task-check"></div>
+                <div class="task-info">
+                    <div class="task-title">
+                        Rapat Koordinasi Wali Kelas
+                        <span class="priority-label priority-medium">Sedang</span>
+                    </div>
+                    <div class="task-time">
+                        <i class="bi bi-clock"></i>
+                        Hari ini, 14:30 WIB
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list-item">
+                <div class="task-check"></div>
+                <div class="task-info">
+                    <div class="task-title">Koreksi Tugas Praktikum XII RPL 1</div>
+                    <div class="task-time">
+                        <i class="bi bi-calendar3"></i>
+                        Besok, 08:00 WIB
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="bi bi-house-door-fill"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-clipboard-data"></i>
+                <span>Absensi</span>
+            </a>
+            <a href="#" class="nav-item scan">
+                <div class="scan-btn">
+                    <i class="bi bi-qr-code-scan"></i>
+                </div>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-calendar3"></i>
+                <span>Jadwal</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-person-circle"></i>
+                <span>Profil</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Function untuk update jam realtime
+        function updateClock() {
+            const now = new Date();
+
+            // Format jam dengan timezone Asia/Jakarta (WIB)
+            const options = {
+                timeZone: 'Asia/Jakarta',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+
+            const timeString = now.toLocaleTimeString('id-ID', options);
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        // Function untuk update greeting berdasarkan waktu
+        function updateGreeting() {
+            const now = new Date();
+            const options = { timeZone: 'Asia/Jakarta', hour12: false, hour: '2-digit' };
+            const hour = parseInt(now.toLocaleTimeString('id-ID', options).split(':')[0]);
+
+            let greeting = '';
+            let icon = '';
+
+            if (hour >= 5 && hour < 10) {
+                greeting = 'Selamat Pagi!';
+                icon = 'bi-brightness-high-fill'; // Matahari pagi
+            } else if (hour >= 10 && hour < 15) {
+                greeting = 'Selamat Siang!';
+                icon = 'bi-sun-fill'; // Matahari terik
+            } else if (hour >= 15 && hour < 18) {
+                greeting = 'Selamat Sore!';
+                icon = 'bi-sunset-fill'; // Matahari sore
+            } else if (hour >= 18 && hour < 19) {
+                greeting = 'Selamat Petang!';
+                icon = 'bi-cloud-sun-fill'; // Petang
+            } else {
+                greeting = 'Selamat Malam!';
+                icon = 'bi-moon-stars-fill'; // Bulan malam
+            }
+
+            document.getElementById('greetingText').textContent = greeting;
+            document.getElementById('greetingIcon').className = 'bi ' + icon;
+        }
+
+        // Update pertama kali saat halaman load
+        updateClock();
+        updateGreeting();
+
+        // Update jam setiap detik
+        setInterval(updateClock, 1000);
+
+        // Update greeting setiap 1 menit
+        setInterval(updateGreeting, 60000);
+    </script>
+</body>
+</html>

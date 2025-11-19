@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#198754">
+    <title>Dashboard Guru - SIAG NEKAS</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Colors */
+            --primary: #198754;
+            --primary-dark: #146c43;
+            --primary-light: #20c997;
+            --secondary: #0d6efd;
+            --accent: #fd7e14;
+            --success: #198754;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #0dcaf0;
+
+            /* Neutrals */
+            --gray-50: #f8f9fa;
+            --gray-100: #f1f3f5;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+
+            /* Semantic */
+            --bg-app: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-muted: #adb5bd;
+            --border-color: #e9ecef;
+
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
+
+            /* Border Radius */
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            --radius-full: 9999px;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-app);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* App Container */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg-app);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Modern Header */
+        .modern-header {
+            position: relative;
+            background: var(--primary);
+            padding: var(--space-lg) var(--space-lg) var(--space-2xl);
+            padding-top: calc(env(safe-area-inset-top) + var(--space-lg));
+            overflow: hidden;
+        }
+
+        .header-bg-pattern {
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-bg-pattern:nth-child(2) {
+            top: -100px;
+            right: 100px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .header-top-bar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, #20c997 0%, #0dcaf0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.125rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-info h1 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.125rem;
+        }
+
+        .profile-info p {
+            font-size: 0.8125rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .header-icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .header-icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .header-icon-btn i {
+            font-size: 1.125rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: var(--danger);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Floating Stats Card */
+        .floating-stats {
+            position: relative;
+            z-index: 10;
+            margin: 0 var(--space-lg);
+            margin-top: -40px;
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .stats-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stats-main {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .stats-status {
+            flex: 1;
+        }
+
+        .status-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .status-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-time {
+            text-align: right;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .time-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stats-progress {
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .progress-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .progress-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            margin: 0 auto var(--space-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .progress-item.hadir .progress-icon {
+            background: rgba(25, 135, 84, 0.1);
+            color: var(--success);
+        }
+
+        .progress-item.izin .progress-icon {
+            background: rgba(13, 110, 253, 0.1);
+            color: var(--secondary);
+        }
+
+        .progress-item.alpha .progress-icon {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .progress-count {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.125rem;
+        }
+
+        .progress-label {
+            font-size: 0.6875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-lg);
+            padding-top: var(--space-xl);
+        }
+
+        .section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-link {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: gap 0.2s;
+        }
+
+        .section-link:hover {
+            gap: 0.5rem;
+        }
+
+        /* Quick Actions Grid */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .action-item:active {
+            transform: scale(0.95);
+        }
+
+        .action-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-icon-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-lg);
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .action-icon-wrapper.primary {
+            background: linear-gradient(135deg, rgba(25, 135, 84, 0.1), rgba(32, 201, 151, 0.15));
+        }
+
+        .action-icon-wrapper.secondary {
+            background: linear-gradient(135deg, rgba(13, 110, 253, 0.1), rgba(13, 202, 240, 0.15));
+        }
+
+        .action-icon-wrapper.accent {
+            background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(255, 193, 7, 0.15));
+        }
+
+        .action-icon-wrapper.danger {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(253, 126, 20, 0.15));
+        }
+
+        .action-icon-wrapper i {
+            font-size: 1.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-icon-wrapper.primary i {
+            color: var(--primary);
+        }
+
+        .action-icon-wrapper.secondary i {
+            color: var(--secondary);
+        }
+
+        .action-icon-wrapper.accent i {
+            color: var(--accent);
+        }
+
+        .action-icon-wrapper.danger i {
+            color: var(--danger);
+        }
+
+        .action-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        /* Schedule Cards */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .schedule-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .schedule-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .schedule-card.active::before {
+            background: var(--success);
+            box-shadow: 0 0 12px rgba(25, 135, 84, 0.5);
+        }
+
+        .schedule-card.upcoming::before {
+            background: var(--warning);
+        }
+
+        .schedule-card:active {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .schedule-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-sm);
+        }
+
+        .schedule-time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: var(--gray-100);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .schedule-time-badge i {
+            font-size: 0.875rem;
+        }
+
+        .schedule-status {
+            padding: 0.25rem 0.625rem;
+            border-radius: var(--radius-full);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .schedule-status.active {
+            background: rgba(25, 135, 84, 0.1);
+            color: var(--success);
+        }
+
+        .schedule-status.upcoming {
+            background: rgba(255, 193, 7, 0.1);
+            color: #996800;
+        }
+
+        .schedule-status.completed {
+            background: var(--gray-100);
+            color: var(--text-secondary);
+        }
+
+        .schedule-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .schedule-meta {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .schedule-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .schedule-meta-item i {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            display: flex;
+            gap: var(--space-md);
+            border-left: 4px solid var(--warning);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .banner-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .banner-icon i {
+            font-size: 1.25rem;
+            color: var(--warning);
+        }
+
+        .banner-content {
+            flex: 1;
+        }
+
+        .banner-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #664d03;
+            margin-bottom: 0.25rem;
+        }
+
+        .banner-text {
+            font-size: 0.8125rem;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        /* Activity Timeline */
+        .activity-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .activity-item {
+            display: flex;
+            gap: var(--space-md);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .activity-item:active {
+            box-shadow: var(--shadow-md);
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .activity-icon i {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .activity-icon.success {
+            background: rgba(25, 135, 84, 0.1);
+        }
+
+        .activity-icon.success i {
+            color: var(--success);
+        }
+
+        .activity-icon.warning {
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        .activity-icon.warning i {
+            color: var(--warning);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .activity-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .activity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.6875rem;
+            font-weight: 600;
+        }
+
+        .activity-badge.success {
+            background: rgba(25, 135, 84, 0.1);
+            color: var(--success);
+        }
+
+        .activity-badge.warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: #996800;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: var(--space-xs) var(--space-md);
+            padding-bottom: calc(env(safe-area-inset-bottom) + var(--space-xs));
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            padding: var(--space-xs);
+            border-radius: var(--radius-md);
+            min-width: 60px;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .nav-item.active::before {
+            opacity: 1;
+        }
+
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item span {
+            font-size: 0.625rem;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 375px) {
+            .modern-header {
+                padding-left: var(--space-md);
+                padding-right: var(--space-md);
+            }
+
+            .floating-stats {
+                margin-left: var(--space-md);
+                margin-right: var(--space-md);
+            }
+
+            .main-content {
+                padding: var(--space-md);
+                padding-top: var(--space-xl);
+            }
+
+            .quick-actions-grid {
+                gap: var(--space-sm);
+            }
+
+            .action-icon-wrapper {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Modern Header -->
+        <div class="modern-header">
+            <div class="header-bg-pattern"></div>
+            <div class="header-bg-pattern"></div>
+
+            <div class="header-top-bar">
+                <div class="profile-section">
+                    <div class="profile-avatar">BS</div>
+                    <div class="profile-info">
+                        <h1>Budi Santoso, S.Pd</h1>
+                        <p>Guru Matematika</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-icon-btn" onclick="alert('Notifikasi')">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="header-icon-btn" onclick="alert('Menu')">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Stats Card -->
+        <div class="floating-stats animate-slide-up">
+            <div class="stats-header">
+                <span class="stats-title">Status Hari Ini</span>
+                <span class="stats-date">
+                    <i class="bi bi-calendar3"></i> 19 Nov 2025
+                </span>
+            </div>
+            <div class="stats-main">
+                <div class="stats-status">
+                    <div class="status-label">Status Kehadiran</div>
+                    <div class="status-value">Hadir</div>
+                </div>
+                <div class="stats-time">
+                    <div class="time-label">Check In</div>
+                    <div class="time-value">07:15</div>
+                </div>
+            </div>
+            <div class="stats-progress">
+                <div class="progress-item hadir">
+                    <div class="progress-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div class="progress-count">18</div>
+                    <div class="progress-label">Hadir</div>
+                </div>
+                <div class="progress-item izin">
+                    <div class="progress-icon">
+                        <i class="bi bi-file-text"></i>
+                    </div>
+                    <div class="progress-count">0</div>
+                    <div class="progress-label">Izin</div>
+                </div>
+                <div class="progress-item alpha">
+                    <div class="progress-icon">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <div class="progress-count">0</div>
+                    <div class="progress-label">Alpha</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Quick Actions -->
+            <section class="section animate-fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">Aksi Cepat</h2>
+                </div>
+                <div class="quick-actions-grid">
+                    <a href="#" class="action-item">
+                        <div class="action-icon-wrapper primary">
+                            <i class="bi bi-qr-code-scan"></i>
+                        </div>
+                        <span class="action-label">Scan QR</span>
+                    </a>
+                    <a href="#" class="action-item">
+                        <div class="action-icon-wrapper secondary">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <span class="action-label">Input Manual</span>
+                    </a>
+                    <a href="#" class="action-item">
+                        <div class="action-icon-wrapper accent">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <span class="action-label">Izin/Sakit</span>
+                    </a>
+                    <a href="#" class="action-item">
+                        <div class="action-icon-wrapper danger">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <span class="action-label">Jadwal</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Schedule -->
+            <section class="section animate-fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">Jadwal Mengajar</h2>
+                    <a href="#" class="section-link">
+                        Lihat Semua <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="schedule-list">
+                    <div class="schedule-card active">
+                        <div class="schedule-card-header">
+                            <div class="schedule-time-badge">
+                                <i class="bi bi-clock"></i>
+                                <span>07:30 - 09:00</span>
+                            </div>
+                            <span class="schedule-status active">Berlangsung</span>
+                        </div>
+                        <div class="schedule-title">Matematika</div>
+                        <div class="schedule-meta">
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-people"></i>
+                                <span>Kelas X-A</span>
+                            </div>
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Ruang 101</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-card upcoming">
+                        <div class="schedule-card-header">
+                            <div class="schedule-time-badge">
+                                <i class="bi bi-clock"></i>
+                                <span>09:30 - 11:00</span>
+                            </div>
+                            <span class="schedule-status upcoming">Berikutnya</span>
+                        </div>
+                        <div class="schedule-title">Matematika</div>
+                        <div class="schedule-meta">
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-people"></i>
+                                <span>Kelas X-B</span>
+                            </div>
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Ruang 102</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-card upcoming">
+                        <div class="schedule-card-header">
+                            <div class="schedule-time-badge">
+                                <i class="bi bi-clock"></i>
+                                <span>13:00 - 14:30</span>
+                            </div>
+                            <span class="schedule-status upcoming">Berikutnya</span>
+                        </div>
+                        <div class="schedule-title">Matematika Lanjutan</div>
+                        <div class="schedule-meta">
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-people"></i>
+                                <span>Kelas XI-A</span>
+                            </div>
+                            <div class="schedule-meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Ruang 201</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Info Banner -->
+            <section class="section animate-fade-in">
+                <div class="info-banner">
+                    <div class="banner-icon">
+                        <i class="bi bi-megaphone"></i>
+                    </div>
+                    <div class="banner-content">
+                        <div class="banner-title">Pengumuman</div>
+                        <div class="banner-text">
+                            Rapat evaluasi pembelajaran akan dilaksanakan hari Jumat, 22 November 2025 pukul 14:00 WIB di Aula Sekolah.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Timeline -->
+            <section class="section animate-fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">Aktivitas Terkini</h2>
+                    <a href="#" class="section-link">
+                        Riwayat <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="activity-timeline">
+                    <div class="activity-item">
+                        <div class="activity-icon success">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Absensi Masuk</div>
+                            <div class="activity-meta">
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span>07:15 WIB</span>
+                                </div>
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>SMA Negeri 1</span>
+                                </div>
+                            </div>
+                            <span class="activity-badge success">Hadir Tepat Waktu</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon warning">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Absensi Kemarin</div>
+                            <div class="activity-meta">
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span>07:22 WIB</span>
+                                </div>
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>18 Nov 2025</span>
+                                </div>
+                            </div>
+                            <span class="activity-badge warning">Terlambat 7 menit</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon success">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Absensi Jumat Lalu</div>
+                            <div class="activity-meta">
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span>07:10 WIB</span>
+                                </div>
+                                <div class="activity-meta-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>15 Nov 2025</span>
+                                </div>
+                            </div>
+                            <span class="activity-badge success">Hadir Tepat Waktu</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-container">
+                <a href="#" class="nav-item active">
+                    <i class="bi bi-house-fill"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Riwayat</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="bi bi-qr-code-scan"></i>
+                    <span>Scan</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Statistik</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Profil</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Navigation handling
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(10px)';
+            el.style.transition = 'all 0.4s ease-out';
+            observer.observe(el);
+        });
+
+        // Update greeting
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const profileInfo = document.querySelector('.profile-info p');
+
+            let greeting = 'Selamat Pagi';
+            if (hour >= 12 && hour < 15) greeting = 'Selamat Siang';
+            else if (hour >= 15 && hour < 18) greeting = 'Selamat Sore';
+            else if (hour >= 18) greeting = 'Selamat Malam';
+
+            // Optional: Update greeting text if needed
+        }
+
+        updateGreeting();
+    </script>
+</body>
+</html>

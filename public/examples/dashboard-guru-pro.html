@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f8f9fa">
+    <title>SIAG NEKAS - Professional Dashboard</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #198754;
+            --primary-rgb: 25, 135, 84;
+            --secondary: #0a84ff;
+            --secondary-rgb: 10, 132, 255;
+            --accent: #ff375f;
+            --accent-rgb: 255, 55, 95;
+            --warning: #ff9f0a;
+            --warning-rgb: 255, 159, 10;
+            --info: #64d2ff;
+            --info-rgb: 100, 210, 255;
+            --success: #30d158;
+            --success-rgb: 48, 209, 88;
+            --purple: #bf5af2;
+            --purple-rgb: 191, 90, 242;
+        }
+
+        /* Light Theme - iOS 26.1 Pro */
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f0f0f5;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-elevated: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(0, 0, 0, 0.06);
+            --text-primary: #1c1c1e;
+            --text-secondary: #48484a;
+            --text-tertiary: #8e8e93;
+            --text-quaternary: #aeaeb2;
+            --separator-light: rgba(60, 60, 67, 0.12);
+            --separator: rgba(60, 60, 67, 0.18);
+            --overlay-bg: rgba(0, 0, 0, 0.3);
+            --shadow-xs: rgba(0, 0, 0, 0.04);
+            --shadow-sm: rgba(0, 0, 0, 0.08);
+            --shadow-md: rgba(0, 0, 0, 0.12);
+            --shadow-lg: rgba(0, 0, 0, 0.16);
+            --shadow-xl: rgba(0, 0, 0, 0.24);
+        }
+
+        /* Dark Theme - iOS 26.1 Pro */
+        [data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-tertiary: #2c2c2e;
+            --glass-bg: rgba(28, 28, 30, 0.2);
+            --glass-elevated: rgba(44, 44, 46, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #e5e5ea;
+            --text-tertiary: #98989d;
+            --text-quaternary: #636366;
+            --separator-light: rgba(84, 84, 88, 0.32);
+            --separator: rgba(84, 84, 88, 0.48);
+            --overlay-bg: rgba(0, 0, 0, 0.6);
+            --shadow-xs: rgba(0, 0, 0, 0.2);
+            --shadow-sm: rgba(0, 0, 0, 0.3);
+            --shadow-md: rgba(0, 0, 0, 0.4);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+            --shadow-xl: rgba(0, 0, 0, 0.6);
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+        }
+
+        /* Liquid Glass Effect - 20% Transparency */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            -webkit-backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            border: 0.5px solid var(--glass-border);
+        }
+
+        .glass-elevated {
+            background: var(--glass-elevated);
+            backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            -webkit-backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            border: 0.5px solid var(--glass-border);
+        }
+
+        /* App Container */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 20px 20px calc(100px + env(safe-area-inset-bottom));
+            position: relative;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-top: env(safe-area-inset-top);
+        }
+
+        .greeting-section {
+            flex: 1;
+        }
+
+        .greeting-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            margin-bottom: 4px;
+        }
+
+        .user-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(180%);
+            -webkit-backdrop-filter: blur(80px) saturate(180%);
+            border: 0.5px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px var(--shadow-sm);
+            position: relative;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--shadow-md);
+        }
+
+        .action-btn:active {
+            transform: scale(0.92);
+            transition-duration: 0.1s;
+        }
+
+        .action-btn i {
+            font-size: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 4px;
+            border: 2px solid var(--bg-primary);
+            box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.5);
+        }
+
+        /* Status Card - New Design */
+        .status-card {
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.95), rgba(var(--success-rgb), 0.9));
+            border-radius: 28px;
+            padding: 28px 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -15%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 3px;
+            animation: live-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
+            50% { opacity: 0.5; box-shadow: 0 0 4px rgba(255, 255, 255, 0.4); }
+        }
+
+        .status-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 18px;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .status-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .status-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-value {
+            font-size: 40px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .status-meta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .meta-info i {
+            font-size: 16px;
+        }
+
+        /* Statistics Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .stat-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            -webkit-backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 20px 16px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px var(--shadow-xs);
+        }
+
+        .stat-item:active {
+            transform: scale(0.95);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.4px;
+        }
+
+        /* Quick Access Grid */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .access-card {
+            background: var(--glass-elevated);
+            backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            -webkit-backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px 20px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at top right, var(--glass-border), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+
+        .access-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 40px var(--shadow-md);
+        }
+
+        .access-card:hover::before {
+            opacity: 1;
+        }
+
+        .access-card:active {
+            transform: scale(0.96);
+            transition-duration: 0.1s;
+        }
+
+        .access-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .access-icon i {
+            font-size: 28px;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .access-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .access-subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        /* Schedule Cards */
+        .schedule-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .schedule-card {
+            background: var(--glass-elevated);
+            backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            -webkit-backdrop-filter: blur(80px) saturate(180%) brightness(102%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px var(--shadow-xs);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .schedule-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary), var(--success));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .schedule-card:hover::before {
+            opacity: 1;
+        }
+
+        .schedule-card:active {
+            transform: scale(0.98);
+        }
+
+        .schedule-card.active::before {
+            opacity: 1;
+            box-shadow: 0 0 12px rgba(var(--primary-rgb), 0.5);
+        }
+
+        .schedule-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border: 0.5px solid var(--separator-light);
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .time-slot i {
+            font-size: 14px;
+        }
+
+        .schedule-status {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-live {
+            background: linear-gradient(135deg, var(--accent), #ff6b8a);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+            animation: status-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes status-glow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3); }
+            50% { box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.5); }
+        }
+
+        .status-upcoming {
+            background: rgba(var(--secondary-rgb), 0.15);
+            color: var(--secondary);
+        }
+
+        .schedule-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .schedule-details {
+            display: flex;
+            gap: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        .detail-item i {
+            font-size: 16px;
+        }
+
+        /* Floating Navigation - iOS Style */
+        .floating-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 0 20px;
+            max-width: 480px;
+            width: calc(100% - 40px);
+        }
+
+        .nav-container {
+            background: var(--glass-elevated);
+            backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            -webkit-backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 12px 16px;
+            box-shadow: 0 16px 48px var(--shadow-xl), 0 0 1px var(--separator);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 8px;
+            text-decoration: none;
+            color: var(--text-tertiary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active::before {
+            opacity: 1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item.active .nav-icon {
+            animation: nav-pop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes nav-pop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Theme Sheet Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .theme-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: var(--glass-elevated);
+            backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            -webkit-backdrop-filter: blur(100px) saturate(200%) brightness(105%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 32px 32px 0 0;
+            padding: 24px 24px calc(env(safe-area-inset-bottom) + 24px);
+            box-shadow: 0 -12px 60px var(--shadow-xl);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .theme-sheet.active {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: var(--separator);
+            border-radius: 3px;
+            margin: 0 auto 24px;
+        }
+
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .sheet-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sheet-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 0.5px solid var(--separator-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .sheet-close:active {
+            transform: scale(0.9);
+        }
+
+        .theme-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .theme-choice {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(180%);
+            -webkit-backdrop-filter: blur(80px) saturate(180%);
+            border: 2px solid var(--separator-light);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-choice:active {
+            transform: scale(0.97);
+        }
+
+        .theme-choice.selected {
+            border-color: var(--primary);
+            background: rgba(var(--primary-rgb), 0.08);
+        }
+
+        .theme-icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .theme-icon-box i {
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .theme-info {
+            flex: 1;
+        }
+
+        .theme-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .theme-description {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        .theme-indicator {
+            width: 26px;
+            height: 26px;
+            border-radius: 13px;
+            border: 2px solid var(--separator);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .theme-choice.selected .theme-indicator {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .theme-indicator i {
+            font-size: 14px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .theme-choice.selected .theme-indicator i {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 390px) {
+            .app-container {
+                padding: 16px 16px calc(100px + env(safe-area-inset-bottom));
+            }
+
+            .user-name {
+                font-size: 24px;
+            }
+
+            .status-value {
+                font-size: 36px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+
+            .quick-access {
+                gap: 12px;
+            }
+
+            .access-card {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Prevent overscroll */
+        body {
+            overscroll-behavior-y: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="greeting-section">
+                <p class="greeting-text">Selamat Pagi</p>
+                <h1 class="user-name">Budi Santoso</h1>
+            </div>
+            <div class="top-actions">
+                <div class="action-btn">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="notification-badge"></span>
+                </div>
+                <div class="action-btn" id="themeBtn">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Card -->
+        <div class="status-card">
+            <div class="status-header">
+                <div class="status-badge">
+                    <span class="live-dot"></span>
+                    Sedang Mengajar
+                </div>
+                <div class="status-icon">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+            </div>
+            <div class="status-content">
+                <div class="status-label">Status Hari Ini</div>
+                <div class="status-value">HADIR</div>
+                <div class="status-meta">
+                    <div class="meta-info">
+                        <i class="bi bi-clock-fill"></i>
+                        07:15 WIB
+                    </div>
+                    <div class="meta-info">
+                        <i class="bi bi-hourglass-split"></i>
+                        2 Jam 30 Menit
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">18</div>
+                <div class="stat-text">Hadir</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-text">Izin</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-text">Alpha</div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <h2 class="section-title">Akses Cepat</h2>
+        <div class="quick-access">
+            <a href="#" class="access-card">
+                <div class="access-icon" style="background: linear-gradient(135deg, rgba(var(--primary-rgb), 1), rgba(var(--success-rgb), 0.9));">
+                    <i class="bi bi-qr-code-scan"></i>
+                </div>
+                <div class="access-title">Scan QR</div>
+                <div class="access-subtitle">Absensi cepat</div>
+            </a>
+            <a href="#" class="access-card">
+                <div class="access-icon" style="background: linear-gradient(135deg, rgba(var(--secondary-rgb), 1), rgba(var(--info-rgb), 0.9));">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+                <div class="access-title">Input Data</div>
+                <div class="access-subtitle">Entry manual</div>
+            </a>
+            <a href="#" class="access-card">
+                <div class="access-icon" style="background: linear-gradient(135deg, rgba(var(--warning-rgb), 1), rgba(255, 193, 7, 0.9));">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="access-title">Perizinan</div>
+                <div class="access-subtitle">Ajukan izin</div>
+            </a>
+            <a href="#" class="access-card">
+                <div class="access-icon" style="background: linear-gradient(135deg, rgba(var(--purple-rgb), 1), rgba(147, 51, 234, 0.9));">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div class="access-title">Jadwal</div>
+                <div class="access-subtitle">Lihat lengkap</div>
+            </a>
+        </div>
+
+        <!-- Schedule -->
+        <h2 class="section-title">Jadwal Mengajar</h2>
+        <div class="schedule-container">
+            <div class="schedule-card active">
+                <div class="schedule-top">
+                    <div class="time-slot">
+                        <i class="bi bi-clock-fill"></i>
+                        07:30 - 09:00
+                    </div>
+                    <div class="schedule-status status-live">LIVE NOW</div>
+                </div>
+                <h3 class="schedule-title">Matematika Dasar</h3>
+                <div class="schedule-details">
+                    <div class="detail-item">
+                        <i class="bi bi-people-fill"></i>
+                        Kelas X-A
+                    </div>
+                    <div class="detail-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Ruang 101
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card">
+                <div class="schedule-top">
+                    <div class="time-slot">
+                        <i class="bi bi-clock-fill"></i>
+                        09:30 - 11:00
+                    </div>
+                    <div class="schedule-status status-upcoming">UPCOMING</div>
+                </div>
+                <h3 class="schedule-title">Matematika Lanjutan</h3>
+                <div class="schedule-details">
+                    <div class="detail-item">
+                        <i class="bi bi-people-fill"></i>
+                        Kelas X-B
+                    </div>
+                    <div class="detail-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Ruang 102
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card">
+                <div class="schedule-top">
+                    <div class="time-slot">
+                        <i class="bi bi-clock-fill"></i>
+                        13:00 - 14:30
+                    </div>
+                    <div class="schedule-status status-upcoming">UPCOMING</div>
+                </div>
+                <h3 class="schedule-title">Matematika Peminatan</h3>
+                <div class="schedule-details">
+                    <div class="detail-item">
+                        <i class="bi bi-people-fill"></i>
+                        Kelas XI-A
+                    </div>
+                    <div class="detail-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Ruang 201
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+        <nav class="nav-container">
+            <a href="#" class="nav-item active">
+                <i class="bi bi-house-door-fill nav-icon"></i>
+                <span class="nav-label">HOME</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-clock-history nav-icon"></i>
+                <span class="nav-label">HISTORY</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-qr-code-scan nav-icon"></i>
+                <span class="nav-label">SCAN</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-bar-chart-line-fill nav-icon"></i>
+                <span class="nav-label">STATS</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="bi bi-person-circle nav-icon"></i>
+                <span class="nav-label">PROFILE</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Theme Modal -->
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="theme-sheet" id="themeSheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3 class="sheet-title">
+                <i class="bi bi-palette-fill"></i>
+                Pilih Tema
+            </h3>
+            <div class="sheet-close" id="closeSheet">
+                <i class="bi bi-x-lg"></i>
+            </div>
+        </div>
+        <div class="theme-list">
+            <div class="theme-choice" data-theme="light">
+                <div class="theme-icon-box" style="background: linear-gradient(135deg, #ffd60a, #ffba08);">
+                    <i class="bi bi-sun-fill"></i>
+                </div>
+                <div class="theme-info">
+                    <div class="theme-name">Light Mode</div>
+                    <div class="theme-description">Tema terang untuk siang hari</div>
+                </div>
+                <div class="theme-indicator">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+            </div>
+
+            <div class="theme-choice" data-theme="dark">
+                <div class="theme-icon-box" style="background: linear-gradient(135deg, #4361ee, #3a0ca3);">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </div>
+                <div class="theme-info">
+                    <div class="theme-name">Dark Mode</div>
+                    <div class="theme-description">Tema gelap untuk malam hari</div>
+                </div>
+                <div class="theme-indicator">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+            </div>
+
+            <div class="theme-choice" data-theme="system">
+                <div class="theme-icon-box" style="background: linear-gradient(135deg, rgba(var(--primary-rgb), 1), rgba(var(--info-rgb), 0.9));">
+                    <i class="bi bi-circle-half"></i>
+                </div>
+                <div class="theme-info">
+                    <div class="theme-name">System Mode</div>
+                    <div class="theme-description">Ikuti pengaturan perangkat</div>
+                </div>
+                <div class="theme-indicator">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Professional Theme Manager
+        const ProThemeManager = {
+            key: 'siag-pro-theme',
+            current: 'system',
+
+            init() {
+                this.loadTheme();
+                this.bindEvents();
+                this.watchSystem();
+            },
+
+            loadTheme() {
+                const saved = localStorage.getItem(this.key) || 'system';
+                this.apply(saved, false);
+            },
+
+            apply(theme, save = true) {
+                if (save) localStorage.setItem(this.key, theme);
+
+                this.current = theme;
+                const actual = theme === 'system'
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : theme;
+
+                document.documentElement.setAttribute('data-theme', actual);
+                this.updateMeta(actual);
+                this.updateIcon(theme);
+                this.updateSelected(theme);
+            },
+
+            updateMeta(theme) {
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.content = theme === 'dark' ? '#000000' : '#f8f9fa';
+            },
+
+            updateIcon(theme) {
+                const icons = { light: 'bi-sun-fill', dark: 'bi-moon-stars-fill', system: 'bi-circle-half' };
+                document.getElementById('themeIcon').className = `bi ${icons[theme]}`;
+            },
+
+            updateSelected(theme) {
+                document.querySelectorAll('.theme-choice').forEach(el => {
+                    el.classList.toggle('selected', el.dataset.theme === theme);
+                });
+            },
+
+            bindEvents() {
+                const sheet = document.getElementById('themeSheet');
+                const backdrop = document.getElementById('modalBackdrop');
+
+                // Open sheet
+                document.getElementById('themeBtn').addEventListener('click', () => {
+                    sheet.classList.add('active');
+                    backdrop.classList.add('active');
+                });
+
+                // Close sheet
+                const closeSheet = () => {
+                    sheet.classList.remove('active');
+                    backdrop.classList.remove('active');
+                };
+
+                document.getElementById('closeSheet').addEventListener('click', closeSheet);
+                backdrop.addEventListener('click', closeSheet);
+
+                // Theme selection
+                document.querySelectorAll('.theme-choice').forEach(choice => {
+                    choice.addEventListener('click', () => {
+                        this.apply(choice.dataset.theme);
+                        setTimeout(closeSheet, 300);
+                    });
+                });
+            },
+
+            watchSystem() {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (this.current === 'system') this.apply('system', false);
+                });
+            }
+        };
+
+        // Navigation handler
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+
+                // Haptic feedback
+                if (navigator.vibrate) navigator.vibrate(5);
+            });
+        });
+
+        // Init
+        ProThemeManager.init();
+
+        // Add touch feedback
+        document.querySelectorAll('.access-card, .schedule-card, .stat-item, .action-btn').forEach(el => {
+            el.addEventListener('touchstart', () => {
+                if (navigator.vibrate) navigator.vibrate(3);
+            });
+        });
+    </script>
+</body>
+</html>

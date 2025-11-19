@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f5f7">
+    <title>SIAG NEKAS - Dashboard Guru</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #198754;
+            --primary-rgb: 25, 135, 84;
+            --secondary: #0066cc;
+            --secondary-rgb: 0, 102, 204;
+            --accent: #ff3b30;
+            --accent-rgb: 255, 59, 48;
+            --warning: #ff9500;
+            --warning-rgb: 255, 149, 0;
+            --info: #5ac8fa;
+            --info-rgb: 90, 200, 250;
+            --success: #34c759;
+            --success-rgb: 52, 199, 89;
+        }
+
+        /* iOS 26.1 Light Theme */
+        [data-theme="light"] {
+            --bg-base: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-tertiary: #e8e8ed;
+            --glass-bg: rgba(255, 255, 255, 0.3);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --text-primary: #000000;
+            --text-secondary: #3c3c43;
+            --text-tertiary: #8e8e93;
+            --separator: rgba(60, 60, 67, 0.18);
+            --overlay: rgba(0, 0, 0, 0.4);
+            --shadow-sm: rgba(0, 0, 0, 0.05);
+            --shadow-md: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+            --card-elevated: rgba(255, 255, 255, 0.85);
+        }
+
+        /* iOS 26.1 Dark Theme */
+        [data-theme="dark"] {
+            --bg-base: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-tertiary: #2c2c2e;
+            --glass-bg: rgba(28, 28, 30, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #ebebf5;
+            --text-tertiary: #98989d;
+            --separator: rgba(84, 84, 88, 0.48);
+            --overlay: rgba(0, 0, 0, 0.7);
+            --shadow-sm: rgba(0, 0, 0, 0.3);
+            --shadow-md: rgba(0, 0, 0, 0.5);
+            --shadow-lg: rgba(0, 0, 0, 0.7);
+            --card-elevated: rgba(28, 28, 30, 0.85);
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* iOS 26.1 Liquid Glass Effect */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 0.5px solid var(--glass-border);
+        }
+
+        .elevated-card {
+            background: var(--card-elevated);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border: 0.5px solid var(--separator);
+        }
+
+        /* App Container */
+        .app-wrapper {
+            min-height: 100vh;
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+        }
+
+        /* Navigation Bar - iOS 26.1 Style */
+        .navbar-liquid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: calc(env(safe-area-inset-top) + 8px) 16px 8px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border-bottom: 0.5px solid var(--glass-border);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .navbar-title {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border: 0.5px solid var(--separator);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 8px var(--shadow-sm);
+        }
+
+        .nav-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px var(--shadow-md);
+        }
+
+        .nav-button:active {
+            transform: scale(0.94);
+        }
+
+        .nav-button i {
+            font-size: 18px;
+        }
+
+        .badge-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 4px;
+            border: 1.5px solid var(--bg-base);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: calc(env(safe-area-inset-top) + 70px) 16px 16px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Profile Card - Horizontal Layout */
+        .profile-card {
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 1), rgba(var(--info-rgb), 0.9));
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.25);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
+            border-radius: 50%;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-info {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-role {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        .profile-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(52, 199, 89, 0.8);
+            animation: pulse-status 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-status {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+
+        /* Quick Stats - iOS 26.1 Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 16px 12px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px var(--shadow-sm);
+        }
+
+        .stat-card:active {
+            transform: scale(0.96);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .section-action {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: opacity 0.2s;
+        }
+
+        .section-action:active {
+            opacity: 0.6;
+        }
+
+        /* Action Cards - Compact iOS Style */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px 16px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .action-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow-md);
+        }
+
+        .action-item:active {
+            transform: scale(0.96);
+        }
+
+        .action-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .action-icon-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: inherit;
+            opacity: 0.15;
+        }
+
+        .action-icon-wrap i {
+            font-size: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .action-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .action-desc {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Schedule List - iOS 26.1 Inset Style */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .schedule-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 12px var(--shadow-sm);
+        }
+
+        .schedule-item:active {
+            transform: scale(0.98);
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .schedule-time {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .schedule-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-live {
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.4);
+            animation: badge-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .badge-next {
+            background: rgba(var(--secondary-rgb), 0.15);
+            color: var(--secondary);
+        }
+
+        .schedule-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .schedule-meta {
+            display: flex;
+            gap: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .meta-item i {
+            font-size: 14px;
+        }
+
+        /* Activity Feed - Modern List */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .activity-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 12px var(--shadow-sm);
+        }
+
+        .activity-item:active {
+            transform: scale(0.98);
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .activity-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            background: inherit;
+            opacity: 0.15;
+        }
+
+        .activity-icon i {
+            font-size: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Bottom Navigation - iOS 26.1 Tab Bar */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border-top: 0.5px solid var(--glass-border);
+            padding: 8px 0 calc(env(safe-area-inset-bottom) + 8px);
+            box-shadow: 0 -4px 24px var(--shadow-sm);
+        }
+
+        .tab-bar-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--text-tertiary);
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .tab-item:active {
+            transform: scale(0.9);
+        }
+
+        .tab-item.active {
+            color: var(--primary);
+        }
+
+        .tab-item.active::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(var(--primary-rgb), 0.1);
+            border-radius: 12px;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .tab-item.active .tab-icon {
+            animation: tab-bounce 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes tab-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .tab-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Theme Modal - iOS 26.1 Sheet */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--overlay);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            display: none;
+            align-items: flex-end;
+            animation: overlay-fade-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes overlay-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-sheet {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--card-elevated);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px calc(env(safe-area-inset-bottom) + 20px);
+            box-shadow: 0 -8px 48px var(--shadow-lg);
+            animation: sheet-slide-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes sheet-slide-up {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--text-tertiary);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+            opacity: 0.5;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 0.5px solid var(--separator);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:active {
+            transform: scale(0.9);
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .theme-option {
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border: 2px solid var(--separator);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .theme-option:active {
+            transform: scale(0.98);
+        }
+
+        .theme-option.active {
+            border-color: var(--primary);
+            background: rgba(var(--primary-rgb), 0.08);
+        }
+
+        .theme-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .theme-icon-wrap i {
+            font-size: 26px;
+        }
+
+        .theme-content {
+            flex: 1;
+        }
+
+        .theme-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .theme-desc {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .theme-check {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            border: 2px solid var(--separator);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .theme-option.active .theme-check {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .theme-check i {
+            font-size: 12px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .theme-option.active .theme-check i {
+            opacity: 1;
+        }
+
+        /* Utility Classes */
+        .mb-1 { margin-bottom: 8px; }
+        .mb-2 { margin-bottom: 16px; }
+        .mb-3 { margin-bottom: 24px; }
+        .mt-1 { margin-top: 8px; }
+        .mt-2 { margin-top: 16px; }
+        .mt-3 { margin-top: 24px; }
+
+        /* Responsive */
+        @media (max-width: 375px) {
+            .navbar-title {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px 8px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+        }
+
+        /* Prevent pull-to-refresh on iOS */
+        body {
+            overscroll-behavior-y: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar-liquid">
+        <div class="navbar-content">
+            <h1 class="navbar-title">Dashboard</h1>
+            <div class="navbar-actions">
+                <div class="nav-button" style="position: relative;">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="badge-dot"></span>
+                </div>
+                <div class="nav-button" id="themeBtn">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="app-wrapper">
+        <main class="main-content">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-avatar">BS</div>
+                <div class="profile-info">
+                    <h2 class="profile-name">Budi Santoso</h2>
+                    <p class="profile-role">Guru Matematika • S.Pd</p>
+                    <div class="profile-status">
+                        <span class="status-indicator"></span>
+                        Online Sekarang
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid mb-3">
+                <div class="stat-card">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Hadir</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Izin</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Alpha</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-header">
+                <h3 class="section-title">Aksi Cepat</h3>
+            </div>
+            <div class="actions-grid">
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap" style="background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.9), rgba(var(--success-rgb), 0.9));">
+                        <i class="bi bi-qr-code-scan" style="color: #fff;"></i>
+                    </div>
+                    <div class="action-title">Scan Absen</div>
+                    <div class="action-desc">Scan QR Code</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap" style="background: linear-gradient(135deg, rgba(var(--secondary-rgb), 0.9), rgba(var(--info-rgb), 0.9));">
+                        <i class="bi bi-pencil-square" style="color: #fff;"></i>
+                    </div>
+                    <div class="action-title">Input Manual</div>
+                    <div class="action-desc">Isi data manual</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap" style="background: linear-gradient(135deg, rgba(var(--warning-rgb), 0.9), rgba(255, 204, 0, 0.9));">
+                        <i class="bi bi-file-earmark-text" style="color: #fff;"></i>
+                    </div>
+                    <div class="action-title">Izin / Sakit</div>
+                    <div class="action-desc">Ajukan perizinan</div>
+                </a>
+                <a href="#" class="action-item">
+                    <div class="action-icon-wrap" style="background: linear-gradient(135deg, rgba(108, 99, 255, 0.9), rgba(147, 51, 234, 0.9));">
+                        <i class="bi bi-calendar-week" style="color: #fff;"></i>
+                    </div>
+                    <div class="action-title">Jadwal</div>
+                    <div class="action-desc">Lihat semua</div>
+                </a>
+            </div>
+
+            <!-- Schedule Today -->
+            <div class="section-header mt-3">
+                <h3 class="section-title">Jadwal Hari Ini</h3>
+                <a href="#" class="section-action">
+                    Semua <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="schedule-header">
+                        <div class="schedule-time">
+                            <i class="bi bi-clock-fill"></i>
+                            07:30 - 09:00
+                        </div>
+                        <span class="schedule-badge badge-live">LIVE NOW</span>
+                    </div>
+                    <h4 class="schedule-title">Matematika Dasar</h4>
+                    <div class="schedule-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-people-fill"></i>
+                            Kelas X-A
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Ruang 101
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-header">
+                        <div class="schedule-time">
+                            <i class="bi bi-clock-fill"></i>
+                            09:30 - 11:00
+                        </div>
+                        <span class="schedule-badge badge-next">NEXT</span>
+                    </div>
+                    <h4 class="schedule-title">Matematika Lanjutan</h4>
+                    <div class="schedule-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-people-fill"></i>
+                            Kelas X-B
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Ruang 102
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-header">
+                        <div class="schedule-time">
+                            <i class="bi bi-clock-fill"></i>
+                            13:00 - 14:30
+                        </div>
+                        <span class="schedule-badge badge-next">NEXT</span>
+                    </div>
+                    <h4 class="schedule-title">Matematika Peminatan</h4>
+                    <div class="schedule-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-people-fill"></i>
+                            Kelas XI-A
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Ruang 201
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section-header mt-3">
+                <h3 class="section-title">Aktivitas Terkini</h3>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: linear-gradient(135deg, rgba(var(--success-rgb), 0.9), rgba(var(--primary-rgb), 0.9));">
+                        <i class="bi bi-check-circle-fill" style="color: #fff;"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Absensi Berhasil</div>
+                        <div class="activity-desc">Check-in kelas X-A berhasil dicatat</div>
+                        <div class="activity-time">
+                            <i class="bi bi-clock"></i>
+                            2 menit yang lalu
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: linear-gradient(135deg, rgba(var(--info-rgb), 0.9), rgba(var(--secondary-rgb), 0.9));">
+                        <i class="bi bi-file-earmark-check-fill" style="color: #fff;"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Laporan Diterima</div>
+                        <div class="activity-desc">Laporan harian telah diverifikasi</div>
+                        <div class="activity-time">
+                            <i class="bi bi-clock"></i>
+                            1 jam yang lalu
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: linear-gradient(135deg, rgba(var(--warning-rgb), 0.9), rgba(255, 204, 0, 0.9));">
+                        <i class="bi bi-calendar-event-fill" style="color: #fff;"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Jadwal Diperbarui</div>
+                        <div class="activity-desc">Ada perubahan jadwal minggu depan</div>
+                        <div class="activity-time">
+                            <i class="bi bi-clock"></i>
+                            3 jam yang lalu
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <nav class="tab-bar">
+        <div class="tab-bar-content">
+            <a href="#" class="tab-item active">
+                <i class="bi bi-house-fill tab-icon"></i>
+                <span class="tab-label">Home</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="bi bi-clock-history tab-icon"></i>
+                <span class="tab-label">History</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="bi bi-qr-code-scan tab-icon"></i>
+                <span class="tab-label">Scan</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="bi bi-bar-chart-fill tab-icon"></i>
+                <span class="tab-label">Stats</span>
+            </a>
+            <a href="#" class="tab-item">
+                <i class="bi bi-person-circle tab-icon"></i>
+                <span class="tab-label">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Theme Modal -->
+    <div class="modal-overlay" id="themeModal">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="bi bi-palette-fill"></i>
+                    Pilih Tema
+                </div>
+                <div class="modal-close" id="closeModal">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+            </div>
+            <div class="theme-options">
+                <div class="theme-option" data-theme="light">
+                    <div class="theme-icon-wrap" style="background: linear-gradient(135deg, #ffd60a, #ffc300);">
+                        <i class="bi bi-sun-fill" style="color: #fff;"></i>
+                    </div>
+                    <div class="theme-content">
+                        <div class="theme-name">Light Mode</div>
+                        <div class="theme-desc">Tema terang untuk siang hari</div>
+                    </div>
+                    <div class="theme-check">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                </div>
+
+                <div class="theme-option" data-theme="dark">
+                    <div class="theme-icon-wrap" style="background: linear-gradient(135deg, #4361ee, #3f37c9);">
+                        <i class="bi bi-moon-stars-fill" style="color: #fff;"></i>
+                    </div>
+                    <div class="theme-content">
+                        <div class="theme-name">Dark Mode</div>
+                        <div class="theme-desc">Tema gelap untuk malam hari</div>
+                    </div>
+                    <div class="theme-check">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                </div>
+
+                <div class="theme-option" data-theme="system">
+                    <div class="theme-icon-wrap" style="background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.9), rgba(var(--info-rgb), 0.9));">
+                        <i class="bi bi-circle-half" style="color: #fff;"></i>
+                    </div>
+                    <div class="theme-content">
+                        <div class="theme-name">System Mode</div>
+                        <div class="theme-desc">Ikuti pengaturan perangkat</div>
+                    </div>
+                    <div class="theme-check">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Manager - iOS 26.1 Style
+        const ThemeManager = {
+            storageKey: 'siag-theme-preference',
+            currentTheme: 'system',
+
+            init() {
+                this.loadTheme();
+                this.setupListeners();
+                this.watchSystemTheme();
+            },
+
+            loadTheme() {
+                const saved = localStorage.getItem(this.storageKey) || 'system';
+                this.applyTheme(saved, false);
+            },
+
+            applyTheme(theme, save = true) {
+                if (save) {
+                    localStorage.setItem(this.storageKey, theme);
+                }
+
+                this.currentTheme = theme;
+                let actualTheme = theme;
+
+                if (theme === 'system') {
+                    actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+
+                document.documentElement.setAttribute('data-theme', actualTheme);
+                this.updateMetaTheme(actualTheme);
+                this.updateThemeIcon(theme);
+                this.updateActiveOption(theme);
+            },
+
+            updateMetaTheme(theme) {
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) {
+                    meta.content = theme === 'dark' ? '#000000' : '#f5f5f7';
+                }
+            },
+
+            updateThemeIcon(theme) {
+                const icon = document.getElementById('themeIcon');
+                const icons = {
+                    light: 'bi-sun-fill',
+                    dark: 'bi-moon-stars-fill',
+                    system: 'bi-circle-half'
+                };
+                icon.className = `bi ${icons[theme]}`;
+            },
+
+            updateActiveOption(theme) {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.theme === theme);
+                });
+            },
+
+            setupListeners() {
+                // Theme button
+                document.getElementById('themeBtn').addEventListener('click', () => {
+                    document.getElementById('themeModal').classList.add('active');
+                });
+
+                // Close modal
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    document.getElementById('themeModal').classList.remove('active');
+                });
+
+                // Modal backdrop
+                document.getElementById('themeModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'themeModal') {
+                        e.target.classList.remove('active');
+                    }
+                });
+
+                // Theme options
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        const theme = option.dataset.theme;
+                        this.applyTheme(theme);
+                        setTimeout(() => {
+                            document.getElementById('themeModal').classList.remove('active');
+                        }, 300);
+                    });
+                });
+            },
+
+            watchSystemTheme() {
+                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                mediaQuery.addEventListener('change', () => {
+                    if (this.currentTheme === 'system') {
+                        this.applyTheme('system', false);
+                    }
+                });
+            }
+        };
+
+        // Initialize
+        ThemeManager.init();
+
+        // Tab navigation active state
+        document.querySelectorAll('.tab-item').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Add haptic feedback simulation
+        document.querySelectorAll('.action-item, .schedule-item, .activity-item, .tab-item, .nav-button').forEach(el => {
+            el.addEventListener('touchstart', () => {
+                if (navigator.vibrate) {
+                    navigator.vibrate(5);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
